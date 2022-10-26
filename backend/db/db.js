@@ -1,16 +1,27 @@
-import knex from 'knex';
-import dotenv from 'dotenv';
+import { Pool } from 'pg';
+import 'dotenv/config';
 
-dotenv.config();
+let pool;
+if (process.env.NODE_ENV === 'production') {
+  pool = new Pool({ connectionString: process.env.DATABASE_URL });
+} else if (process.env.NODE_ENV === 'test') {
+  pool = new Pool({ connectionString: process.env.TEST_DATABASE_URL });
+} else {
+  pool = new Pool({ connectionString: process.env.DEV_DATABASE_URL });
+}
 
-const database = process.env.NODE_ENV === 'test' ? process.env.TESTDATABASE : process.env.DATABASE;
-
-module.exports = knex({
-  client: 'postgres',
-  connection: {
-    host: process.env.POSTGRES_HOST,
-    user: process.env.POSTGRES_USER,
-    password: process.env.POSTGRES_PASSWORD,
-    database,
+export default {
+  query: async (text, params) => {
+    const client = await pool.connect();
+    try {
+      const res = await client.query(text, params);
+      return res;
+    } finally {
+      client.release();
+    }
   },
-});
+  clearDb: async () => {
+    const client = await pool.connect();
+    await client.query('DROP TABLE IF EXISTS ffff CASCADE');
+  },
+};
