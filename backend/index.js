@@ -3,6 +3,7 @@ import cors from 'cors';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
 import initializeDb from './db/dbinit';
+import { userRoute } from './routes';
 
 dotenv.config();
 const app = express();
@@ -25,6 +26,8 @@ app.use((req, res) => {
     error: 'Not Found !',
   });
 });
+
+app.use('/api/v1/auth', userRoute);
 
 app.listen(PORT, () => {
   console.log(`Listening on port: ${PORT}`);
