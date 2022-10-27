@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import dbInterface from './index';
+import dbInterface from './db';
 import { users } from '../models/users';
 
 export default async () => {

@@ -16,6 +16,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(morgan('short'));
 
+
+app.use('/api/v1/auth', userRoute);
+
 app.use('/', (req, res) => {
   res.status(200).send('Welcome to this awesome API!!');
 });
@@ -27,7 +30,6 @@ app.use((req, res) => {
   });
 });
 
-app.use('/api/v1/auth', userRoute);
 
 app.listen(PORT, () => {
   console.log(`Listening on port: ${PORT}`);
