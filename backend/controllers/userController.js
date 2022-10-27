@@ -1,6 +1,7 @@
 import bcryptjs from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import crypto from 'crypto';
 import db from '../db/db';
 
 dotenv.config();
@@ -74,6 +75,52 @@ exports.login = async (req, res) => {
     return res.status(400).json({
       status: 'error',
       error: 'invalid email',
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json({
+      status: 'error',
+      error: err.message,
+    });
+  }
+};
+
+exports.passwordReset = async (req, res) => {
+  try {
+    // const schema = Joi.object({ email: Joi.string().email().required() });
+    // const { error } = schema.validate(req.body.email);
+    // if (error) return res.status(400).send(error.details[0].message);
+
+    // check if email exists
+    const findUser = await db.query('SELECT * FROM users WHERE email = $1', [req.body.email]);
+
+    if (!findUser.rows.length) {
+      return res.status(400).json({
+        status: 'error',
+        error: 'User with given email does not exist',
+      });
+    }
+
+    // create token if dosent exist
+    let userId = findUser.rows[0].id;
+    let randomToken = crypto.randomBytes(32).toString('hex');
+    let token = await db.query('SELECT * FROM tokens WHERE user_id = $1', [userId]);
+    if (!token.rows.length) {
+      token = await db.query('INSERT INTO tokens(user_id, token) VALUES($1, $2) RETURNING *', [
+        userId,
+        randomToken,
+      ]);
+    }
+
+    // email user the link
+    const link = `${process.env.BASE_URL}/password-reset/${user._id}/${token.rows[O].token}`;
+    await sendEmail(user.email, 'Password reset', link);
+
+    return res.status(200).json({
+      status: 'success',
+      data: {
+        message: 'password reset link sent to your email account',
+      },
     });
   } catch (err) {
     console.log(err);
