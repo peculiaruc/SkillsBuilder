@@ -1,12 +1,11 @@
 import {
+  Email, Google, LinkedIn, Password, Window,
+} from '@mui/icons-material';
+
+import {
   Box,
-  Button, Checkbox, Divider, FormControlLabel, Grid, InputAdornment, Stack, TextField, Typography,
+  Button, Checkbox, Divider, FormControlLabel, InputAdornment, Stack, TextField, Typography,
 } from '@mui/material';
-import EmailIcon from '@mui/icons-material/Email';
-import PasswordIcon from '@mui/icons-material/Password';
-import GoogleIcon from '@mui/icons-material/Google';
-import WindowIcon from '@mui/icons-material/Window';
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import Logo from '../../assets/images/Logo.png';
 
 export default function LoginView() {
@@ -29,7 +28,7 @@ export default function LoginView() {
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <EmailIcon />
+                <Email />
               </InputAdornment>
             ),
           }}
@@ -40,7 +39,7 @@ export default function LoginView() {
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <PasswordIcon />
+                <Password />
               </InputAdornment>
             ),
           }}
@@ -61,7 +60,7 @@ export default function LoginView() {
           }}
         >
           <span>
-            Don't have and account ?
+            Don&apos;t have and account ?
           </span>
           <span style={{ fontWeight: 'bold' }}> SignIn ?</span>
         </Stack>
@@ -74,9 +73,9 @@ export default function LoginView() {
             alignItems: 'center',
           }}
         >
-          <GoogleIcon fontSize="large" />
-          <WindowIcon fontSize="large" />
-          <LinkedInIcon fontSize="large" />
+          <Google fontSize="large" />
+          <Window fontSize="large" />
+          <LinkedIn fontSize="large" />
         </Stack>
       </Stack>
     </Stack>

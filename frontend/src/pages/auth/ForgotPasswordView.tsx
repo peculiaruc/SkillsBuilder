@@ -1,6 +1,6 @@
 import EmailIcon from '@mui/icons-material/Email';
 import {
-  Button, InputAdornment, Stack, TextField
+  Button, InputAdornment, Stack, TextField,
 } from '@mui/material';
 import Logo from '../../assets/images/Logo.png';
 

@@ -18,7 +18,7 @@ export default function AuthLayout() {
     >
       <Box
         sx={{
-          padding: [2,4],
+          padding: [2, 4],
           borderRadius: 4,
           backgroundColor: palette.background.paper,
         }}

@@ -1,7 +1,7 @@
-import PasswordIcon from '@mui/icons-material/Password';
 import {
-  Button, InputAdornment, Stack, TextField
+  Button, InputAdornment, Stack, TextField,
 } from '@mui/material';
+import PasswordIcon from '@mui/icons-material/Password';
 import Logo from '../../assets/images/Logo.png';
 
 export default function ResetPasswordView() {

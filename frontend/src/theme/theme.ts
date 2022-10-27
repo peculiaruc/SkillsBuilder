@@ -1,6 +1,5 @@
-import { useTheme } from '@mui/system';
 /* eslint-disable prettier/prettier */
-import { createTheme, alpha } from '@mui/material';
+import { createTheme, alpha, useTheme } from '@mui/material';
 
 const themeColors = {
   primary: '#0e2129',
