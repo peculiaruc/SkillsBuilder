@@ -1,4 +1,5 @@
 import AuthLayout from '../../layout/AuthLayout';
+import ForgotPasswordView from './ForgotPasswordView';
 import LoginView from './LoginView';
 
 const routes = {
@@ -7,6 +8,10 @@ const routes = {
     {
       path: '/login',
       element: <LoginView />,
+    },
+    {
+      path: '/forgot-password',
+      element: <ForgotPasswordView />,
     },
   ],
 };
