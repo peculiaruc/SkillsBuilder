@@ -45,3 +45,41 @@ exports.createUser = async (req, res) => {
     });
   }
 };
+
+exports.login = async (req, res) => {
+  try {
+    const user = await db.query('SELECT * FROM users WHERE email = $1', [req.body.email]);
+
+    if (user.rows.length) {
+      const validPass = await bcryptjs.compare(req.body.password, user.rows[0].password);
+
+      if (!validPass) {
+        return res.status(400).json({
+          status: 'error',
+          error: 'invalid Password',
+        });
+      }
+      //  create token
+      const token = jwt.sign({ id: user.rows[0].id }, process.env.JWT_PRIVATE_KEY, {
+        expiresIn: '2H',
+      });
+      return res.status(200).json({
+        status: 'success',
+        data: {
+          token,
+          user: user.rows[0],
+        },
+      });
+    }
+    return res.status(400).json({
+      status: 'error',
+      error: 'invalid email',
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json({
+      status: 'error',
+      error: err.message,
+    });
+  }
+};
