@@ -5,7 +5,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import PhoneIcon from '@mui/icons-material/Phone';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import {
-  Button, InputAdornment, Stack, TextField, Typography,
+  Button, InputAdornment, Link, Stack, TextField, Typography,
 } from '@mui/material';
 
 import Logo from '../../assets/images/Logo.png';
@@ -99,7 +99,11 @@ export default function SignupView() {
           }}
         >
           <Typography fontWeight="bold">Already have an account ?</Typography>
-          <Typography fontWeight="bold" color="primary"> Login</Typography>
+          <Typography fontWeight="bold" color="primary">
+            <Link href="/login" underline="hover">
+              Login
+            </Link>
+          </Typography>
         </Stack>
       </Stack>
     </Stack>
