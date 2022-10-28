@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 import Logo from '../../assets/images/Logo.png';
 
-export default function LoginView() {
+export default function SignupView() {
   return (
     <Stack spacing={2}>
       <Stack
@@ -44,14 +44,18 @@ export default function LoginView() {
             ),
           }}
         />
-        <Box sx={{
-          display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
-        }}
-        >
-          <FormControlLabel sx={{ marginTop: 0 }} control={<Checkbox defaultChecked />} label="Keep me logged in" />
-          <Typography fontWeight="bold"> Forgot password ?</Typography>
-        </Box>
-        <Button>Login</Button>
+        <TextField
+          label="Confirm Password"
+          type="password"
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <Password />
+              </InputAdornment>
+            ),
+          }}
+        />
+        <Button>Sign Up</Button>
         <Stack
           direction="row"
           sx={{
@@ -59,23 +63,54 @@ export default function LoginView() {
             alignItems: 'center',
           }}
         >
-          <span>
-            Don&apos;t have and account?
-          </span>
-          <span style={{ fontWeight: 'bold' }}> Sign Up</span>
+          <Typography fontWeight="bold">Already have an account ?</Typography>
+          <Typography fontWeight="bold" color="primary"> Login</Typography>
         </Stack>
-        <Divider>Or continue with</Divider>
+        <Divider />
         <Stack
           direction="row"
-          spacing={2}
           sx={{
             justifyContent: 'center',
             alignItems: 'center',
           }}
         >
-          <Google fontSize="large" />
-          <Window fontSize="large" />
-          <LinkedIn fontSize="large" />
+          <Typography fontWeight="bold">Or sign up with</Typography>
+        </Stack>
+        <Stack
+          direction="row"
+          sx={{
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <Button
+            sx={{
+              backgroundColor: '#DB4437',
+              color: 'white',
+              '&:hover': {
+                backgroundColor: '#DB4437',
+                color: 'white',
+              },
+            }}
+          >
+            <Google />
+            {' '}
+            Google
+          </Button>
+          <Button
+            sx={{
+              backgroundColor: '#0077B5',
+              color: 'white',
+              '&:hover': {
+                backgroundColor: '#0077B5',
+                color: 'white',
+              },
+            }}
+          >
+            <LinkedIn />
+            {' '}
+            LinkedIn
+          </Button>
         </Stack>
       </Stack>
     </Stack>
