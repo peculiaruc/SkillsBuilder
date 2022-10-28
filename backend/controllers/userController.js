@@ -17,10 +17,10 @@ exports.createUser = async (req, res) => {
       error: 'User with email already exists. Please Log in',
     });
   }
-
+  
   const resp = await db.query(
     'INSERT INTO users(fullName, email, password, city, auth_method) VALUES($1, $2, $3, $4, $5) RETURNING *',
-    [req.body.fullname, req.body.email, hashedPassword, req.body.city, req.body.auth_method,]
+    [req.body.fullname, req.body.email, hashedPassword, req.body.city, req.body.auth_method],
   );
 
   console.log(resp.rows[0]);
