@@ -9,13 +9,12 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-initializeDb();
+// initializeDb();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(morgan('short'));
-
 
 app.use('/api/v1/auth', userRoute);
 
@@ -30,8 +29,8 @@ app.use((req, res) => {
   });
 });
 
-
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
+  await initializeDb();
   console.log(`Listening on port: ${PORT}`);
 });
 
