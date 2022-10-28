@@ -1,11 +1,13 @@
 import {
-  Email, Google, LinkedIn, Password, Window,
+  Email, Password,
 } from '@mui/icons-material';
-
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import PhoneIcon from '@mui/icons-material/Phone';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 import {
-  Box,
-  Button, Checkbox, Divider, FormControlLabel, InputAdornment, Stack, TextField, Typography,
+  Button, InputAdornment, Stack, TextField, Typography,
 } from '@mui/material';
+
 import Logo from '../../assets/images/Logo.png';
 
 export default function SignupView() {
@@ -23,12 +25,45 @@ export default function SignupView() {
       </Stack>
       <Stack spacing={2}>
         <TextField
+          label="Full Name"
+          type="text"
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <AccountCircleIcon />
+              </InputAdornment>
+            ),
+          }}
+        />
+        <TextField
           label="Email Address"
           type="email"
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
                 <Email />
+              </InputAdornment>
+            ),
+          }}
+        />
+        <TextField
+          label="Phone Number"
+          type="tel"
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <PhoneIcon />
+              </InputAdornment>
+            ),
+          }}
+        />
+        <TextField
+          label="City"
+          type="text"
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <LocationOnIcon />
               </InputAdornment>
             ),
           }}
@@ -65,52 +100,6 @@ export default function SignupView() {
         >
           <Typography fontWeight="bold">Already have an account ?</Typography>
           <Typography fontWeight="bold" color="primary"> Login</Typography>
-        </Stack>
-        <Divider />
-        <Stack
-          direction="row"
-          sx={{
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <Typography fontWeight="bold">Or sign up with</Typography>
-        </Stack>
-        <Stack
-          direction="row"
-          sx={{
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <Button
-            sx={{
-              backgroundColor: '#DB4437',
-              color: 'white',
-              '&:hover': {
-                backgroundColor: '#DB4437',
-                color: 'white',
-              },
-            }}
-          >
-            <Google />
-            {' '}
-            Google
-          </Button>
-          <Button
-            sx={{
-              backgroundColor: '#0077B5',
-              color: 'white',
-              '&:hover': {
-                backgroundColor: '#0077B5',
-                color: 'white',
-              },
-            }}
-          >
-            <LinkedIn />
-            {' '}
-            LinkedIn
-          </Button>
         </Stack>
       </Stack>
     </Stack>
