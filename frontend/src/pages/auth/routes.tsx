@@ -2,6 +2,7 @@ import AuthLayout from '../../layout/AuthLayout';
 import ForgotPasswordView from './ForgotPasswordView';
 import LoginView from './LoginView';
 import ResetPasswordView from './ResetPasswordView';
+import SignupView from './SignupView';
 
 const routes = {
   element: <AuthLayout />,
@@ -17,6 +18,10 @@ const routes = {
     {
       path: '/reset-password',
       element: <ResetPasswordView />,
+    },
+    {
+      path: '/signup',
+      element: <SignupView />,
     },
   ],
 };
