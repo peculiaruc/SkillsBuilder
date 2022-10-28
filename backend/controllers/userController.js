@@ -113,8 +113,8 @@ exports.passwordReset = async (req, res) => {
     }
 
     // email user the link
-    const link = `${process.env.BASE_URL}/password-reset/${user._id}/${token.rows[O].token}`;
-    await sendEmail(user.email, 'Password reset', link);
+    const link = `${process.env.BASE_URL}/password-reset/${userId}/${token.rows[O].token}`;
+    await sendEmail(findUser.rows[0].email, 'Password reset', link);
 
     return res.status(200).json({
       status: 'success',
