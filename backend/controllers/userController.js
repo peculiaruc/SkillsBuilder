@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import crypto from 'crypto';
 import db from '../db/db';
-import sendEmail from '../utils/sendEmails'
+import sendEmail from '../utils/sendEmails';
 
 dotenv.config();
 
@@ -25,7 +25,7 @@ exports.createUser = async (req, res) => {
       [req.body.firstname, req.body.email, hashedPassword, req.body.city, req.body.auth_method]
     );
 
-    console.log(resp.rows[0]);
+    // console.log(resp.rows[0]);
 
     //  create token
     const token = jwt.sign({ id: resp.rows[0].id }, process.env.JWT_PRIVATE_KEY, {
