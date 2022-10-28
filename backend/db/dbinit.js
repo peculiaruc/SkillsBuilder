@@ -1,6 +1,6 @@
-
 import db from './db';
 import { users } from '../models/users';
+import { tokens } from '../models/token';
 
 export default async () => {
   try {
@@ -9,6 +9,7 @@ export default async () => {
       console.log('Database connected', date.rows[0]);
     }
     await db.query(users);
+    await db.query(tokens);
     return true;
   } catch (e) {
     console.log('db init err', e);
