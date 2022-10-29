@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 
 import { useFormik } from 'formik';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Logo from '../../assets/images/Logo.png';
 import { useRegisterMutation } from '../../apiServices/authService';
 import { UserInterface } from '../../interfaces/User';
