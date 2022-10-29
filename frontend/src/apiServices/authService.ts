@@ -13,13 +13,13 @@ export interface Response {
 const authService = api.injectEndpoints({
   endpoints: (builder) => ({
     login: builder.mutation<Response, AuthInterface>({
-      query: (credentials) => ({ url: 'auth/login', method: 'POST', data: credentials }),
+      query: (credentials) => ({ url: '/auth/login', method: 'POST', data: credentials }),
     }),
     register: builder.mutation<Response, UserInterface>({
-      query: (user) => ({ url: 'auth/register', method: 'POST', data: user }),
+      query: (user) => ({ url: '/auth/register', method: 'POST', data: user }),
     }),
-    logout: builder.query({
-      query: () => ({ url: 'auth/logout', method: 'POST' }),
+    logout: builder.mutation({
+      query: () => ({ url: '/auth/logout', method: 'POST' }),
     }),
   }),
 });

@@ -18,7 +18,14 @@ unknown
 }) => {
   try {
     const result = await axios({
-      url: baseUrl + url, method, data, params,
+      url: baseUrl + url,
+      method,
+      data,
+      params,
+      headers: {
+        Accept: 'application/json',
+        'X-Requested-With': 'XMLHttpRequest',
+      },
     });
     return { data: result.data };
   } catch (axiosError) {
