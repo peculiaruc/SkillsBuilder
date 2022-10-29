@@ -4,7 +4,7 @@ import {
 
 import {
   Box,
-  Button, Checkbox, Divider, FormControlLabel, InputAdornment, Link, Stack, TextField, Typography,
+  Button, Checkbox, Divider, FormControlLabel, InputAdornment, Link, Stack, TextField,
 } from '@mui/material';
 import Logo from '../../assets/images/Logo.png';
 
@@ -49,7 +49,7 @@ export default function LoginView() {
         }}
         >
           <FormControlLabel sx={{ marginTop: 0 }} control={<Checkbox defaultChecked />} label="Keep me logged in" />
-          <Typography fontWeight="bold"> Forgot password ?</Typography>
+          <span style={{ fontWeight: 'bold' }}> Forgot password ?</span>
         </Box>
         <Button>Login</Button>
         <Stack
