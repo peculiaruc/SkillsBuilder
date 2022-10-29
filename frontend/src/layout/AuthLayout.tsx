@@ -1,11 +1,13 @@
 import { Box, Container } from '@mui/material';
-import React from 'react';
-import { Outlet } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
+import { useAuth } from '../store/authReducer';
 import { usePalette } from '../theme/theme';
 
 export default function AuthLayout() {
   const palette = usePalette();
-  return (
+  const auth = useAuth();
+
+  return auth.token ? <Navigate to="/" /> : (
     <Container
       maxWidth="lg"
       sx={{
