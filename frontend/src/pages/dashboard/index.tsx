@@ -1,6 +1,9 @@
-import { Box, Typography } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
+import { useAuth } from '../../store/authReducer';
 
 export default function DashboardView() {
+  const auth = useAuth();
+
   return (
     <Box sx={{
       width: '100%',
@@ -10,7 +13,13 @@ export default function DashboardView() {
       display: 'flex',
     }}
     >
-      <Typography variant="h2" fontWeight="bold">Hello, Welcome to SkillBuddy!</Typography>
+      <Stack spacing={2} alignItems="center">
+        <Typography variant="h2" fontWeight="bold">
+          Hello,
+          {auth.user?.fullname}
+        </Typography>
+        <Typography variant="h2" fontWeight="bold">Welcome to SkillBuddy!</Typography>
+      </Stack>
     </Box>
   );
 }
