@@ -13,7 +13,7 @@ interface ReducerState {
 }
 
 const initialState: AuthState = {
-  token: undefined,
+  token: 'undefined',
   user: undefined,
 };
 

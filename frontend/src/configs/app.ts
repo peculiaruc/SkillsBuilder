@@ -4,6 +4,9 @@ const apiVersion = '/v1';
 
 const apiPath = basePath + apiVersion;
 
-const appConfig = { basePath, apiVersion, apiPath };
+const appName = 'SkillBuddy';
+
+const appConfig = { basePath, apiVersion, apiPath, appName };
+
 
 export default appConfig;

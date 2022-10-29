@@ -4,9 +4,9 @@ export interface AuthInterface {
   rememberMe?: boolean;
 }
 
-export interface UserInterface extends Omit<AuthInterface, 'rememberMe'> {
+export interface UserInterface extends AuthInterface {
 
-  fullName: string;
+  fullname: string;
 
   phone: string;
 
