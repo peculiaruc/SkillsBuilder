@@ -4,7 +4,7 @@ import {
 
 import {
   Box,
-  Button, Checkbox, Divider, FormControlLabel, InputAdornment, Stack, TextField, Typography,
+  Button, Checkbox, Divider, FormControlLabel, InputAdornment, Link, Stack, TextField, Typography,
 } from '@mui/material';
 import Logo from '../../assets/images/Logo.png';
 
@@ -60,9 +60,13 @@ export default function LoginView() {
           }}
         >
           <span>
-            Don&apos;t have and account ?
+            Don&apos;t have and account?
           </span>
-          <span style={{ fontWeight: 'bold' }}> SignIn ?</span>
+          <span style={{ fontWeight: 'bold' }}>
+            <Link href="/signup" underline="hover">
+              Sign Up
+            </Link>
+          </span>
         </Stack>
         <Divider>Or continue with</Divider>
         <Stack
