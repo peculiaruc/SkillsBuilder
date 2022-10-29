@@ -1,10 +1,10 @@
+import { ThemeProvider } from '@mui/material';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { ThemeProvider } from '@mui/material';
 import { BrowserRouter, useRoutes } from 'react-router-dom';
-import theme from './theme/theme';
-import routes from './pages';
 import './index.css';
+import routes from './pages';
+import theme from './theme/theme';
 
 const Router = () => useRoutes(routes);
 
