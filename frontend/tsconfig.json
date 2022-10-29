@@ -21,6 +21,8 @@
     "src",
     "src/**/*.ts",
     "src/**/*.tsx",
+    "src/**/*.html",
+    "src/**/*.css",
     "src/**/*.js",
     "src/**/*.jsx",
     "test/**/*.ts",
