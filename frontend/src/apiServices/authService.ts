@@ -1,12 +1,12 @@
 import { UserInterface, AuthInterface } from '../interfaces/User';
 import api from '.';
 
-interface Response {
+export interface Response {
   status:string,
   error?:string,
   data?:{
-    token:string,
-    user:Partial<UserInterface>
+    token:string | undefined,
+    user:Partial<UserInterface> | undefined
   }
 }
 
@@ -25,3 +25,5 @@ const authService = api.injectEndpoints({
 });
 
 export const { useLoginMutation, useRegisterMutation, useLogoutMutation } = authService;
+
+export default authService;

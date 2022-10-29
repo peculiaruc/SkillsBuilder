@@ -1,5 +1,6 @@
 import BackgroundLayout from '../layout/BackgroundLayout';
 import authroutes from './auth/routes';
+import DashboardLayout from '../layout/DashboardLayout';
 import DashboardView from './dashboard';
 
 export default [{
@@ -7,7 +8,13 @@ export default [{
   children: [
     {
       path: '/',
-      element: <DashboardView />,
+      element: <DashboardLayout />,
+      chrildren: [
+        {
+          index: true,
+          element: <DashboardView />,
+        },
+      ],
     },
     authroutes,
   ],
