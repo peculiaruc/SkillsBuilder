@@ -31,7 +31,7 @@ const authReducer = createSlice({
         authService.endpoints.register.matchFulfilled,
         (state, { payload }: { payload: Response }) => payload.data,
       )
-      .addMatcher(authService.endpoints.logout.matchFulfilled, (state) => initialState);
+      .addMatcher(authService.endpoints.logout.matchFulfilled, () => initialState);
   },
 });
 

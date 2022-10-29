@@ -14,7 +14,7 @@ export default function ForgotPasswordView() {
     initialValues: {
       email: '',
     },
-    onSubmit: ({ email }) => navigate('/login'),
+    onSubmit: () => navigate('/login'),
 
   });
 
