@@ -16,7 +16,6 @@ app.use(morgan('short'));
 
 app.use('/api/v1/auth', userRoute);
 
-
 app.use('/home', (req, res) => {
   res.status(200).send('Welcome to this awesome API!!');
 });
