@@ -37,31 +37,7 @@ exports.createUser = async (req, res) => {
       token,
       user: resp.rows[0],
     },
-  });
-  // } catch (err) {
-  //   console.log(err);
-  //   res.status(400).json({
-  }
-
-  const resp = await db.query(
-    'INSERT INTO users(fullName, email, password, city, auth_method) VALUES($1, $2, $3, $4, $5) RETURNING *',
-    [req.body.fullname, req.body.email, hashedPassword, req.body.city, req.body.auth_method],
-  );
-
-  console.log(resp.rows[0]);
-
-  //  create token
-  const token = jwt.sign({ id: resp.rows[0].id }, process.env.JWT_PRIVATE_KEY, {
-    expiresIn: '24H',
-  });
-
-  res.status(200).json({
-    status: 'success',
-    data: {
-      token,
-      user: resp.rows[0],
-    },
-  });
+  }); 
   // } catch (err) {
   //   console.log(err);
   //   res.status(400).json({
@@ -69,7 +45,7 @@ exports.createUser = async (req, res) => {
   //     error: err.message,
   //   });
   // }
-};
+}
 
 exports.login = async (req, res) => {
   // try {
@@ -107,4 +83,4 @@ exports.login = async (req, res) => {
   //     error: err.message,
   //   });
   // }
-};
+}
