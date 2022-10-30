@@ -36,7 +36,7 @@ exports.createUser = async (req, res) => {
       token,
       user: resp.rows[0],
     },
-  }); 
+  });
 }
 
 exports.login = async (req, res) => {
