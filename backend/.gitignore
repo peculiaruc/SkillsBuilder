@@ -106,3 +106,5 @@ gen
 
 .env
 
+env_setup.sh
+
