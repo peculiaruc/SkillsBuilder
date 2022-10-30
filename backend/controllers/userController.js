@@ -37,7 +37,7 @@ exports.createUser = async (req, res) => {
       user: resp.rows[0],
     },
   });
-}
+};
 
 exports.login = async (req, res) => {
   const user = await db.query('SELECT * FROM users WHERE email = $1', [req.body.email]);
@@ -67,4 +67,4 @@ exports.login = async (req, res) => {
     status: 'error',
     error: 'invalid email',
   });
-}
+};
