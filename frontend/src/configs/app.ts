@@ -1,4 +1,4 @@
-const basePath = 'https://opensourceteam3.onrender.com/api';
+const basePath = 'http://skillbuddy-env.eba-74fcefym.us-east-1.elasticbeanstalk.com/api';
 
 const apiVersion = '/v1';
 
