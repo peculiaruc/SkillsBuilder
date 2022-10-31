@@ -6,7 +6,6 @@ import db from '../db/db';
 dotenv.config();
 
 exports.createUser = async (req, res) => {
-  // try {
   const salt = await bcryptjs.genSalt(10);
   const hashedPassword = await bcryptjs.hash(req.body.password, salt);
 
@@ -38,41 +37,9 @@ exports.createUser = async (req, res) => {
       user: resp.rows[0],
     },
   });
-  // } catch (err) {
-  //   console.log(err);
-  //   res.status(400).json({
-  }
-
-  const resp = await db.query(
-    'INSERT INTO users(fullName, email, password, city, auth_method) VALUES($1, $2, $3, $4, $5) RETURNING *',
-    [req.body.fullname, req.body.email, hashedPassword, req.body.city, req.body.auth_method],
-  );
-
-  console.log(resp.rows[0]);
-
-  //  create token
-  const token = jwt.sign({ id: resp.rows[0].id }, process.env.JWT_PRIVATE_KEY, {
-    expiresIn: '24H',
-  });
-
-  res.status(200).json({
-    status: 'success',
-    data: {
-      token,
-      user: resp.rows[0],
-    },
-  });
-  // } catch (err) {
-  //   console.log(err);
-  //   res.status(400).json({
-  //     status: 'error',
-  //     error: err.message,
-  //   });
-  // }
 };
 
 exports.login = async (req, res) => {
-  // try {
   const user = await db.query('SELECT * FROM users WHERE email = $1', [req.body.email]);
 
   if (user.rows.length) {
@@ -100,11 +67,4 @@ exports.login = async (req, res) => {
     status: 'error',
     error: 'invalid email',
   });
-  // } catch (err) {
-  //   console.log(err);
-  //   return res.status(400).json({
-  //     status: 'error',
-  //     error: err.message,
-  //   });
-  // }
 };

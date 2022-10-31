@@ -28,7 +28,7 @@ export default function ForgotPasswordView() {
             alignItems: 'center',
           }}
         >
-          <img src={Logo} alt="Conversational App" />
+          <img src={Logo} alt={appConfig.appName} />
           <h2>{appConfig.appName}</h2>
         </Stack>
         <Stack spacing={2}>
