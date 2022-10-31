@@ -21,13 +21,14 @@ To get it up and running on your local machine, follow the steps below:
 - Install all the dependencies with the command `npm install`
 - Start the app with the command `npm run dev`
 - Navigate to the app on your browser with the url `http://localhost:****` where **** is the port number displayed on your terminal
-#### Other commands available
-- `npm run build` - Builds the app for production to the `dist` folder.
-- `npm run lint` - Lints the codebase.
-- `npm run lint:fix` - Lints the codebase and fixes auto-fixable errors.
 ##### Backend
 - Navigate to the project directory with the command `cd conversational-app-team3`
 - Navigate to the frontend directory with the command `cd backend`
 - Install all the dependencies with the command `npm install`
 - Start the app with the command `npm run start`
 - Before  you commit and push your changes, lock down dependency versions for production environment `npm shrinkwrap`
+#### Other commands available
+- `npm run build` - Builds the app for production to the `dist` folder.
+- `npm run lint` - Lints the codebase.
+- `npm run lint:fix` - Lints the codebase and fixes auto-fixable errors.
+
