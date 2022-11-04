@@ -32,6 +32,8 @@ exports.createUser = async (req, res) => {
       expiresIn: '24H',
     });
 
+    // send confirmation and verification Email
+
     return res.status(200).json({
       status: 'success',
       data: {
@@ -111,6 +113,11 @@ exports.passwordReset = async (req, res) => {
         userId,
         randomToken,
       ]);
+    } else {
+      return res.status(400).json({
+        status: 'error',
+        error: 'Account not verified',
+      });
     }
 
     // email user the link
@@ -121,6 +128,50 @@ exports.passwordReset = async (req, res) => {
       status: 'success',
       data: {
         message: 'password reset link sent to your email account',
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      status: 'error',
+      error: err.message,
+    });
+  }
+};
+
+exports.passwordUpdate = async (req, res) => {
+  try {
+    const user = await db.query('SELECT * FROM users WHERE id = $1', [req.body.user_id]);
+    if (!user) {
+      return res.status(400).json({
+        status: 'error',
+        error: 'User does not exist',
+      });
+    }
+    const token = await db.query('SELECT * FROM tokens WHERE user_id = $1', [req.body.user_id]);
+
+    if (!token) {
+      return res.status(400).json({
+        status: 'error',
+        error: 'Link is invalid or expired',
+      });
+    }
+    const salt = await bcryptjs.genSalt(10);
+    const hashedPassword = await bcryptjs.hash(req.body.password, salt);
+
+    const update = await db.query('UPDATE users SET password = $1 WHERE id = $2 RETURNING *', [
+      hashedPassword,
+      req.body.user_id,
+    ]);
+
+    console.log('new user', update.rows[0]);
+
+    await db.query('DELETE FROM tokens WHERE user_id = $1', [req.body.user_id]);
+
+    return res.status(200).json({
+      status: 'success',
+      data: {
+        message: 'password reset sucessfully!',
       },
     });
   } catch (err) {
