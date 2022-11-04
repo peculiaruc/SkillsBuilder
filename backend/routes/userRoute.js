@@ -11,4 +11,6 @@ router.post('/password-reset', userController.passwordReset);
 
 router.post('/password-update', userController.passwordUpdate);
 
+router.post('/verify-email', userController.verifyEmail);
+
 module.exports = router;

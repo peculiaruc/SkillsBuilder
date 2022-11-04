@@ -25,14 +25,29 @@ exports.createUser = async (req, res) => {
       [req.body.fullname, req.body.email, hashedPassword, req.body.city, req.body.auth_method]
     );
 
-    // console.log(resp.rows[0]);
-
-    //  create token
+    //  create an auth token
     const token = jwt.sign({ id: resp.rows[0].id }, process.env.JWT_PRIVATE_KEY, {
       expiresIn: '24H',
     });
 
     // send confirmation and verification Email
+    let randomToken = crypto.randomBytes(32).toString('hex');
+    let verifytoken = await db.query('SELECT * FROM tokens WHERE user_id = $1', [resp.rows[0].id]);
+    if (!verifytoken.rows.length) {
+      verifytoken = await db.query(
+        'INSERT INTO tokens(user_id, token) VALUES($1, $2) RETURNING *',
+        [userId, randomToken]
+      );
+    } else {
+      return res.status(400).json({
+        status: 'error',
+        error: 'Account not verified',
+      });
+    }
+
+    const link = `${process.env.BASE_URL}/auth/verify-email/${resp.rows[0].id}/${verifytoken.rows[0].token}`;
+    // const body = ``
+    await sendEmail(resp.rows[0].email, 'Verify Email', link);
 
     return res.status(200).json({
       status: 'success',
@@ -43,7 +58,7 @@ exports.createUser = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
-    return res.status(400).json({
+    return res.status(500).json({
       status: 'error',
       error: err.message,
     });
@@ -182,3 +197,41 @@ exports.passwordUpdate = async (req, res) => {
     });
   }
 };
+
+exports.verifyEmail = async (req, res) => {
+  try {
+    // find user
+    const user = await db.query('SELECT * FROM users WHERE id = $1', [req.params.id]);
+    if (!user) {
+      return res.status(400).json({
+        status: 'error',
+        error: 'User does not exist',
+      });
+    }
+
+    // find token
+    const token = await db.query('SELECT * FROM tokens WHERE token = $1', [req.params.token]);
+    if (!token) {
+      return res.status(400).json({
+        status: 'error',
+        error: 'Link is invalid or expired',
+      });
+    }
+
+    // update verified status
+    const update = await db.query('UPDATE users SET verified = $1 WHERE id = $2 RETURNING *', [
+      true,
+      user.rows[0].id,
+    ]);
+
+    console.log('user updated', update.rows[0]);
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json({
+      status: 'error',
+      error: err.message,
+    });
+  }
+};
+
+
