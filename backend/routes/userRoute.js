@@ -9,4 +9,6 @@ router.post('/login', userController.login);
 
 router.post('/password-reset', userController.passwordReset);
 
+router.post('/password-update', userController.passwordUpdate);
+
 module.exports = router;
