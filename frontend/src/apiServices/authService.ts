@@ -21,6 +21,9 @@ const authService = api.injectEndpoints({
     logout: builder.mutation({
       query: () => ({ url: '/auth/logout', method: 'POST' }),
     }),
+    googleLogin: builder.mutation({
+      query: (user) => ({ url: '/auth/googleLogin', method: 'POST', data: user }),
+    }),
   }),
 });
 
