@@ -225,6 +225,10 @@ exports.verifyEmail = async (req, res) => {
     ]);
 
     console.log('user updated', update.rows[0]);
+
+    return res.status(200).json({
+      status: 'success',
+    });
   } catch (err) {
     console.log(err);
     return res.status(400).json({
@@ -233,5 +237,3 @@ exports.verifyEmail = async (req, res) => {
     });
   }
 };
-
-
