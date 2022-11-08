@@ -45,7 +45,7 @@ exports.createUser = async (req, res) => {
       });
     }
 
-    const link = `${process.env.BASE_URL}/auth/verify-email/${resp.rows[0].id}/${verifytoken.rows[0].token}`;
+    const link = `${process.env.BASE_URL}/api/v1/auth/verify-email/${resp.rows[0].id}/${verifytoken.rows[0].token}`;
     // const body = ``
     let sent = await sendEmail(resp.rows[0].email, 'Verify Email', link);
 
