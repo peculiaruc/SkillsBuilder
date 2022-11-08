@@ -133,11 +133,6 @@ exports.passwordReset = async (req, res) => {
       });
     } else {
       await db.query('DELETE FROM tokens WHERE user_id = $1', [userId]);
-
-      return res.status(500).json({
-        status: 'error',
-        error: 'Email not sent!',
-      });
     }
   } catch (err) {
     console.log(err);
