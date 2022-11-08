@@ -36,7 +36,7 @@ exports.createUser = async (req, res) => {
     if (!verifytoken.rows.length) {
       verifytoken = await db.query(
         'INSERT INTO tokens(user_id, token) VALUES($1, $2) RETURNING *',
-        [userId, randomToken]
+        [resp.rows[0].id, randomToken]
       );
     } else {
       return res.status(400).json({
@@ -47,15 +47,23 @@ exports.createUser = async (req, res) => {
 
     const link = `${process.env.BASE_URL}/auth/verify-email/${resp.rows[0].id}/${verifytoken.rows[0].token}`;
     // const body = ``
-    await sendEmail(resp.rows[0].email, 'Verify Email', link);
+    let sent = await sendEmail(resp.rows[0].email, 'Verify Email', link);
 
-    return res.status(200).json({
-      status: 'success',
-      data: {
-        token,
-        user: resp.rows[0],
-      },
-    });
+    if (sent) {
+      return res.status(200).json({
+        status: 'success',
+        data: {
+          token,
+          user: resp.rows[0],
+        },
+      });
+    } else {
+      await db.query('DELETE FROM tokens WHERE user_id = $1', [resp.rows[0].id]);
+      return res.status(500).json({
+        status: 'error',
+        error: `Email not sent ${sent}`,
+      });
+    }
   } catch (err) {
     console.log(err);
     return res.status(500).json({
