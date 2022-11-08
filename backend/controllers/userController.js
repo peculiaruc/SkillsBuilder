@@ -122,14 +122,23 @@ exports.passwordReset = async (req, res) => {
 
     // email user the link
     const link = `${process.env.BASE_URL}/password-reset/${userId}/${token.rows[0].token}`;
-    await sendEmail(req.body.email, 'Password reset', link);
+    let sent = await sendEmail(req.body.email, 'Password reset', link);
 
-    return res.status(200).json({
-      status: 'success',
-      data: {
-        message: 'password reset link sent to your email account',
-      },
-    });
+    if (sent) {
+      return res.status(200).json({
+        status: 'success',
+        data: {
+          message: 'password reset link sent to your email account',
+        },
+      });
+    } else {
+      await db.query('DELETE FROM tokens WHERE user_id = $1', [userId]);
+
+      return res.status(500).json({
+        status: 'error',
+        error: 'Email not sent!',
+      });
+    }
   } catch (err) {
     console.log(err);
     return res.status(500).json({
