@@ -10,7 +10,7 @@ dotenv.config();
 exports.createUser = async (req, res) => {
   try {
     // check if user exist
-    const user = await db.query('SELECT * FROM users WHERE email = $1', [req.body.email]);
+    const user = await db.query('SELECT * FROM users WHERE email = $1', [req.body.email],);
     if (user.rows.length) {
       return res.status(400).json({
         status: 'error',
@@ -23,14 +23,14 @@ exports.createUser = async (req, res) => {
     const hashedPassword = await bcryptjs.hash(req.body.password, salt);
     const newUser = await db.query(
       'INSERT INTO users(fullName, email, password, city, auth_method) VALUES($1, $2, $3, $4, $5) RETURNING *',
-      [req.body.fullname, req.body.email, hashedPassword, req.body.city, req.body.auth_method]
+      [req.body.fullname, req.body.email, hashedPassword, req.body.city, req.body.auth_method],
     );
 
     // send validation email
     const randomToken = crypto.randomBytes(32).toString('hex');
     const verifytoken = await db.query(
       'INSERT INTO tokens(user_id, token) VALUES($1, $2) RETURNING *',
-      [newUser.rows[0].id, randomToken]
+      [newUser.rows[0].id, randomToken],
     );
     const link = `${process.env.BASE_URL}/api/v1/auth/verify-email/${newUser.rows[0].id}/${verifytoken.rows[0].token}`;
     await sendEmail(newUser.rows[0].email, 'Verify Email', link);
@@ -58,7 +58,7 @@ exports.createUser = async (req, res) => {
 
 exports.login = async (req, res) => {
   try {
-    const user = await db.query('SELECT * FROM users WHERE email = $1', [req.body.email]);
+    const user = await db.query('SELECT * FROM users WHERE email = $1', [req.body.email],);
 
     if (user.rows.length) {
       const validPass = await bcryptjs.compare(req.body.password, user.rows[0].password);
@@ -97,7 +97,7 @@ exports.login = async (req, res) => {
 exports.passwordReset = async (req, res) => {
   try {
     // check if email exists
-    const user = await db.query('SELECT * FROM users WHERE email = $1', [req.body.email]);
+    const user = await db.query('SELECT * FROM users WHERE email = $1', [req.body.email],);
 
     if (!user.rows.length) {
       return res.status(400).json({
@@ -109,12 +109,12 @@ exports.passwordReset = async (req, res) => {
     // create token if dosent exist
     let userId = user.rows[0].id;
     let randomToken = crypto.randomBytes(32).toString('hex');
-    let token = await db.query('SELECT * FROM tokens WHERE user_id = $1', [userId]);
+    let token = await db.query('SELECT * FROM tokens WHERE user_id = $1', [userId],);
     if (!token.rows.length) {
       token = await db.query('INSERT INTO tokens(user_id, token) VALUES($1, $2) RETURNING *', [
         userId,
         randomToken,
-      ]);
+      ],);
     } else {
       return res.status(400).json({
         status: 'error',
@@ -134,7 +134,7 @@ exports.passwordReset = async (req, res) => {
         },
       });
     } else {
-      await db.query('DELETE FROM tokens WHERE user_id = $1', [userId]);
+      await db.query('DELETE FROM tokens WHERE user_id = $1', [userId],);
       return res.status(500).json({
         status: 'error',
         error: `Email not sent ${sent}`,
@@ -151,14 +151,14 @@ exports.passwordReset = async (req, res) => {
 
 exports.passwordUpdate = async (req, res) => {
   try {
-    const user = await db.query('SELECT * FROM users WHERE id = $1', [req.body.user_id]);
+    const user = await db.query('SELECT * FROM users WHERE id = $1', [req.body.user_id],);
     if (!user) {
       return res.status(400).json({
         status: 'error',
         error: 'User does not exist',
       });
     }
-    const token = await db.query('SELECT * FROM tokens WHERE user_id = $1', [req.body.user_id]);
+    const token = await db.query('SELECT * FROM tokens WHERE user_id = $1', [req.body.user_id],);
 
     if (!token) {
       return res.status(400).json({
@@ -172,11 +172,11 @@ exports.passwordUpdate = async (req, res) => {
     const update = await db.query('UPDATE users SET password = $1 WHERE id = $2 RETURNING *', [
       hashedPassword,
       req.body.user_id,
-    ]);
+    ],);
 
     console.log('new user', update.rows[0]);
 
-    await db.query('DELETE FROM tokens WHERE user_id = $1', [req.body.user_id]);
+    await db.query('DELETE FROM tokens WHERE user_id = $1', [req.body.user_id],);
 
     return res.status(200).json({
       status: 'success',
@@ -196,7 +196,7 @@ exports.passwordUpdate = async (req, res) => {
 exports.verifyEmail = async (req, res) => {
   try {
     // find user
-    const user = await db.query('SELECT * FROM users WHERE id = $1', [req.params.id]);
+    const user = await db.query('SELECT * FROM users WHERE id = $1', [req.params.id],);
     if (!user) {
       return res.status(400).json({
         status: 'error',
@@ -205,7 +205,7 @@ exports.verifyEmail = async (req, res) => {
     }
 
     // find token
-    const token = await db.query('SELECT * FROM tokens WHERE token = $1', [req.params.token]);
+    const token = await db.query('SELECT * FROM tokens WHERE token = $1', [req.params.token],);
     if (!token) {
       return res.status(400).json({
         status: 'error',
@@ -217,7 +217,7 @@ exports.verifyEmail = async (req, res) => {
     const update = await db.query('UPDATE users SET verified = $1 WHERE id = $2 RETURNING *', [
       true,
       user.rows[0].id,
-    ]);
+    ],);
 
     console.log('user updated', update.rows[0]);
 
