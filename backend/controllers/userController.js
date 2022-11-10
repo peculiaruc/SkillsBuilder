@@ -7,6 +7,7 @@ import sendEmail from '../utils/sendEmails';
 
 dotenv.config();
 
+exports.createUser = (req, res) => {
 try {
     // check if user exist
     const user = await db.query('SELECT * FROM users WHERE email = $1', [req.body.email]);
