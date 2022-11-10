@@ -7,8 +7,8 @@ import sendEmail from '../utils/sendEmails';
 
 dotenv.config();
 
-exports.createUser = (req, res) => {
-try {
+exports.createUser = async (req, res) => {
+  try {
     // check if user exist
     const user = await db.query('SELECT * FROM users WHERE email = $1', [req.body.email]);
     if (user.rows.length) {
@@ -23,14 +23,14 @@ try {
     const hashedPassword = await bcryptjs.hash(req.body.password, salt);
     const newUser = await db.query(
       'INSERT INTO users(fullName, email, password, city, auth_method) VALUES($1, $2, $3, $4, $5) RETURNING *',
-      [req.body.fullname, req.body.email, hashedPassword, req.body.city, req.body.auth_method],
+      [req.body.fullname, req.body.email, hashedPassword, req.body.city, req.body.auth_method]
     );
 
     // send validation email
     const randomToken = crypto.randomBytes(32).toString('hex');
     const verifytoken = await db.query(
       'INSERT INTO tokens(user_id, token) VALUES($1, $2) RETURNING *',
-      [newUser.rows[0].id, randomToken],
+      [newUser.rows[0].id, randomToken]
     );
     const link = `${process.env.BASE_URL}/api/v1/auth/verify-email/${newUser.rows[0].id}/${verifytoken.rows[0].token}`;
     await sendEmail(newUser.rows[0].email, 'Verify Email', link);
@@ -55,12 +55,10 @@ try {
     });
   }
 };
-  
-  
 
 exports.login = async (req, res) => {
   try {
-    const user = await db.query('SELECT * FROM users WHERE email = $1', [req.body.email],);
+    const user = await db.query('SELECT * FROM users WHERE email = $1', [req.body.email]);
 
     if (user.rows.length) {
       const validPass = await bcryptjs.compare(req.body.password, user.rows[0].password);
@@ -99,7 +97,7 @@ exports.login = async (req, res) => {
 exports.passwordReset = async (req, res) => {
   try {
     // check if email exists
-    const user = await db.query('SELECT * FROM users WHERE email = $1', [req.body.email],);
+    const user = await db.query('SELECT * FROM users WHERE email = $1', [req.body.email]);
 
     if (!user.rows.length) {
       return res.status(400).json({
@@ -174,7 +172,7 @@ exports.passwordUpdate = async (req, res) => {
     const update = await db.query('UPDATE users SET password = $1 WHERE id = $2 RETURNING *', [
       hashedPassword,
       req.body.user_id,
-    ],);
+    ]);
 
     console.log('new user', update.rows[0]);
 
@@ -219,7 +217,7 @@ exports.verifyEmail = async (req, res) => {
     const update = await db.query('UPDATE users SET verified = $1 WHERE id = $2 RETURNING *', [
       true,
       user.rows[0].id,
-    ],);
+    ]);
 
     console.log('user updated', update.rows[0]);
 

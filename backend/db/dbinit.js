@@ -1,5 +1,5 @@
 import db from './db';
-import { users, tokens, course_categories, courses, enrollments } from '../models';
+import { users, tokens, courseCategories, courses, enrollments } from '../models';
 
 export default async () => {
   try {
@@ -9,7 +9,7 @@ export default async () => {
     }
     await db.query(users);
     await db.query(tokens);
-    await db.query(course_categories);
+    await db.query(courseCategories);
     await db.query(courses);
     await db.query(enrollments);
     return true;

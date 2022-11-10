@@ -7,4 +7,4 @@ export const courses = `CREATE TABLE IF NOT EXISTS courses (
     category_ids INT[],
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW()
-);`
+);`;
