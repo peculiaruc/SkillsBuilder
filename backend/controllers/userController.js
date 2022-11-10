@@ -7,114 +7,101 @@ import sendEmail from '../utils/sendEmails';
 
 dotenv.config();
 
-exports.createUser = async (req, res) => {
-  const salt = await bcryptjs.genSalt(10);
-  const hashedPassword = await bcryptjs.hash(req.body.password, salt);
-
-<<<<<<< HEAD
-  const findUser = await db.query('SELECT * FROM users WHERE email = $1', [req.body.email]);
-  if (findUser.rows.length) {
-=======
-    const findUser = await db.query('SELECT * FROM users WHERE email = $1', [req.body.email]);
-    if (findUser.rows.length) {
+exports.createUser = (req, res) => {
+try {
+    // check if user exist
+    const user = await db.query('SELECT * FROM users WHERE email = $1', [req.body.email]);
+    if (user.rows.length) {
       return res.status(400).json({
         status: 'error',
         error: 'User with email already exists. Please Log in',
       });
     }
 
-    const resp = await db.query(
+    // create user
+    const salt = await bcryptjs.genSalt(10);
+    const hashedPassword = await bcryptjs.hash(req.body.password, salt);
+    const newUser = await db.query(
       'INSERT INTO users(fullName, email, password, city, auth_method) VALUES($1, $2, $3, $4, $5) RETURNING *',
-      [req.body.fullname, req.body.email, hashedPassword, req.body.city, req.body.auth_method]
+      [req.body.fullname, req.body.email, hashedPassword, req.body.city, req.body.auth_method],
     );
 
-    // console.log(resp.rows[0]);
+    // send validation email
+    const randomToken = crypto.randomBytes(32).toString('hex');
+    const verifytoken = await db.query(
+      'INSERT INTO tokens(user_id, token) VALUES($1, $2) RETURNING *',
+      [newUser.rows[0].id, randomToken],
+    );
+    const link = `${process.env.BASE_URL}/api/v1/auth/verify-email/${newUser.rows[0].id}/${verifytoken.rows[0].token}`;
+    await sendEmail(newUser.rows[0].email, 'Verify Email', link);
 
-    //  create token
-    const token = jwt.sign({ id: resp.rows[0].id }, process.env.JWT_PRIVATE_KEY, {
+    // generate jwt token
+    const token = jwt.sign({ id: newUser.rows[0].id }, process.env.JWT_PRIVATE_KEY, {
       expiresIn: '24H',
     });
-
-    // send confirmation and verification Email
 
     return res.status(200).json({
       status: 'success',
       data: {
         token,
-        user: resp.rows[0],
+        user: newUser.rows[0],
       },
     });
   } catch (err) {
     console.log(err);
->>>>>>> c563641dd4279d57dd3e9bf4f84bc9daa311a044
-    return res.status(400).json({
+    return res.status(500).json({
       status: 'error',
-      error: 'User with email already exists. Please Log in',
+      error: err.message,
     });
-
   }
-  
-  const resp = await db.query(
-    'INSERT INTO users(fullName, email, password, city, auth_method) VALUES($1, $2, $3, $4, $5) RETURNING *',
-    [req.body.fullname, req.body.email, hashedPassword, req.body.city, req.body.auth_method],
-  );
-
-  console.log(resp.rows[0]);
-
-  //  create token
-  const token = jwt.sign({ id: resp.rows[0].id }, process.env.JWT_PRIVATE_KEY, {
-    expiresIn: '24H',
-  });
-
-  res.status(200).json({
-    status: 'success',
-    data: {
-      token,
-      user: resp.rows[0],
-    },
-  });
 };
+  
+  
 
 exports.login = async (req, res) => {
-  const user = await db.query('SELECT * FROM users WHERE email = $1', [req.body.email]);
+  try {
+    const user = await db.query('SELECT * FROM users WHERE email = $1', [req.body.email],);
 
-  if (user.rows.length) {
-    const validPass = await bcryptjs.compare(req.body.password, user.rows[0].password);
+    if (user.rows.length) {
+      const validPass = await bcryptjs.compare(req.body.password, user.rows[0].password);
 
-    if (!validPass) {
-      return res.status(400).json({
-        status: 'error',
-        error: 'invalid Password',
+      if (!validPass) {
+        return res.status(400).json({
+          status: 'error',
+          error: 'invalid Password',
+        });
+      }
+      //  create token
+      const token = jwt.sign({ id: user.rows[0].id }, process.env.JWT_PRIVATE_KEY, {
+        expiresIn: '24H',
+      });
+      return res.status(200).json({
+        status: 'success',
+        data: {
+          token,
+          user: user.rows[0],
+        },
       });
     }
-    //  create token
-    const token = jwt.sign({ id: user.rows[0].id }, process.env.JWT_PRIVATE_KEY, {
-      expiresIn: '24H',
+    return res.status(400).json({
+      status: 'error',
+      error: 'invalid email',
     });
-    return res.status(200).json({
-      status: 'success',
-      data: {
-        token,
-        user: user.rows[0],
-      },
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      status: 'error',
+      error: err.message,
     });
   }
-  return res.status(400).json({
-    status: 'error',
-    error: 'invalid email',
-  });
 };
 
 exports.passwordReset = async (req, res) => {
   try {
-    // const schema = Joi.object({ email: Joi.string().email().required() });
-    // const { error } = schema.validate(req.body.email);
-    // if (error) return res.status(400).send(error.details[0].message);
-
     // check if email exists
-    const findUser = await db.query('SELECT * FROM users WHERE email = $1', [req.body.email]);
+    const user = await db.query('SELECT * FROM users WHERE email = $1', [req.body.email],);
 
-    if (!findUser.rows.length) {
+    if (!user.rows.length) {
       return res.status(400).json({
         status: 'error',
         error: 'User with given email does not exist',
@@ -122,7 +109,7 @@ exports.passwordReset = async (req, res) => {
     }
 
     // create token if dosent exist
-    let userId = findUser.rows[0].id;
+    const userId = user.rows[0].id;
     let randomToken = crypto.randomBytes(32).toString('hex');
     let token = await db.query('SELECT * FROM tokens WHERE user_id = $1', [userId]);
     if (!token.rows.length) {
@@ -139,7 +126,7 @@ exports.passwordReset = async (req, res) => {
 
     // email user the link
     const link = `${process.env.BASE_URL}/password-reset/${userId}/${token.rows[0].token}`;
-    let sent = await sendEmail(req.body.email, 'Password reset', link);
+    const sent = await sendEmail(req.body.email, 'Password reset', link);
 
     if (sent) {
       return res.status(200).json({
@@ -187,7 +174,7 @@ exports.passwordUpdate = async (req, res) => {
     const update = await db.query('UPDATE users SET password = $1 WHERE id = $2 RETURNING *', [
       hashedPassword,
       req.body.user_id,
-    ]);
+    ],);
 
     console.log('new user', update.rows[0]);
 
@@ -198,6 +185,46 @@ exports.passwordUpdate = async (req, res) => {
       data: {
         message: 'password reset sucessfully!',
       },
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json({
+      status: 'error',
+      error: err.message,
+    });
+  }
+};
+
+exports.verifyEmail = async (req, res) => {
+  try {
+    // find user
+    const user = await db.query('SELECT * FROM users WHERE id = $1', [req.params.id]);
+    if (!user) {
+      return res.status(400).json({
+        status: 'error',
+        error: 'User does not exist',
+      });
+    }
+
+    // find token
+    const token = await db.query('SELECT * FROM tokens WHERE token = $1', [req.params.token]);
+    if (!token) {
+      return res.status(400).json({
+        status: 'error',
+        error: 'Link is invalid or expired',
+      });
+    }
+
+    // update verified status
+    const update = await db.query('UPDATE users SET verified = $1 WHERE id = $2 RETURNING *', [
+      true,
+      user.rows[0].id,
+    ],);
+
+    console.log('user updated', update.rows[0]);
+
+    return res.status(200).json({
+      status: 'success',
     });
   } catch (err) {
     console.log(err);
