@@ -4,9 +4,7 @@ import sendEmail from '../utils/sendEmails';
 exports.getAllCourses = async (req, res) => {
   try {
     const { offset, limit } = req.query;
-    const total = await db.query('SELECT reltuples AS estimate FROM pg_class where relname = $1', [
-      'courses',
-    ]);
+    const total = await db.query('SELECT COUNT(*) FROM courses');
     const course_data = await db.query('SELECT * FROM courses LIMIT $2 OFFSET $1', [
       offset || 0,
       limit || 5,
