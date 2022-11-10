@@ -13,7 +13,7 @@ exports.getAllCourses = async (req, res) => {
     return res.status(200).json({
       status: 'success',
       data: {
-        totalCourses: total,
+        totalCourses: total.rows[0].count,
         courses: course_data.rows,
       },
     });
