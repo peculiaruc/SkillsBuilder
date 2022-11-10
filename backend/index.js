@@ -14,14 +14,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(morgan('short'));
 
-<<<<<<< HEAD
-app.use('/api/v1/auth', userRoute);
-
-<<<<<<< HEAD
-=======
-=======
->>>>>>> c563641dd4279d57dd3e9bf4f84bc9daa311a044
->>>>>>> 82df0fed72581baea4d16460951f649d55800758
 app.use('/home', (req, res) => {
   res.status(200).send('Welcome to this awesome API!!');
 });
