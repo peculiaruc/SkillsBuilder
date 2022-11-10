@@ -7,8 +7,7 @@ import sendEmail from '../utils/sendEmails';
 
 dotenv.config();
 
-exports.createUser = async (req, res) => {
-  try {
+try {
     // check if user exist
     const user = await db.query('SELECT * FROM users WHERE email = $1', [req.body.email]);
     if (user.rows.length) {
@@ -55,6 +54,8 @@ exports.createUser = async (req, res) => {
     });
   }
 };
+  
+  
 
 exports.login = async (req, res) => {
   try {
