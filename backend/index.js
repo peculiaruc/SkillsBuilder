@@ -3,7 +3,7 @@ import cors from 'cors';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
 import initializeDb from './db/dbinit';
-import userRoute from './routes/userRoute';
+import { userRoute, courseRoute } from './routes';
 
 dotenv.config();
 const app = express();
@@ -19,6 +19,7 @@ app.use('/home', (req, res) => {
 });
 
 app.use('/api/v1/auth', userRoute);
+app.use('/api/v1/course', courseRoute);
 
 app.use((req, res) => {
   res.status(404).send({

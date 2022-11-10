@@ -1,0 +1,118 @@
+import db from '../db/db';
+import sendEmail from '../utils/sendEmails';
+
+exports.getAllCourses = async (req, res) => {
+  try {
+    const { offset, limit } = req.query;
+    const total = await db.query('SELECT reltuples AS estimate FROM pg_class where relname = $1', [
+      'courses',
+    ]);
+    const course_data = await db.query('SELECT * FROM courses LIMIT $2 OFFSET $1', [
+      offset || 0,
+      limit || 5,
+    ]);
+
+    return res.status(200).json({
+      status: 'success',
+      data: {
+        totalCourses: total,
+        courses: course_data.rows,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      status: 'error',
+      error: err.message,
+    });
+  }
+};
+
+exports.getCoursesByCategories = async (req, res) => {
+  try {
+    const { categories } = req.body;
+    const course_data = await db.query('SELECT * FROM  courses WHERE category_ids @> $1', [
+      categories,
+    ]);
+
+    return res.status(200).json({
+      status: 'success',
+      data: {
+        totalCourses: course_data.rowCount,
+        courses: course_data.rows,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      status: 'error',
+      error: err.message,
+    });
+  }
+};
+
+exports.getEnrolledCourses = async (req, res) => {
+  try {
+    const { user_id } = req.body;
+    const enrolled_courses = await db.query('SELECT * FROM enrollments WHERE user_id = $1', [
+      user_id,
+    ]);
+
+    return res.status(200).json({
+      status: 'success',
+      data: {
+        totalCourses: enrolled_courses.rowCount,
+        courses: enrolled_courses.rows,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      status: 'error',
+      error: err.message,
+    });
+  }
+};
+
+exports.getCourseCategory = async (req, res) => {
+  try {
+    const categories_data = await db.query('SELECT * FROM course_categories RETURNING *');
+    return res.status(200).json({
+      status: 'success',
+      data: {
+        categories: categories_data.rows,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      status: 'error',
+      error: err.message,
+    });
+  }
+};
+
+exports.enrollUser = async (req, res) => {
+  try {
+    const { user_id, course_id, course_name } = req.body;
+    const user = await db.query('SELECT * FROM users WHERE id = $1 RETURNING *', [user_id]);
+    await db.query(
+      'INSERT INTO enrollments(user_id, course_id, enroll_date) VALUES($1, $2) RETURNING *',
+      [user_id, course_id, new Date()]
+    );
+    await sendEmail(
+      user.rows[0].email,
+      'Enrollment Confirmation',
+      `You have successfully enrolled in ${course_name}`
+    );
+    return res.status(200).json({
+      status: 'success',
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      status: 'error',
+      error: err.message,
+    });
+  }
+};
