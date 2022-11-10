@@ -76,7 +76,7 @@ exports.getEnrolledCourses = async (req, res) => {
 
 exports.getCourseCategory = async (req, res) => {
   try {
-    const categories_data = await db.query('SELECT * FROM course_categories RETURNING *');
+    const categories_data = await db.query('SELECT * FROM course_categories');
     return res.status(200).json({
       status: 'success',
       data: {
@@ -95,7 +95,7 @@ exports.getCourseCategory = async (req, res) => {
 exports.enrollUser = async (req, res) => {
   try {
     const { user_id, course_id, course_name } = req.body;
-    const user = await db.query('SELECT * FROM users WHERE id = $1 RETURNING *', [user_id]);
+    const user = await db.query('SELECT * FROM users WHERE id = $1', [user_id]);
     await db.query(
       'INSERT INTO enrollments(user_id, course_id, enroll_date) VALUES($1, $2) RETURNING *',
       [user_id, course_id, new Date()]
