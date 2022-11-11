@@ -95,7 +95,7 @@ exports.enrollUser = async (req, res) => {
     const { user_id, course_id, course_name } = req.body;
     const user = await db.query('SELECT * FROM users WHERE id = $1', [user_id]);
     await db.query(
-      'INSERT INTO enrollments(user_id, course_id, enroll_date) VALUES($1, $2) RETURNING *',
+      'INSERT INTO enrollments(user_id, course_id, enroll_date) VALUES($1, $2, $3) RETURNING *',
       [user_id, course_id, new Date()]
     );
     await sendEmail(
