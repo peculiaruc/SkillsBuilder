@@ -159,3 +159,26 @@ exports.getAssignmentSubmissions = async (req, res) => {
     });
   }
 };
+
+exports.createAssignmentSubmissions = async (req, res) => {
+  try {
+    const { course_id, user_id, assignment_id, grade, status } = req.body;
+    const newSubmission = await db.query(
+      'INSERT INTO assignment_submission(course_id, user_id, assignment_id, grade, status) VALUES($1, $2, $3, $4, $5) RETURNING *',
+      [course_id, user_id, assignment_id, grade, status]
+    );
+
+    return res.status(200).json({
+      status: 'success',
+      data: {
+        assignments: newSubmission.rows,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      status: 'error',
+      error: err.message,
+    });
+  }
+};
