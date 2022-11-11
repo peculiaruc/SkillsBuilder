@@ -141,7 +141,7 @@ exports.getAssignmentSubmissions = async (req, res) => {
   try {
     const { course_id, user_id } = req.body;
     const assignments = await db.query(
-      'SELECT * FROM assignment_submission WHERE course_id = $1 && user_id = $2',
+      'SELECT * FROM assignment_submission WHERE course_id = $1 AND user_id = $2',
       [course_id, user_id]
     );
 
