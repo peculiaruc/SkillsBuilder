@@ -162,10 +162,10 @@ exports.getAssignmentSubmissions = async (req, res) => {
 
 exports.createAssignmentSubmissions = async (req, res) => {
   try {
-    const { course_id, user_id, assignment_id, grade, status } = req.body;
+    const { course_id, user_id, assignment_id, grade, ass_status } = req.body;
     const newSubmission = await db.query(
       'INSERT INTO assignment_submission(course_id, user_id, assignment_id, grade, status) VALUES($1, $2, $3, $4, $5) RETURNING *',
-      [course_id, user_id, assignment_id, grade, status]
+      [course_id, user_id, assignment_id, grade, ass_status]
     );
 
     return res.status(200).json({
