@@ -114,3 +114,48 @@ exports.enrollUser = async (req, res) => {
     });
   }
 };
+
+exports.getCourseAssignments = async (req, res) => {
+  try {
+    const { course_id } = req.body;
+    const assignments = await db.query('SELECT * FROM assignments WHERE course_id = $1', [
+      course_id,
+    ]);
+
+    return res.status(200).json({
+      status: 'success',
+      data: {
+        assignments: assignments.rows,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      status: 'error',
+      error: err.message,
+    });
+  }
+};
+
+exports.getAssignmentSubmissions = async (req, res) => {
+  try {
+    const { course_id, user_id } = req.body;
+    const assignments = await db.query(
+      'SELECT * FROM assignment_submission WHERE course_id = $1 && user_id = $2',
+      [course_id, user_id]
+    );
+
+    return res.status(200).json({
+      status: 'success',
+      data: {
+        assignments: assignments.rows,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      status: 'error',
+      error: err.message,
+    });
+  }
+};

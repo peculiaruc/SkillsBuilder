@@ -1,5 +1,14 @@
 import db from './db';
-import { users, tokens, courseCategories, courses, enrollments } from '../models';
+import {
+  users,
+  tokens,
+  courseCategories,
+  courses,
+  enrollments,
+  courseLesson,
+  assignmentSubmission,
+  assignments,
+} from '../models';
 
 export default async () => {
   try {
@@ -12,6 +21,9 @@ export default async () => {
     await db.query(courseCategories);
     await db.query(courses);
     await db.query(enrollments);
+    await db.query(courseLesson);
+    await db.query(assignmentSubmission);
+    await db.query(assignments);
     return true;
   } catch (e) {
     console.log('db init err', e);
