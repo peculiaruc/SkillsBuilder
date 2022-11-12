@@ -2,11 +2,11 @@ import { UserInterface, AuthInterface } from '../interfaces/User';
 import api from '.';
 
 export interface Response {
-  status:string,
-  error?:string,
-  data?:{
-    token:string | undefined,
-    user:Partial<UserInterface> | undefined
+  status: string,
+  error?: string,
+  data?: {
+    token: string | undefined,
+    user: Partial<UserInterface> | undefined
   }
 }
 
@@ -22,11 +22,24 @@ const authService = api.injectEndpoints({
       query: () => ({ url: '/auth/logout', method: 'POST' }),
     }),
     googleLogin: builder.mutation({
-      query: (user) => ({ url: '/auth/googleLogin', method: 'POST', data: user }),
+      query: (user) => ({ url: '/auth/google', method: 'POST', data: user }),
+    }),
+    facebookLogin: builder.mutation({
+      query: (user) => ({ url: '/auth/facebook', method: 'POST', data: user }),
+    }),
+    linkedinLogin: builder.mutation({
+      query: (user) => ({ url: '/auth/linkedin', method: 'POST', data: user }),
     }),
   }),
 });
 
-export const { useLoginMutation, useRegisterMutation, useLogoutMutation } = authService;
+export const {
+  useLoginMutation,
+  useRegisterMutation,
+  useLogoutMutation,
+  useGoogleLoginMutation,
+  useFacebookLoginMutation,
+  useLinkedinLoginMutation,
+} = authService;
 
 export default authService;

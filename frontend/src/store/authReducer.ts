@@ -12,10 +12,7 @@ interface ReducerState {
   auth: AuthState
 }
 
-const initialState: AuthState = {
-  token: undefined,
-  user: undefined,
-};
+const initialState: AuthState = JSON.parse(localStorage.getItem('user') as string) || { user: undefined, token: undefined };
 
 const authReducer = createSlice({
   name: 'auth',
@@ -25,7 +22,11 @@ const authReducer = createSlice({
     builder
       .addMatcher(
         authService.endpoints.login.matchFulfilled,
-        (state, { payload }: { payload: Response }) => payload.data,
+        (state, { payload }: { payload: Response }) => {
+          const user = payload.data;
+          localStorage.setItem('user', JSON.stringify(user));
+          return payload.data;
+        },
       )
       .addMatcher(
         authService.endpoints.register.matchFulfilled,

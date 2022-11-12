@@ -1,3 +1,4 @@
+import { LinkedInCallback } from 'react-linkedin-login-oauth2';
 import AuthLayout from '../../layout/AuthLayout';
 import ForgotPasswordView from './ForgotPasswordView';
 import LoginView from './LoginView';
@@ -22,6 +23,10 @@ const routes = {
     {
       path: '/signup',
       element: <SignupView />,
+    },
+    {
+      path: '/linkedin',
+      element: <LinkedInCallback />,
     },
   ],
 };

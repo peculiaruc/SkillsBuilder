@@ -1,23 +1,46 @@
 import {
-  Email, Google, LinkedIn, Password, Window,
+  Email, Facebook, Google, LinkedIn, Password,
 } from '@mui/icons-material';
 
 import {
   Box,
   Button, Checkbox, Divider, FormControlLabel, InputAdornment, Stack, TextField, Typography,
 } from '@mui/material';
+import { useGoogleLogin } from '@react-oauth/google';
 import { useFormik } from 'formik';
+import FacebookAuth from 'react-facebook-auth';
+import { useLinkedIn } from 'react-linkedin-login-oauth2';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useLoginMutation } from '../../apiServices/authService';
+import {
+  useFacebookLoginMutation, useGoogleLoginMutation, useLinkedinLoginMutation, useLoginMutation,
+} from '../../apiServices/authService';
 import Logo from '../../assets/images/Logo.png';
-import appConfig from '../../configs/app';
+import appConfig, { FACEBOOK_APP_ID, LINKEDIN_CLIENT_ID } from '../../configs/app';
 import { AuthInterface } from '../../interfaces/User';
+
+const FacebookIcon = (<Facebook fontSize="large" />);
 
 export default function LoginView() {
   const navigate = useNavigate();
 
   const [login] = useLoginMutation();
+
+  const [GoogleAuth] = useGoogleLoginMutation();
+
+  const [LinkedInAuth] = useLinkedinLoginMutation();
+
+  const [FacebookLogin] = useFacebookLoginMutation();
+
+  const GoogleLogin = useGoogleLogin({
+    onSuccess: GoogleAuth,
+  });
+
+  const { linkedInLogin } = useLinkedIn({
+    clientId: LINKEDIN_CLIENT_ID,
+    redirectUri: `${window.location.origin}/linkedin`,
+    onSuccess: LinkedInAuth,
+  });
 
   const initialValues: AuthInterface = {
     email: '',
@@ -122,9 +145,16 @@ export default function LoginView() {
           alignItems: 'center',
         }}
       >
-        <Google fontSize="large" />
-        <Window fontSize="large" />
-        <LinkedIn fontSize="large" />
+        <Google fontSize="large" onClick={() => GoogleLogin()} />
+        <LinkedIn fontSize="large" onClick={() => linkedInLogin()} />
+        <FacebookAuth
+          appId={FACEBOOK_APP_ID}
+          autoLoad
+          fields="name,email,picture"
+          callback={() => FacebookLogin()}
+          component={FacebookIcon}
+        />
+
       </Stack>
     </Stack>
   );
