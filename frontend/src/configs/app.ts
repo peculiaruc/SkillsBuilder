@@ -6,6 +6,8 @@ const apiPath = basePath + apiVersion;
 
 const appName = 'SkillBuddy';
 
+export const GOOGLE_CLIENT_ID = '693113486174-5df06paehqv1ddg50i68jhf9cfdcrbfn.apps.googleusercontent.com';
+
 const appConfig = {
   basePath, apiVersion, apiPath, appName,
 };

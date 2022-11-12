@@ -1,15 +1,16 @@
 import {
-  Email, Google, LinkedIn, Password, Window,
+  Email, Google, Password,
 } from '@mui/icons-material';
 
 import {
   Box,
   Button, Checkbox, Divider, FormControlLabel, InputAdornment, Stack, TextField, Typography,
 } from '@mui/material';
+import { useGoogleLogin } from '@react-oauth/google';
 import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useLoginMutation } from '../../apiServices/authService';
+import { useGoogleLoginMutation, useLoginMutation } from '../../apiServices/authService';
 import Logo from '../../assets/images/Logo.png';
 import appConfig from '../../configs/app';
 import { AuthInterface } from '../../interfaces/User';
@@ -18,6 +19,12 @@ export default function LoginView() {
   const navigate = useNavigate();
 
   const [login] = useLoginMutation();
+
+  const [GoogleAuth] = useGoogleLoginMutation();
+
+  const GoogleLogin = useGoogleLogin({
+    onSuccess: GoogleAuth,
+  });
 
   const initialValues: AuthInterface = {
     email: '',
@@ -43,7 +50,7 @@ export default function LoginView() {
           alignItems: 'center',
         }}
       >
-        <img src={Logo} alt="Conversational App" />
+        <img src={Logo} alt={appConfig.appName} />
         <h2>{appConfig.appName}</h2>
       </Stack>
 
@@ -122,9 +129,7 @@ export default function LoginView() {
           alignItems: 'center',
         }}
       >
-        <Google fontSize="large" />
-        <Window fontSize="large" />
-        <LinkedIn fontSize="large" />
+        <Google fontSize="large" onClick={() => GoogleLogin()} />
       </Stack>
     </Stack>
   );
