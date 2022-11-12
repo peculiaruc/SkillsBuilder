@@ -13,7 +13,6 @@ import { useLinkedIn } from 'react-linkedin-login-oauth2';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useGoogleLoginMutation, useLinkedinLoginMutation, useLoginMutation } from '../../apiServices/authService';
-oogleLoginMutation, useLoginMutation } from '../../apiServices/authService';
 import Logo from '../../assets/images/Logo.png';
 import appConfig, { LINKEDIN_CLIENT_ID } from '../../configs/app';
 import { AuthInterface } from '../../interfaces/User';
@@ -36,7 +35,7 @@ export default function LoginView() {
     redirectUri: `${window.location.origin}/linkedin`,
     onSuccess: LinkedInAuth,
   });
-  
+
   const initialValues: AuthInterface = {
     email: '',
     password: '',
@@ -141,7 +140,7 @@ export default function LoginView() {
         }}
       >
         <Google fontSize="large" onClick={() => GoogleLogin()} />
-        
+
         <LinkedIn fontSize="large" onClick={() => linkedInLogin()} />
 
       </Stack>
