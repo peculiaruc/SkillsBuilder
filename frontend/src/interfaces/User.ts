@@ -1,10 +1,10 @@
-export interface AuthInterface {
-  email: string;
-  password: string;
-  rememberMe?: boolean;
-}
+export type UserType = {
 
-export interface UserInterface extends AuthInterface {
+  email: string;
+
+  password: string;
+
+  rememberMe?: boolean;
 
   fullname: string;
 
@@ -12,4 +12,15 @@ export interface UserInterface extends AuthInterface {
 
   city: string;
 
-}
+  id: number;
+
+  role: number;
+};
+
+export type CredentialsType = {
+  email: string,
+  password: string,
+  rememberMe?: boolean
+};
+
+export type UserRegisterType = Omit<UserType, 'id' | 'role'>;

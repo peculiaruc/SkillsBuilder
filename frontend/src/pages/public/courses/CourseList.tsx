@@ -1,10 +1,10 @@
 import { Stack } from '@mui/material';
-import { CourseItem } from '../../../interfaces/Course';
+import { CourseItem, EnrolledCourseType } from '../../../interfaces/Course';
 import { useCourses, useEnrolledCourses } from '../../../store/courseReducer';
 import ListItemCourse from './ListItemCourse';
 
 function CourseList() {
-  const enrolled : CourseItem[] = useEnrolledCourses();
+  const enrolled : EnrolledCourseType[] = useEnrolledCourses();
   const courseIds = enrolled.map((e) => e.id);
   const allCourses : CourseItem[] = useCourses();
 

@@ -1,21 +1,21 @@
-import { UserInterface, AuthInterface } from '../interfaces/User';
+import { CredentialsType, UserType, UserRegisterType } from '../interfaces/User';
 import api from '.';
 
-export interface Response {
+export type LoginResponseType = {
   status: string,
-  error?: string,
-  data?: {
-    token: string | undefined,
-    user: Partial<UserInterface> | undefined
+  error: string,
+  data: {
+    token: string,
+    user: UserType
   }
-}
+};
 
 const authService = api.injectEndpoints({
   endpoints: (builder) => ({
-    login: builder.mutation<Response, AuthInterface>({
+    login: builder.mutation<LoginResponseType, CredentialsType>({
       query: (credentials) => ({ url: '/auth/login', method: 'POST', data: credentials }),
     }),
-    register: builder.mutation<Response, UserInterface>({
+    register: builder.mutation<LoginResponseType, UserRegisterType>({
       query: (user) => ({ url: '/auth/register', method: 'POST', data: user }),
     }),
     logout: builder.mutation({

@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { useSelector } from 'react-redux';
 import courseService, { GetAllType } from '../apiServices/courseService';
-import { CourseItem } from '../interfaces/Course';
+import { CourseItem, EnrolledCourseResponseType, EnrolledCourseType } from '../interfaces/Course';
 
 type InitialStateType = {
-  enrolled:CourseItem[],
+  enrolled:EnrolledCourseType[],
   courses:CourseItem[]
 };
 
@@ -25,13 +25,13 @@ const courseReducer = createSlice({
         courseService.endpoints.getAllCourse.matchFulfilled,
         (state: InitialStateType, { payload }: { payload: GetAllType }) => {
           const currenState = state;
-          currenState.courses = payload.data?.courses as CourseItem[];
+          currenState.courses = payload.data.courses;
         },
       ).addMatcher(
         courseService.endpoints.getEnrolledCourses.matchFulfilled,
-        (state: InitialStateType, { payload }: { payload: GetAllType }) => {
+        (state: InitialStateType, { payload }: { payload: EnrolledCourseResponseType }) => {
           const currenState = state;
-          currenState.enrolled = payload.data?.courses as CourseItem[];
+          currenState.enrolled = payload.data.courses;
         },
       );
   },

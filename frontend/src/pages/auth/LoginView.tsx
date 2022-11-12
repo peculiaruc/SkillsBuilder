@@ -1,6 +1,5 @@
 import {
   Email, Google, LinkedIn, Password,
-
 } from '@mui/icons-material';
 
 import {
@@ -15,7 +14,7 @@ import { toast } from 'react-toastify';
 import { useGoogleLoginMutation, useLinkedinLoginMutation, useLoginMutation } from '../../apiServices/authService';
 import Logo from '../../assets/images/Logo.png';
 import appConfig, { LINKEDIN_CLIENT_ID } from '../../configs/app';
-import { AuthInterface } from '../../interfaces/User';
+import { CredentialsType } from '../../interfaces/User';
 
 export default function LoginView() {
   const navigate = useNavigate();
@@ -36,12 +35,12 @@ export default function LoginView() {
     onSuccess: LinkedInAuth,
   });
 
-  const initialValues: AuthInterface = {
+  const initialValues: CredentialsType = {
     email: '',
     password: '',
   };
 
-  const onSubmit = async (credentials: AuthInterface) => {
+  const onSubmit = async (credentials: CredentialsType) => {
     await login(credentials).unwrap();
     toast('Login successfully', { type: 'success' });
   };
