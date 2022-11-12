@@ -21,6 +21,8 @@ router.post('/get-assignment-submissions', verifyToken, courseController.getAssi
 
 router.post('/submit-assignment', verifyToken, courseController.createAssignmentSubmissions);
 
+router.post('/:id', verifyToken, courseController.getCoursesById);
+
 // admin routes
 router.post('/create-course', verifyAdminUserToken, adminCourseController.createCourse);
 

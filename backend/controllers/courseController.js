@@ -49,6 +49,26 @@ exports.getCoursesByCategories = async (req, res) => {
   }
 };
 
+exports.getCoursesById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const course_data = await db.query('SELECT * FROM  courses WHERE id = $1', [id]);
+
+    return res.status(200).json({
+      status: 'success',
+      data: {
+        course: course_data.rows,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      status: 'error',
+      error: err.message,
+    });
+  }
+};
+
 exports.getEnrolledCourses = async (req, res) => {
   try {
     const { user_id } = req.body;
