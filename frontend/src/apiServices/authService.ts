@@ -3,8 +3,8 @@ import api from '.';
 
 export type LoginResponseType = {
   status: string,
-  error?: string,
-  data?: {
+  error: string,
+  data: {
     token: string,
     user: UserType
   }

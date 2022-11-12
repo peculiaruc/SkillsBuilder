@@ -23,4 +23,4 @@ export type CredentialsType = {
   rememberMe?: boolean
 };
 
-export type UserRegisterType = Omit<UserType, 'id ' | 'role'>;
+export type UserRegisterType = Omit<UserType, 'id' | 'role'>;

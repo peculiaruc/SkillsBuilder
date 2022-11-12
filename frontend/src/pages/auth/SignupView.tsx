@@ -22,7 +22,7 @@ export default function SignupView() {
 
   const onSubmit = async (user: UserRegisterType) => {
     const res = await signup(user).unwrap();
-    if (res?.data?.token) navigate('/');
+    if (res.data.token) navigate('/');
   };
 
   const initialValues: UserRegisterType = {
@@ -33,7 +33,7 @@ export default function SignupView() {
     rememberMe: false,
     phone: '',
   };
-  
+
   const formik = useFormik({
     initialValues,
     onSubmit,
