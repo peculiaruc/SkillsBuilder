@@ -32,6 +32,8 @@ export const {
   useRegisterMutation,
   useLogoutMutation,
   useGoogleLoginMutation,
+  useLinkedinLoginMutation,
+
 } = authService;
 
 export default authService;

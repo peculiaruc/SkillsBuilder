@@ -1,5 +1,6 @@
 import {
-  Email, Google, Password,
+  Email, Google, LinkedIn, Password,
+
 } from '@mui/icons-material';
 
 import {
@@ -8,11 +9,13 @@ import {
 } from '@mui/material';
 import { useGoogleLogin } from '@react-oauth/google';
 import { useFormik } from 'formik';
+import { useLinkedIn } from 'react-linkedin-login-oauth2';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useGoogleLoginMutation, useLoginMutation } from '../../apiServices/authService';
+import { useGoogleLoginMutation, useLinkedinLoginMutation, useLoginMutation } from '../../apiServices/authService';
+oogleLoginMutation, useLoginMutation } from '../../apiServices/authService';
 import Logo from '../../assets/images/Logo.png';
-import appConfig from '../../configs/app';
+import appConfig, { LINKEDIN_CLIENT_ID } from '../../configs/app';
 import { AuthInterface } from '../../interfaces/User';
 
 export default function LoginView() {
@@ -22,10 +25,18 @@ export default function LoginView() {
 
   const [GoogleAuth] = useGoogleLoginMutation();
 
+  const [LinkedInAuth] = useLinkedinLoginMutation();
+
   const GoogleLogin = useGoogleLogin({
     onSuccess: GoogleAuth,
   });
 
+  const { linkedInLogin } = useLinkedIn({
+    clientId: LINKEDIN_CLIENT_ID,
+    redirectUri: `${window.location.origin}/linkedin`,
+    onSuccess: LinkedInAuth,
+  });
+  
   const initialValues: AuthInterface = {
     email: '',
     password: '',
@@ -130,6 +141,9 @@ export default function LoginView() {
         }}
       >
         <Google fontSize="large" onClick={() => GoogleLogin()} />
+        
+        <LinkedIn fontSize="large" onClick={() => linkedInLogin()} />
+
       </Stack>
     </Stack>
   );

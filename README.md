@@ -20,7 +20,7 @@ To get it up and running on your local machine, follow the steps below:
 - Navigate to the frontend directory with the command `cd frontend`
 - Install all the dependencies with the command `npm install`
 - Start the app with the command `npm run dev`
-- Navigate to the app on your browser with the url `http://localhost:****` where **** is the port number displayed on your terminal
+- Navigate to the app on your browser with the url `http://localhost:****` where **** is the port number displayed on your terminal.
 ##### Backend
 - Navigate to the project directory with the command `cd conversational-app-team3`
 - Navigate to the frontend directory with the command `cd backend`
