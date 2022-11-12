@@ -1,5 +1,5 @@
 import {
-  Email, Facebook, Google, LinkedIn, Password,
+  Email, Google, LinkedIn, Password,
 } from '@mui/icons-material';
 
 import {
@@ -8,18 +8,13 @@ import {
 } from '@mui/material';
 import { useGoogleLogin } from '@react-oauth/google';
 import { useFormik } from 'formik';
-import FacebookAuth from 'react-facebook-auth';
 import { useLinkedIn } from 'react-linkedin-login-oauth2';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import {
-  useFacebookLoginMutation, useGoogleLoginMutation, useLinkedinLoginMutation, useLoginMutation,
-} from '../../apiServices/authService';
+import { useGoogleLoginMutation, useLinkedinLoginMutation, useLoginMutation } from '../../apiServices/authService';
 import Logo from '../../assets/images/Logo.png';
-import appConfig, { FACEBOOK_APP_ID, LINKEDIN_CLIENT_ID } from '../../configs/app';
+import appConfig, { LINKEDIN_CLIENT_ID } from '../../configs/app';
 import { AuthInterface } from '../../interfaces/User';
-
-const FacebookIcon = (<Facebook fontSize="large" />);
 
 export default function LoginView() {
   const navigate = useNavigate();
@@ -29,8 +24,6 @@ export default function LoginView() {
   const [GoogleAuth] = useGoogleLoginMutation();
 
   const [LinkedInAuth] = useLinkedinLoginMutation();
-
-  const [FacebookLogin] = useFacebookLoginMutation();
 
   const GoogleLogin = useGoogleLogin({
     onSuccess: GoogleAuth,
@@ -147,14 +140,6 @@ export default function LoginView() {
       >
         <Google fontSize="large" onClick={() => GoogleLogin()} />
         <LinkedIn fontSize="large" onClick={() => linkedInLogin()} />
-        <FacebookAuth
-          appId={FACEBOOK_APP_ID}
-          autoLoad
-          fields="name,email,picture"
-          callback={() => FacebookLogin()}
-          component={FacebookIcon}
-        />
-
       </Stack>
     </Stack>
   );

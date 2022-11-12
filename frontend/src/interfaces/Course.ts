@@ -5,6 +5,7 @@ export type CourseItem = {
   thumbnail: string,
   updated_at: string,
   id: string,
+  course_id?: string,
   status:string;
   created_at:string;
 };

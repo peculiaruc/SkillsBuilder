@@ -1,7 +1,7 @@
 import {
   Box, Button, CircularProgress, Grid, Paper, Stack, Typography,
 } from '@mui/material';
-import { useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useEnrolleInOneCourseMutation, useGetEnrolledCoursesQuery } from '../../../apiServices/courseService';
 import TabView from '../../../components/TabView';
@@ -23,11 +23,17 @@ function CourseDetails() {
 
   if (isLoading) return <CircularProgress />;
 
-  const course : CourseItem = courses.find((c) => c.id === id);
+  const course = courses.find((c:CourseItem) => Number(c.id) === Number(id)) as CourseItem;
+
+  if (!course) {
+    return <Navigate to="/my-courses" />;
+  }
 
   if (!enrolled) return <Typography>Course Not found</Typography>;
 
-  const isEnrolled = enrolled.data?.courses.find((c) => c.course_id === id);
+  const isEnrolled = enrolled.data?.courses.find(
+    (c:CourseItem) => Number(c.course_id) === Number(id),
+  );
 
   const { name, summary, thumbnail } = course;
 
