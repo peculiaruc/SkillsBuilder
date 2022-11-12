@@ -1,5 +1,6 @@
 import {
   Email, Google, LinkedIn, Password,
+
 } from '@mui/icons-material';
 
 import {
@@ -24,13 +25,11 @@ export default function LoginView() {
 
   const [GoogleAuth] = useGoogleLoginMutation();
 
-
   const [LinkedInAuth] = useLinkedinLoginMutation();
 
   const GoogleLogin = useGoogleLogin({
     onSuccess: GoogleAuth,
   });
-
 
   const { linkedInLogin } = useLinkedIn({
     clientId: LINKEDIN_CLIENT_ID,
@@ -144,6 +143,7 @@ export default function LoginView() {
         <Google fontSize="large" onClick={() => GoogleLogin()} />
         
         <LinkedIn fontSize="large" onClick={() => linkedInLogin()} />
+
       </Stack>
     </Stack>
   );
