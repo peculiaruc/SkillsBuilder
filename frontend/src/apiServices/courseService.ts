@@ -1,10 +1,12 @@
 import api from '.';
-import { CourseItem } from '../interfaces/Course';
+import {
+  CourseItem, EnrolledCourseResponseType, EnrolledCourseType, EnrollInCourseResponse
+} from '../interfaces/Course';
 
 export type GetAllType = {
   status: string,
   error?: string,
-  data?: {
+  data: {
     totalCourses: number,
     courses: CourseItem[]
   }
@@ -13,17 +15,11 @@ export type GetAllType = {
 type GetOneType = {
   status: string,
   error?: string,
-  data?: CourseItem
-};
-
-type EnrollInCourseRequest = {
-  user_id: string,
-  course_id: string,
-  course_name: string
+  data: CourseItem
 };
 
 type UserId = {
-  user_id:string
+  user_id:number
 };
 
 const courseService = api.injectEndpoints({
@@ -43,11 +39,13 @@ const courseService = api.injectEndpoints({
     deleteOneCourse: builder.mutation({
       query: (id) => ({ url: `/course/${id}`, method: 'DELETE' }),
     }),
-    enrolleInOneCourse: builder.mutation<EnrollInCourseRequest, GetOneType>({
+    enrolleInOneCourse: builder.mutation<EnrollInCourseResponse, Partial<EnrolledCourseType>>({
       query: (data) => ({ url: '/course/enroll-in-course', method: 'POST', data }),
+      invalidatesTags: ['AllEnrolledCourses'],
     }),
-    getEnrolledCourses: builder.query<GetAllType, UserId>({
+    getEnrolledCourses: builder.query<EnrolledCourseResponseType, UserId>({
       query: (data) => ({ url: '/course/enrolled-courses', method: 'POST', data }),
+      providesTags: ['AllEnrolledCourses'],
     }),
   }),
 });
