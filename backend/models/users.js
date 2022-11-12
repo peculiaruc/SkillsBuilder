@@ -3,6 +3,7 @@ export const users = `CREATE TABLE IF NOT EXISTS users (
     fullName VARCHAR NOT NULL,
     city VARCHAR,
     email VARCHAR,
+    phone VARCHAR,
     verified BOOLEAN DEFAULT false,
     role INT DEFAULT 0,
     password VARCHAR,
