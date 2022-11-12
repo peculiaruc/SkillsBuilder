@@ -1,6 +1,6 @@
 import api from '.';
 import {
-  CourseItem, EnrolledCourseResponseType, EnrolledCourseType, EnrollInCourseResponse
+  CourseItem, EnrolledCourseResponseType, EnrolledCourseType, EnrollInCourseResponse,
 } from '../interfaces/Course';
 
 export type GetAllType = {
