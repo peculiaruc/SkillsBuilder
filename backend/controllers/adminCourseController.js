@@ -5,7 +5,7 @@ exports.createCourse = async (req, res) => {
   try {
     const { name, description, thumbnail, summary, category } = req.body;
     const newCourse = await db.query(
-      'INSERT INTO courses(name, description, thumbnail, summary, category) VALUES($1, $2, $3, $4, $5) RETURNING *',
+      'INSERT INTO courses(name, description, thumbnail, summary, category_ids) VALUES($1, $2, $3, $4, $5) RETURNING *',
       [name, description, thumbnail, summary, category]
     );
     return res.status(200).json({
