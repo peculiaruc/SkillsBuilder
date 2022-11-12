@@ -11,8 +11,9 @@ import { useCourses } from '../../../store/courseReducer';
 
 function CourseDetails() {
   const params = useParams();
+
   const id = params.id as string;
-  // const { data, isLoading } = useGetOneCourseQuery(id as string);
+  /// const { data, isLoading } = useGetOneCourseQuery(id as string);
   const auth = useAuth();
   const { data: enrolled, isLoading } = useGetEnrolledCoursesQuery({
     user_id: auth?.user?.id,
@@ -23,11 +24,11 @@ function CourseDetails() {
 
   if (isLoading) return <CircularProgress />;
 
-  const course : CourseItem = courses.find((c) => c.id === id);
+  const course = courses.find((c) => c.id == id) as CourseItem;
 
   if (!enrolled) return <Typography>Course Not found</Typography>;
 
-  const isEnrolled = enrolled.data?.courses.find((c) => c.course_id === id);
+  const isEnrolled = enrolled.data?.courses.find((c) => c.course_id == id);
 
   const { name, summary, thumbnail } = course;
 

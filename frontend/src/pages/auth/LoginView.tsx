@@ -29,9 +29,7 @@ export default function LoginView() {
   const [GoogleAuth] = useGoogleLoginMutation();
 
   const [LinkedInAuth] = useLinkedinLoginMutation();
-
-  const [FacebookLogin] = useFacebookLoginMutation();
-
+ 
   const GoogleLogin = useGoogleLogin({
     onSuccess: GoogleAuth,
   });
@@ -147,13 +145,7 @@ export default function LoginView() {
       >
         <Google fontSize="large" onClick={() => GoogleLogin()} />
         <LinkedIn fontSize="large" onClick={() => linkedInLogin()} />
-        <FacebookAuth
-          appId={FACEBOOK_APP_ID}
-          autoLoad
-          fields="name,email,picture"
-          callback={() => FacebookLogin()}
-          component={FacebookIcon}
-        />
+       
 
       </Stack>
     </Stack>

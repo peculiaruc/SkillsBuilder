@@ -38,6 +38,7 @@ const courseReducer = createSlice({
 });
 
 export const useCourses = () => useSelector((state:ReducerState) => state.courses.courses);
+
 export const useEnrolledCourses = () => useSelector((state:ReducerState) => state.courses.enrolled);
 
 export default courseReducer;
