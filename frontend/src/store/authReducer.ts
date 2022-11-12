@@ -28,10 +28,6 @@ const authReducer = createSlice({
           return payload.data;
         },
       )
-      .addMatcher(
-        authService.endpoints.register.matchFulfilled,
-        (state, { payload }: { payload: LoginResponseType }) => payload.data,
-      )
       .addMatcher(authService.endpoints.logout.matchFulfilled, () => initialState);
   },
 });

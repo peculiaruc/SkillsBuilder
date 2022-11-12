@@ -36,3 +36,7 @@ export type EnrollInCourseResponse = {
   error?: string,
   status:string,
 };
+
+export type ResetPasswordRequest = {
+  email:string,
+};

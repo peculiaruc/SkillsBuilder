@@ -32,6 +32,7 @@ const courseService = api.injectEndpoints({
     }),
     getOneCourse: builder.query<GetOneType, string>({
       query: (id) => ({ url: `/course/${id}`, method: 'GET' }),
+      providesTags: ['LIST_ALL_COURSES'],
     }),
     getAllCourse: builder.query<GetAllType, void>({
       query: () => ({ url: '/course/courses', method: 'GET' }),
@@ -41,7 +42,7 @@ const courseService = api.injectEndpoints({
     }),
     enrolleInOneCourse: builder.mutation<EnrollInCourseResponse, Partial<EnrolledCourseType>>({
       query: (data) => ({ url: '/course/enroll-in-course', method: 'POST', data }),
-      invalidatesTags: ['AllEnrolledCourses'],
+      invalidatesTags: ['AllEnrolledCourses', 'LIST_ALL_COURSES'],
     }),
     getEnrolledCourses: builder.query<EnrolledCourseResponseType, UserId>({
       query: (data) => ({ url: '/course/enrolled-courses', method: 'POST', data }),
