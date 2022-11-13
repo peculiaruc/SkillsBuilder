@@ -52,8 +52,8 @@ module.exports = {
     }
   },
   linkedInLogin: async (req, res) => {
-    const { code, redirect_uri } = req.body;
     try {
+      const { code, redirect_uri } = req.body;
       /**
        * Request linkedin access token
        */
