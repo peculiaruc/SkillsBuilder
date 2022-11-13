@@ -25,7 +25,7 @@ function LinkedinLoginButton() {
     clientId: LINKEDIN_CLIENT_ID,
     redirectUri: `${window.location.origin}/linkedin`,
     onSuccess: onSuccessLinkedin,
-    scope: encodeURI('r_emailaddress,r_liteprofile'),
+    scope: 'r_emailaddress r_liteprofile',
     state: nanoid(),
   });
 

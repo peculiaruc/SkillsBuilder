@@ -31,7 +31,7 @@ const authService = api.injectEndpoints({
     googleLogin: builder.mutation({
       query: (user) => ({ url: '/auth/google', method: 'POST', data: user }),
     }),
-    linkedinLogin: builder.mutation<string, SocialLoginRequest>({
+    linkedinLogin: builder.mutation({
       query: (data) => ({
         url: '/auth/linkedin',
         method: 'POST',

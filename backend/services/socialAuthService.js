@@ -48,7 +48,12 @@ module.exports = {
       });
     },
     getUserInfo: async (access_token) => {
-      return await getUserInfo(process.env['LINKEDIN_USER_PROFILE_URI'], access_token);
+      const res = await getUserInfo(process.env['LINKEDIN_USER_PROFILE_URI'], access_token);
+      let email = await getUserInfo(process.env['LINKEDIN_USER_EMAIL_URI'], access_token);
+      if(email.data?.elements?.length){
+        email = email.data.elements.pop()['handle~']
+      }
+      return {data:{...res.data,...email}};
     },
   },
 };
