@@ -1,3 +1,5 @@
+"use strict";
+
 import { google, linkedin } from '../services/socialAuthService';
 import db from '../db/db';
 import tokentools from '../utils/tokentools';
@@ -45,7 +47,7 @@ module.exports = {
         });
       }
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       res.status(400).send({
         status: err?.data?.message,
       });
@@ -93,7 +95,7 @@ module.exports = {
         });
       }
     } catch (err) {
-      console.log(err);
+     // console.log(err);
       res.status(400).send({
         status: err?.data?.message,
       });
