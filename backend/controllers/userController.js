@@ -97,7 +97,7 @@ exports.login = async (req, res) => {
   }
 };
 
-exports.logout = (req,res)=> res.status(200).send()
+exports.logout = (req, res) => res.status(200).send();
 
 exports.passwordReset = async (req, res) => {
   try {
