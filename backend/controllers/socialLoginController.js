@@ -1,5 +1,3 @@
-"use strict";
-
 import { google, linkedin } from '../services/socialAuthService';
 import db from '../db/db';
 import tokentools from '../utils/tokentools';
