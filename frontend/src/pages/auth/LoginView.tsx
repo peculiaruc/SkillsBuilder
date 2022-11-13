@@ -1,39 +1,22 @@
-import {
-  Email, Google, LinkedIn, Password,
-} from '@mui/icons-material';
+import { Email, Password } from '@mui/icons-material';
 
 import {
   Box,
-  Button, Checkbox, Divider, FormControlLabel, InputAdornment, Stack, TextField, Typography,
+  Button, Checkbox, FormControlLabel, InputAdornment, Stack, TextField, Typography
 } from '@mui/material';
-import { useGoogleLogin } from '@react-oauth/google';
 import { useFormik } from 'formik';
-import { useLinkedIn } from 'react-linkedin-login-oauth2';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useGoogleLoginMutation, useLinkedinLoginMutation, useLoginMutation } from '../../apiServices/authService';
+import { useLoginMutation } from '../../apiServices/authService';
 import Logo from '../../assets/images/Logo.png';
-import appConfig, { LINKEDIN_CLIENT_ID } from '../../configs/app';
+import appConfig from '../../configs/app';
 import { CredentialsType } from '../../interfaces/User';
+import SocialLoginForm from './SocialLogin';
 
 export default function LoginView() {
   const navigate = useNavigate();
 
   const [login] = useLoginMutation();
-
-  const [GoogleAuth] = useGoogleLoginMutation();
-
-  const [LinkedInAuth] = useLinkedinLoginMutation();
-
-  const GoogleLogin = useGoogleLogin({
-    onSuccess: GoogleAuth,
-  });
-
-  const { linkedInLogin } = useLinkedIn({
-    clientId: LINKEDIN_CLIENT_ID,
-    redirectUri: `${window.location.origin}/linkedin`,
-    onSuccess: LinkedInAuth,
-  });
 
   const initialValues: CredentialsType = {
     email: '',
@@ -62,7 +45,6 @@ export default function LoginView() {
         <img src={Logo} alt={appConfig.appName} />
         <h2>{appConfig.appName}</h2>
       </Stack>
-
       <form onSubmit={formik.handleSubmit}>
         <Stack spacing={2}>
           <TextField
@@ -129,20 +111,7 @@ export default function LoginView() {
         </Typography>
 
       </Stack>
-      <Divider>Or continue with</Divider>
-      <Stack
-        direction="row"
-        spacing={2}
-        sx={{
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <Google fontSize="large" onClick={() => GoogleLogin()} />
-
-        <LinkedIn fontSize="large" onClick={() => linkedInLogin()} />
-
-      </Stack>
+      <SocialLoginForm />
     </Stack>
   );
 }

@@ -11,6 +11,12 @@ export type LoginResponseType = {
   }
 };
 
+export type SocialLoginRequest = {
+  code:string,
+  redirect_uri:string,
+  scope?:string
+};
+
 const authService = api.injectEndpoints({
   endpoints: (builder) => ({
     login: builder.mutation<LoginResponseType, CredentialsType>({
@@ -25,8 +31,12 @@ const authService = api.injectEndpoints({
     googleLogin: builder.mutation({
       query: (user) => ({ url: '/auth/google', method: 'POST', data: user }),
     }),
-    linkedinLogin: builder.mutation({
-      query: (user) => ({ url: '/auth/linkedin', method: 'POST', data: user }),
+    linkedinLogin: builder.mutation<string, SocialLoginRequest>({
+      query: (data) => ({
+        url: '/auth/linkedin',
+        method: 'POST',
+        data,
+      }),
     }),
     passwordReset: builder.mutation<void, ResetPasswordRequest>({
       query: (data) => ({ url: '/auth/password-reset', method: 'POST', data }),
