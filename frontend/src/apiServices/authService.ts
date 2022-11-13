@@ -1,3 +1,4 @@
+import { ResetPasswordRequest } from '../interfaces/Course';
 import { CredentialsType, UserType, UserRegisterType } from '../interfaces/User';
 import api from '.';
 
@@ -8,6 +9,12 @@ export type LoginResponseType = {
     token: string,
     user: UserType
   }
+};
+
+export type SocialLoginRequest = {
+  code:string,
+  redirect_uri:string,
+  scope?:string
 };
 
 const authService = api.injectEndpoints({
@@ -25,7 +32,14 @@ const authService = api.injectEndpoints({
       query: (user) => ({ url: '/auth/google', method: 'POST', data: user }),
     }),
     linkedinLogin: builder.mutation({
-      query: (user) => ({ url: '/auth/linkedin', method: 'POST', data: user }),
+      query: (data) => ({
+        url: '/auth/linkedin',
+        method: 'POST',
+        data,
+      }),
+    }),
+    passwordReset: builder.mutation<void, ResetPasswordRequest>({
+      query: (data) => ({ url: '/auth/password-reset', method: 'POST', data }),
     }),
   }),
 });
@@ -36,6 +50,7 @@ export const {
   useLogoutMutation,
   useGoogleLoginMutation,
   useLinkedinLoginMutation,
+  usePasswordResetMutation,
 } = authService;
 
 export default authService;
