@@ -4,8 +4,8 @@ import tokentools from '../utils/tokentools';
 
 module.exports = {
   googleLogin: async (req, res) => {
-    const { code, redirect_uri } = req.body;
     try {
+      const { code, redirect_uri } = req.body;
       /**
        * Request google access token
        */
