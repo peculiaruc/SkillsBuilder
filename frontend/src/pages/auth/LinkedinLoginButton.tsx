@@ -15,8 +15,7 @@ function LinkedinLoginButton() {
         code,
         redirect_uri: window.location.origin.concat('/linkedin'),
       };
-      const res = await LinkedInAuth(data).unwrap();
-      console.log(res);
+      await LinkedInAuth(data).unwrap();
     } else {
       localStorage.removeItem('redirected');
     }

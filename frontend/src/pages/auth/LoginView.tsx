@@ -2,7 +2,7 @@ import { Email, Password } from '@mui/icons-material';
 
 import {
   Box,
-  Button, Checkbox, FormControlLabel, InputAdornment, Stack, TextField, Typography
+  Button, Checkbox, FormControlLabel, InputAdornment, Stack, TextField, Typography,
 } from '@mui/material';
 import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
