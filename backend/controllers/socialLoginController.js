@@ -44,6 +44,10 @@ module.exports = {
           },
         });
       }
+      res.status(400).send({
+        status: 'error',
+        message: 'Ivalid params'
+      });
     } catch (err) {
       // console.log(err);
       res.status(400).send({
@@ -92,6 +96,10 @@ module.exports = {
           },
         });
       }
+      res.status(400).send({
+        status: 'error',
+        message: 'Ivalid params'
+      });
     } catch (err) {
      // console.log(err);
       res.status(400).send({
