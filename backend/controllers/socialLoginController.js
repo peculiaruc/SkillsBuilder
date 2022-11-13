@@ -46,7 +46,7 @@ module.exports = {
       }
       res.status(400).send({
         status: 'error',
-        message: 'Ivalid params'
+        message: 'Invalid params'
       });
     } catch (err) {
       // console.log(err);
@@ -98,7 +98,7 @@ module.exports = {
       }
       res.status(400).send({
         status: 'error',
-        message: 'Ivalid params'
+        message: 'Invalid params'
       });
     } catch (err) {
      // console.log(err);
