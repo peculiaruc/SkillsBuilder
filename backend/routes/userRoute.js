@@ -1,22 +1,16 @@
 import express from 'express';
-import {
-  createUser,
-  login,
-  passwordReset,
-  passwordUpdate,
-  verifyEmail,
-} from '../controllers/userController';
+import userController from '../controllers/userController';
 
 const router = express.Router();
 
-router.post('/register', createUser);
+router.post('/register', userController.createUser);
 
-router.post('/login', login);
+router.post('/login', userController.login);
 
-router.post('/password-reset', passwordReset);
+router.post('/password-reset', userController.passwordReset);
 
-router.post('/password-update', passwordUpdate);
+router.post('/password-update', userController.passwordUpdate);
 
-router.get('/verify-email/:id/:token', verifyEmail);
+router.get('/verify-email/:id/:token', userController.verifyEmail);
 
 module.exports = router;

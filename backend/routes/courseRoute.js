@@ -1,49 +1,38 @@
 import express from 'express';
 import { verifyToken, verifyAdminUserToken } from '../helpers/authCheck';
-import {
-  getAllCourses,
-  getCourseCategory,
-  getCoursesByCategories,
-  getEnrolledCourses,
-  enrollUser,
-  getCourseAssignments,
-  getAssignmentSubmissions,
-  createAssignmentSubmissions,
-  getCoursesById,
-} from '../controllers/courseController';
-import {
-  createCourse,
-  addCourseLesson,
-  deleteCourse,
-  deleteCourseLesson,
-} from '../controllers/adminCourseController';
+import courseController from '../controllers/courseController';
+import adminCourseController from '../controllers/adminCourseController';
 
 const router = express.Router();
 
-router.get('/courses', verifyToken, getAllCourses);
+router.get('/courses', verifyToken, courseController.getAllCourses);
 
-router.post('/filter-courses', verifyToken, getCoursesByCategories);
+router.post('/filter-courses', verifyToken, courseController.getCoursesByCategories);
 
-router.post('/enrolled-courses', verifyToken, getEnrolledCourses);
+router.post('/enrolled-courses', verifyToken, courseController.getEnrolledCourses);
 
-router.get('/categories', verifyToken, getCourseCategory);
+router.get('/categories', verifyToken, courseController.getCourseCategory);
 
-router.post('/enroll-in-course', verifyToken, enrollUser);
+router.post('/enroll-in-course', verifyToken, courseController.enrollUser);
 
-router.post('/get-course-assignment', verifyToken, getCourseAssignments);
+router.post('/get-course-assignment', verifyToken, courseController.getCourseAssignments);
 
-router.post('/get-assignment-submissions', verifyToken, getAssignmentSubmissions);
+router.post('/get-assignment-submissions', verifyToken, courseController.getAssignmentSubmissions);
 
-router.post('/submit-assignment', verifyToken, createAssignmentSubmissions);
+router.post('/submit-assignment', verifyToken, courseController.createAssignmentSubmissions);
 
-router.post('/:id', verifyToken, getCoursesById);
+router.post('/:id', verifyToken, courseController.getCoursesById);
 
-router.post('/create-course', verifyAdminUserToken, createCourse);
+router.post('/create-course', verifyAdminUserToken, adminCourseController.createCourse);
 
-router.post('/add-course-lesson', verifyAdminUserToken, addCourseLesson);
+router.post('/add-course-lesson', verifyAdminUserToken, adminCourseController.addCourseLesson);
 
-router.post('/delete-course', verifyAdminUserToken, deleteCourse);
+router.post('/delete-course', verifyAdminUserToken, adminCourseController.deleteCourse);
 
-router.post('/delete-course-lesson', verifyAdminUserToken, deleteCourseLesson);
+router.post(
+  '/delete-course-lesson',
+  verifyAdminUserToken,
+  adminCourseController.deleteCourseLesson
+);
 
 module.exports = router;
