@@ -30,6 +30,7 @@ unknown
     return { data: result.data };
   } catch (axiosError) {
     const err = axiosError as AxiosError;
+    // console.log(err)
     return {
       error: {
         status: err.response?.status,

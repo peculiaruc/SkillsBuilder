@@ -4,6 +4,8 @@ import morgan from 'morgan';
 import dotenv from 'dotenv';
 import initializeDb from './db/dbinit';
 import { userRoute, courseRoute } from './routes';
+import socialLoginRoute from './routes/socialLoginRoute';
+
 
 dotenv.config();
 const app = express();
@@ -19,6 +21,7 @@ app.use('/home', (req, res) => {
 });
 
 app.use('/api/v1/auth', userRoute);
+app.use('/api/v1/auth/social', socialLoginRoute);
 app.use('/api/v1/course', courseRoute);
 
 app.use((req, res) => {
