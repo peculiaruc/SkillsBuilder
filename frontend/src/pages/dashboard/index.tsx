@@ -1,10 +1,10 @@
 import { Button, CircularProgress, Paper } from '@mui/material';
-import { useGetAllCourseQuery } from '../../apiServices/courseService';
+import { useGetAllCoursesQuery } from '../../apiServices/courseService';
 import TabView from '../../components/TabView';
 import CourseList from './CourseList';
 
 function Dashboard() {
-  const { isLoading } = useGetAllCourseQuery();
+  const { isLoading } = useGetAllCoursesQuery();
 
   if (isLoading) { return <CircularProgress />; }
 

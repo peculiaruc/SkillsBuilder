@@ -25,7 +25,7 @@ type UserId = {
 const courseService = api.injectEndpoints({
   endpoints: (builder) => ({
     createOneCourse: builder.mutation<GetOneType, Partial<CourseItem>>({
-      query: (course) => ({ url: '/course/create', method: 'POST', data: course }),
+      query: (course) => ({ url: '/create-course', method: 'POST', data: course }),
     }),
     updateOneCourse: builder.mutation<GetOneType, Partial<CourseItem>>({
       query: (course) => ({ url: `/course/${course.id}`, method: 'PUT', data: course }),
@@ -34,11 +34,11 @@ const courseService = api.injectEndpoints({
       query: (id) => ({ url: `/course/${id}`, method: 'GET' }),
       providesTags: ['LIST_ALL_COURSES'],
     }),
-    getAllCourse: builder.query<GetAllType, void>({
+    getAllCourses: builder.query<GetAllType, void>({
       query: () => ({ url: '/course/courses', method: 'GET' }),
     }),
     deleteOneCourse: builder.mutation({
-      query: (id) => ({ url: `/course/${id}`, method: 'DELETE' }),
+      query: (course_id) => ({ url: '/course/delete-course', method: 'POST', data: { course_id } }),
     }),
     enrolleInOneCourse: builder.mutation<EnrollInCourseResponse, Partial<EnrolledCourseType>>({
       query: (data) => ({ url: '/course/enroll-in-course', method: 'POST', data }),
@@ -58,7 +58,7 @@ export const {
   useDeleteOneCourseMutation,
   useUpdateOneCourseMutation,
   useGetEnrolledCoursesQuery,
-  useGetAllCourseQuery,
+  useGetAllCoursesQuery,
 } = courseService;
 
 export default courseService;
