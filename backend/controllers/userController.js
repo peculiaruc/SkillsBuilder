@@ -7,7 +7,7 @@ import sendEmail from '../utils/sendEmails';
 
 dotenv.config();
 
-exports.createUser = async (req, res) => {
+export const createUser = async (req, res) => {
   const { email, password, fullname, city, auth_method } = req.body;
   try {
     const user = await db.query('SELECT * FROM users WHERE email = $1', [email]);
@@ -53,7 +53,7 @@ exports.createUser = async (req, res) => {
   }
 };
 
-exports.login = async (req, res) => {
+export const login = async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await db.query('SELECT * FROM users WHERE email = $1', [email]);
@@ -91,7 +91,7 @@ exports.login = async (req, res) => {
   }
 };
 
-exports.passwordReset = async (req, res) => {
+export const passwordReset = async (req, res) => {
   const { email } = req.body;
   try {
     const user = await db.query('SELECT * FROM users WHERE email = $1', [email]);
@@ -144,7 +144,7 @@ exports.passwordReset = async (req, res) => {
   }
 };
 
-exports.passwordUpdate = async (req, res) => {
+export const passwordUpdate = async (req, res) => {
   const { user_id, password } = req.body;
   try {
     const user = await db.query('SELECT * FROM users WHERE id = $1', [user_id]);
@@ -187,7 +187,7 @@ exports.passwordUpdate = async (req, res) => {
   }
 };
 
-exports.verifyEmail = async (req, res) => {
+export const verifyEmail = async (req, res) => {
   const { id, token } = req.params;
   try {
     const user = await db.query('SELECT * FROM users WHERE id = $1', [id]);

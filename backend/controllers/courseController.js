@@ -1,7 +1,7 @@
 import db from '../db/db';
 import sendEmail from '../utils/sendEmails';
 
-exports.getAllCourses = async (req, res) => {
+export const getAllCourses = async (req, res) => {
   const { offset, limit } = req.query;
   try {
     const total = await db.query('SELECT COUNT(*) FROM courses');
@@ -26,7 +26,7 @@ exports.getAllCourses = async (req, res) => {
   }
 };
 
-exports.getCoursesByCategories = async (req, res) => {
+export const getCoursesByCategories = async (req, res) => {
   const { categories } = req.body;
   try {
     const course_data = await db.query('SELECT * FROM  courses WHERE category_ids @> $1', [
@@ -49,7 +49,7 @@ exports.getCoursesByCategories = async (req, res) => {
   }
 };
 
-exports.getCoursesById = async (req, res) => {
+export const getCoursesById = async (req, res) => {
   const { id } = req.params;
   try {
     const course_data = await db.query('SELECT * FROM  courses WHERE id = $1', [id]);
@@ -69,7 +69,7 @@ exports.getCoursesById = async (req, res) => {
   }
 };
 
-exports.getEnrolledCourses = async (req, res) => {
+export const getEnrolledCourses = async (req, res) => {
   const { user_id } = req.body;
   try {
     const enrolled_courses = await db.query('SELECT * FROM enrollments WHERE user_id = $1', [
@@ -92,7 +92,7 @@ exports.getEnrolledCourses = async (req, res) => {
   }
 };
 
-exports.getCourseCategory = async (req, res) => {
+export const getCourseCategory = async (req, res) => {
   let categories_data;
   try {
     categories_data = await db.query('SELECT * FROM course_categories');
@@ -111,7 +111,7 @@ exports.getCourseCategory = async (req, res) => {
   }
 };
 
-exports.enrollUser = async (req, res) => {
+export const enrollUser = async (req, res) => {
   const { user_id, course_id, course_name } = req.body;
   try {
     const user = await db.query('SELECT * FROM users WHERE id = $1', [user_id]);
@@ -136,7 +136,7 @@ exports.enrollUser = async (req, res) => {
   }
 };
 
-exports.getCourseAssignments = async (req, res) => {
+export const getCourseAssignments = async (req, res) => {
   const { course_id } = req.body;
   try {
     const assignments = await db.query('SELECT * FROM assignments WHERE course_id = $1', [
@@ -158,7 +158,7 @@ exports.getCourseAssignments = async (req, res) => {
   }
 };
 
-exports.getAssignmentSubmissions = async (req, res) => {
+export const getAssignmentSubmissions = async (req, res) => {
   const { course_id, user_id } = req.body;
   try {
     const assignments = await db.query(
@@ -181,7 +181,7 @@ exports.getAssignmentSubmissions = async (req, res) => {
   }
 };
 
-exports.createAssignmentSubmissions = async (req, res) => {
+export const createAssignmentSubmissions = async (req, res) => {
   const { course_id, user_id, assignment_id, grade, ass_status } = req.body;
   try {
     const newSubmission = await db.query(

@@ -1,7 +1,7 @@
 import db from '../db/db';
 import sendEmail from '../utils/sendEmails';
 
-exports.createCourse = async (req, res) => {
+export const createCourse = async (req, res) => {
   const { name, description, thumbnail, summary, category } = req.body;
   try {
     const newCourse = await db.query(
@@ -23,7 +23,7 @@ exports.createCourse = async (req, res) => {
   }
 };
 
-exports.addCourseLesson = async (req, res) => {
+export const addCourseLesson = async (req, res) => {
   const { course_id, description, lesson_no, lesson_content, lesson_content_type } = req.body;
   try {
     const newCourseLesson = await db.query(
@@ -45,7 +45,7 @@ exports.addCourseLesson = async (req, res) => {
   }
 };
 
-exports.deleteCourse = async (req, res) => {
+export const deleteCourse = async (req, res) => {
   const { course_id } = req.body;
   try {
     await db.query('DELETE FROM courses WHERE course_id = $1', [course_id]);
@@ -65,7 +65,7 @@ exports.deleteCourse = async (req, res) => {
   }
 };
 
-exports.deleteCourseLesson = async (req, res) => {
+export const deleteCourseLesson = async (req, res) => {
   const { course_id } = req.body;
   try {
     await db.query('DELETE FROM course_lesson WHERE course_id = $1', [course_id]);
@@ -82,7 +82,7 @@ exports.deleteCourseLesson = async (req, res) => {
   }
 };
 
-exports.deleteCourseAssignment = async (req, res) => {
+export const deleteCourseAssignment = async (req, res) => {
   const { assignment_id } = req.body;
   try {
     await db.query('DELETE FROM assignments WHERE id = $1', [assignment_id]);
@@ -98,7 +98,7 @@ exports.deleteCourseAssignment = async (req, res) => {
   }
 };
 
-exports.deleteCourseAssignmentSubmission = async (req, res) => {
+export const deleteCourseAssignmentSubmission = async (req, res) => {
   const { submission_id } = req.body;
   try {
     await db.query('DELETE FROM assignment_submission WHERE id = $1', [submission_id]);
