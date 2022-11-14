@@ -22,7 +22,7 @@ const courseReducer = createSlice({
   extraReducers(builder) {
     builder
       .addMatcher(
-        courseService.endpoints.getAllCourse.matchFulfilled,
+        courseService.endpoints.getAllCourses.matchFulfilled,
         (state: InitialStateType, { payload }: { payload: GetAllType }) => {
           const currenState = state;
           currenState.courses = payload.data.courses;
