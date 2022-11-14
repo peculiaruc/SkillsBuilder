@@ -53,12 +53,12 @@ module.exports = {
   getCoursesById: async (req, res) => {
     const { id } = req.params;
     try {
-      const course_data = await db.query('SELECT * FROM  courses WHERE id = $1', [id]);
+      const courseData = await db.query('SELECT * FROM  courses WHERE id = $1', [id]);
 
       return res.status(200).json({
         status: 'success',
         data: {
-          course: course_data.rows,
+          course: courseData.rows,
         },
       });
     } catch (err) {
@@ -71,17 +71,17 @@ module.exports = {
   },
 
   getEnrolledCourses: async (req, res) => {
-    const { user_id } = req.body;
+    const { userId } = req.body;
     try {
-      const enrolled_courses = await db.query('SELECT * FROM enrollments WHERE user_id = $1', [
-        user_id,
+      const enrolledCourses = await db.query('SELECT * FROM enrollments WHERE user_id = $1', [
+        userId,
       ]);
 
       return res.status(200).json({
         status: 'success',
         data: {
-          totalCourses: enrolled_courses.rowCount,
-          courses: enrolled_courses.rows,
+          totalCourses: enrolledCourses.rowCount,
+          courses: enrolledCourses.rows,
         },
       });
     } catch (err) {
@@ -112,17 +112,17 @@ module.exports = {
   },
 
   enrollUser: async (req, res) => {
-    const { user_id, course_id, course_name } = req.body;
+    const { userId, courseId, courseName } = req.body;
     try {
-      const user = await db.query('SELECT * FROM users WHERE id = $1', [user_id]);
+      const user = await db.query('SELECT * FROM users WHERE id = $1', [userId]);
       await db.query(
         'INSERT INTO enrollments(user_id, course_id, enroll_date) VALUES($1, $2, $3) RETURNING *',
-        [user_id, course_id, new Date()]
+        [userId, courseId, new Date()]
       );
       await sendEmail(
         user.rows[0].email,
         'Enrollment Confirmation',
-        `You have successfully enrolled in ${course_name}`
+        `You have successfully enrolled in ${courseName}`
       );
       return res.status(200).json({
         status: 'success',
@@ -136,4 +136,3 @@ module.exports = {
     }
   },
 };
-

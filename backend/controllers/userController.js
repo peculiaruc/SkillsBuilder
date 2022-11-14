@@ -129,13 +129,12 @@ module.exports = {
             message: 'password reset link sent to your email account',
           },
         });
-      } else {
-        await db.query('DELETE FROM tokens WHERE user_id = $1', [userId]);
-        return res.status(500).json({
-          status: 'error',
-          error: `Email not sent ${sent}`,
-        });
       }
+      await db.query('DELETE FROM tokens WHERE user_id = $1', [userId]);
+      return res.status(500).json({
+        status: 'error',
+        error: `Email not sent ${sent}`,
+      });
     } catch (err) {
       console.log(err);
       return res.status(500).json({
@@ -224,4 +223,3 @@ module.exports = {
     }
   },
 };
-
