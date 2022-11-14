@@ -11,8 +11,9 @@ import {
 } from '../models';
 
 export default async () => {
+  let date;
   try {
-    const date = await db.query('SELECT NOW()');
+    date = await db.query('SELECT NOW()');
     if (process.env !== 'production') {
       console.log('Database connected', date.rows[0]);
     }

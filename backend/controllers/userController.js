@@ -8,9 +8,9 @@ import sendEmail from '../utils/sendEmails';
 dotenv.config();
 
 exports.createUser = async (req, res) => {
+  const { email, password, fullname, city, auth_method } = req.body;
   try {
-    // check if user exist
-    const user = await db.query('SELECT * FROM users WHERE email = $1', [req.body.email]);
+    const user = await db.query('SELECT * FROM users WHERE email = $1', [email]);
     if (user.rows.length) {
       return res.status(400).json({
         status: 'error',
@@ -18,15 +18,13 @@ exports.createUser = async (req, res) => {
       });
     }
 
-    // create user
     const salt = await bcryptjs.genSalt(10);
-    const hashedPassword = await bcryptjs.hash(req.body.password, salt);
+    const hashedPassword = await bcryptjs.hash(password, salt);
     const newUser = await db.query(
       'INSERT INTO users(fullName, email, password, city, auth_method) VALUES($1, $2, $3, $4, $5) RETURNING *',
-      [req.body.fullname, req.body.email, hashedPassword, req.body.city, req.body.auth_method]
+      [fullname, email, hashedPassword, city, auth_method]
     );
 
-    // send validation email
     const randomToken = crypto.randomBytes(32).toString('hex');
     const verifytoken = await db.query(
       'INSERT INTO tokens(user_id, token) VALUES($1, $2) RETURNING *',
@@ -35,7 +33,6 @@ exports.createUser = async (req, res) => {
     const link = `${process.env.BASE_URL}/api/v1/auth/verify-email/${newUser.rows[0].id}/${verifytoken.rows[0].token}`;
     await sendEmail(newUser.rows[0].email, 'Verify Email', link);
 
-    // generate jwt token
     const token = jwt.sign({ id: newUser.rows[0].id }, process.env.JWT_PRIVATE_KEY, {
       expiresIn: '24H',
     });
@@ -57,11 +54,12 @@ exports.createUser = async (req, res) => {
 };
 
 exports.login = async (req, res) => {
+  const { email, password } = req.body;
   try {
-    const user = await db.query('SELECT * FROM users WHERE email = $1', [req.body.email]);
+    const user = await db.query('SELECT * FROM users WHERE email = $1', [email]);
 
     if (user.rows.length) {
-      const validPass = await bcryptjs.compare(req.body.password, user.rows[0].password);
+      const validPass = await bcryptjs.compare(password, user.rows[0].password);
 
       if (!validPass) {
         return res.status(400).json({
@@ -69,7 +67,6 @@ exports.login = async (req, res) => {
           error: 'invalid Password',
         });
       }
-      //  create token
       const token = jwt.sign({ id: user.rows[0].id }, process.env.JWT_PRIVATE_KEY, {
         expiresIn: '24H',
       });
@@ -95,9 +92,9 @@ exports.login = async (req, res) => {
 };
 
 exports.passwordReset = async (req, res) => {
+  const { email } = req.body;
   try {
-    // check if email exists
-    const user = await db.query('SELECT * FROM users WHERE email = $1', [req.body.email]);
+    const user = await db.query('SELECT * FROM users WHERE email = $1', [email]);
 
     if (!user.rows.length) {
       return res.status(400).json({
@@ -106,7 +103,6 @@ exports.passwordReset = async (req, res) => {
       });
     }
 
-    // create token if dosent exist
     const userId = user.rows[0].id;
     let randomToken = crypto.randomBytes(32).toString('hex');
     let token = await db.query('SELECT * FROM tokens WHERE user_id = $1', [userId]);
@@ -122,9 +118,8 @@ exports.passwordReset = async (req, res) => {
       });
     }
 
-    // email user the link
     const link = `${process.env.BASE_URL}/password-reset/${userId}/${token.rows[0].token}`;
-    const sent = await sendEmail(req.body.email, 'Password reset', link);
+    const sent = await sendEmail(email, 'Password reset', link);
 
     if (sent) {
       return res.status(200).json({
@@ -150,15 +145,16 @@ exports.passwordReset = async (req, res) => {
 };
 
 exports.passwordUpdate = async (req, res) => {
+  const { user_id, password } = req.body;
   try {
-    const user = await db.query('SELECT * FROM users WHERE id = $1', [req.body.user_id]);
+    const user = await db.query('SELECT * FROM users WHERE id = $1', [user_id]);
     if (!user) {
       return res.status(400).json({
         status: 'error',
         error: 'User does not exist',
       });
     }
-    const token = await db.query('SELECT * FROM tokens WHERE user_id = $1', [req.body.user_id]);
+    const token = await db.query('SELECT * FROM tokens WHERE user_id = $1', [user_id]);
 
     if (!token) {
       return res.status(400).json({
@@ -167,16 +163,14 @@ exports.passwordUpdate = async (req, res) => {
       });
     }
     const salt = await bcryptjs.genSalt(10);
-    const hashedPassword = await bcryptjs.hash(req.body.password, salt);
+    const hashedPassword = await bcryptjs.hash(password, salt);
 
     const update = await db.query('UPDATE users SET password = $1 WHERE id = $2 RETURNING *', [
       hashedPassword,
-      req.body.user_id,
+      user_id,
     ]);
 
-    console.log('new user', update.rows[0]);
-
-    await db.query('DELETE FROM tokens WHERE user_id = $1', [req.body.user_id]);
+    await db.query('DELETE FROM tokens WHERE user_id = $1', [user_id]);
 
     return res.status(200).json({
       status: 'success',
@@ -194,9 +188,9 @@ exports.passwordUpdate = async (req, res) => {
 };
 
 exports.verifyEmail = async (req, res) => {
+  const { id, token } = req.params;
   try {
-    // find user
-    const user = await db.query('SELECT * FROM users WHERE id = $1', [req.params.id]);
+    const user = await db.query('SELECT * FROM users WHERE id = $1', [id]);
     if (!user) {
       return res.status(400).json({
         status: 'error',
@@ -204,22 +198,18 @@ exports.verifyEmail = async (req, res) => {
       });
     }
 
-    // find token
-    const token = await db.query('SELECT * FROM tokens WHERE token = $1', [req.params.token]);
-    if (!token) {
+    const savedToken = await db.query('SELECT * FROM tokens WHERE token = $1', [token]);
+    if (!savedToken) {
       return res.status(400).json({
         status: 'error',
         error: 'Link is invalid or expired',
       });
     }
 
-    // update verified status
     const update = await db.query('UPDATE users SET verified = $1 WHERE id = $2 RETURNING *', [
       true,
       user.rows[0].id,
     ]);
-
-    console.log('user updated', update.rows[0]);
 
     return res.status(200).json({
       status: 'success',

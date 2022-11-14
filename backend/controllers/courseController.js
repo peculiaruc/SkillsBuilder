@@ -2,8 +2,8 @@ import db from '../db/db';
 import sendEmail from '../utils/sendEmails';
 
 exports.getAllCourses = async (req, res) => {
+  const { offset, limit } = req.query;
   try {
-    const { offset, limit } = req.query;
     const total = await db.query('SELECT COUNT(*) FROM courses');
     const course_data = await db.query('SELECT * FROM courses LIMIT $2 OFFSET $1', [
       offset || 0,
@@ -27,8 +27,8 @@ exports.getAllCourses = async (req, res) => {
 };
 
 exports.getCoursesByCategories = async (req, res) => {
+  const { categories } = req.body;
   try {
-    const { categories } = req.body;
     const course_data = await db.query('SELECT * FROM  courses WHERE category_ids @> $1', [
       categories,
     ]);
@@ -50,8 +50,8 @@ exports.getCoursesByCategories = async (req, res) => {
 };
 
 exports.getCoursesById = async (req, res) => {
+  const { id } = req.params;
   try {
-    const { id } = req.params;
     const course_data = await db.query('SELECT * FROM  courses WHERE id = $1', [id]);
 
     return res.status(200).json({
@@ -70,8 +70,8 @@ exports.getCoursesById = async (req, res) => {
 };
 
 exports.getEnrolledCourses = async (req, res) => {
+  const { user_id } = req.body;
   try {
-    const { user_id } = req.body;
     const enrolled_courses = await db.query('SELECT * FROM enrollments WHERE user_id = $1', [
       user_id,
     ]);
@@ -93,8 +93,9 @@ exports.getEnrolledCourses = async (req, res) => {
 };
 
 exports.getCourseCategory = async (req, res) => {
+  let categories_data;
   try {
-    const categories_data = await db.query('SELECT * FROM course_categories');
+    categories_data = await db.query('SELECT * FROM course_categories');
     return res.status(200).json({
       status: 'success',
       data: {
@@ -111,8 +112,8 @@ exports.getCourseCategory = async (req, res) => {
 };
 
 exports.enrollUser = async (req, res) => {
+  const { user_id, course_id, course_name } = req.body;
   try {
-    const { user_id, course_id, course_name } = req.body;
     const user = await db.query('SELECT * FROM users WHERE id = $1', [user_id]);
     await db.query(
       'INSERT INTO enrollments(user_id, course_id, enroll_date) VALUES($1, $2, $3) RETURNING *',
@@ -136,8 +137,8 @@ exports.enrollUser = async (req, res) => {
 };
 
 exports.getCourseAssignments = async (req, res) => {
+  const { course_id } = req.body;
   try {
-    const { course_id } = req.body;
     const assignments = await db.query('SELECT * FROM assignments WHERE course_id = $1', [
       course_id,
     ]);
@@ -158,8 +159,8 @@ exports.getCourseAssignments = async (req, res) => {
 };
 
 exports.getAssignmentSubmissions = async (req, res) => {
+  const { course_id, user_id } = req.body;
   try {
-    const { course_id, user_id } = req.body;
     const assignments = await db.query(
       'SELECT * FROM assignment_submission WHERE course_id = $1 AND user_id = $2',
       [course_id, user_id]
@@ -181,8 +182,8 @@ exports.getAssignmentSubmissions = async (req, res) => {
 };
 
 exports.createAssignmentSubmissions = async (req, res) => {
+  const { course_id, user_id, assignment_id, grade, ass_status } = req.body;
   try {
-    const { course_id, user_id, assignment_id, grade, ass_status } = req.body;
     const newSubmission = await db.query(
       'INSERT INTO assignment_submission(course_id, user_id, assignment_id, grade, status) VALUES($1, $2, $3, $4) RETURNING *',
       [course_id, user_id, assignment_id, grade, ass_status]
