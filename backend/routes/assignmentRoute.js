@@ -9,7 +9,7 @@ router.post('/get-course-assignment', verifyToken, assignmentController.getCours
 router.post(
   '/get-assignment-submissions',
   verifyToken,
-  assignmentController.getAssignmentSubmissions
+  assignmentController.getAssignmentSubmissions,
 );
 
 router.post('/submit-assignment', verifyToken, assignmentController.createAssignmentSubmissions);
@@ -21,7 +21,7 @@ router.post('/get-assignment-questions', verifyToken, assignmentController.getAs
 router.post(
   '/create-assignment',
   verifyAuthorUserToken,
-  assignmentController.createAssignmentQuestions
+  assignmentController.createAssignmentQuestions,
 );
 
 router.post('/get-enrolled-users', verifyAuthorUserToken, assignmentController.getUsersInMyCourse);

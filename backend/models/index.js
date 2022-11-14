@@ -17,5 +17,5 @@ export {
   courseLesson,
   assignments,
   assignmentSubmission,
-  assignmentQuestions
+  assignmentQuestions,
 };

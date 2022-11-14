@@ -95,11 +95,11 @@ module.exports = {
 
   getCourseCategory: async (req, res) => {
     try {
-      const categories_data = await db.query('SELECT * FROM course_categories');
+      const categoriesData = await db.query('SELECT * FROM course_categories');
       return res.status(200).json({
         status: 'success',
         data: {
-          categories: categories_data.rows,
+          categories: categoriesData.rows,
         },
       });
     } catch (err) {
