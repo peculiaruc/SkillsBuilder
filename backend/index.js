@@ -3,8 +3,9 @@ import cors from 'cors';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
 import initializeDb from './db/dbinit';
-import userRoute from './routes/userRoute';
+import { userRoute, courseRoute } from './routes';
 import socialLoginRoute from './routes/socialLoginRoute';
+
 
 dotenv.config();
 const app = express();
@@ -15,9 +16,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(morgan('short'));
 
-app.use('/api/v1/auth', socialLoginRoute);
+app.use('/home', (req, res) => {
+  res.status(200).send('Welcome to this awesome API!!');
+});
 
 app.use('/api/v1/auth', userRoute);
+app.use('/api/v1/auth/social', socialLoginRoute);
+app.use('/api/v1/course', courseRoute);
 
 app.use((req, res) => {
   res.status(404).send({
