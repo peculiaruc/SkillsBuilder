@@ -1,10 +1,8 @@
-import {
-  Email, Google, LinkedIn, Password, Window,
-} from '@mui/icons-material';
+import { Email, Password } from '@mui/icons-material';
 
 import {
   Box,
-  Button, Checkbox, Divider, FormControlLabel, InputAdornment, Stack, TextField, Typography,
+  Button, Checkbox, FormControlLabel, InputAdornment, Stack, TextField, Typography,
 } from '@mui/material';
 import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
@@ -12,19 +10,20 @@ import { toast } from 'react-toastify';
 import { useLoginMutation } from '../../apiServices/authService';
 import Logo from '../../assets/images/Logo.png';
 import appConfig from '../../configs/app';
-import { AuthInterface } from '../../interfaces/User';
+import { CredentialsType } from '../../interfaces/User';
+import SocialLoginForm from './SocialLogin';
 
 export default function LoginView() {
   const navigate = useNavigate();
 
   const [login] = useLoginMutation();
 
-  const initialValues: AuthInterface = {
+  const initialValues: CredentialsType = {
     email: '',
     password: '',
   };
 
-  const onSubmit = async (credentials: AuthInterface) => {
+  const onSubmit = async (credentials: CredentialsType) => {
     await login(credentials).unwrap();
     toast('Login successfully', { type: 'success' });
   };
@@ -46,7 +45,6 @@ export default function LoginView() {
         <img src={Logo} alt={appConfig.appName} />
         <h2>{appConfig.appName}</h2>
       </Stack>
-
       <form onSubmit={formik.handleSubmit}>
         <Stack spacing={2}>
           <TextField
@@ -113,19 +111,7 @@ export default function LoginView() {
         </Typography>
 
       </Stack>
-      <Divider>Or continue with</Divider>
-      <Stack
-        direction="row"
-        spacing={2}
-        sx={{
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <Google fontSize="large" />
-        <Window fontSize="large" />
-        <LinkedIn fontSize="large" />
-      </Stack>
+      <SocialLoginForm />
     </Stack>
   );
 }

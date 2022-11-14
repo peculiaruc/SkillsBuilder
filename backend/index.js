@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import initializeDb from './db/dbinit';
 import { userRoute, courseRoute, socialLoginRoute } from './routes';
 
+
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;

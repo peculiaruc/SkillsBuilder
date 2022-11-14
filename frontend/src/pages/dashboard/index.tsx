@@ -1,25 +1,44 @@
-import { Box, Stack, Typography } from '@mui/material';
-import { useAuth } from '../../store/authReducer';
+import { Button, CircularProgress, Paper } from '@mui/material';
+import { useGetAllCourseQuery } from '../../apiServices/courseService';
+import TabView from '../../components/TabView';
+import CourseList from './CourseList';
 
-export default function DashboardView() {
-  const auth = useAuth();
+function Dashboard() {
+  const { isLoading } = useGetAllCourseQuery();
+
+  if (isLoading) { return <CircularProgress />; }
 
   return (
-    <Box sx={{
-      width: '100%',
-      height: '100%',
-      justifyContent: 'center',
-      alignItems: 'center',
-      display: 'flex',
-    }}
-    >
-      <Stack spacing={2} alignItems="center">
-        <Typography variant="h2" fontWeight="bold">
-          Hello,
-          {auth.user?.fullname}
-        </Typography>
-        <Typography variant="h2" fontWeight="bold">Welcome to SkillBuddy!</Typography>
-      </Stack>
-    </Box>
+    <TabView
+      title="Community courses"
+      tabs={
+      [
+        {
+          name: 'All Courses',
+          component: <CourseList />,
+        },
+        {
+          name: 'Courses Categories',
+          component: (
+            <Paper sx={{
+              height: '300px',
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderRadius: 2,
+            }}
+            >
+              <Button size="large">All Courses in progress</Button>
+            </Paper>
+          ),
+        },
+      ]
+     }
+
+    />
+
   );
 }
+
+export default Dashboard;
