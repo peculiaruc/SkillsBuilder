@@ -5,6 +5,7 @@ export const courseLesson = `CREATE TABLE IF NOT EXISTS course_lesson (
     lesson_no INT NOT NULL,
     lesson_content TEXT NOT NULL,
     lesson_content_type VARCHAR NOT NULL,
+    lesson_topic VARCHAR NOT NULL,
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW()
 );`;

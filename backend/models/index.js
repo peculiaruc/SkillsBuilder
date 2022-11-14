@@ -6,6 +6,7 @@ import { courses } from './courses';
 import { courseLesson } from './courseLessons';
 import { assignments } from './assignments';
 import { assignmentSubmission } from './assignmentsSubmissions';
+import { assignmentQuestions } from './assignmentQuestions';
 
 export {
   users,
@@ -16,4 +17,5 @@ export {
   courseLesson,
   assignments,
   assignmentSubmission,
+  assignmentQuestions
 };

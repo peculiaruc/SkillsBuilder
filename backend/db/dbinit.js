@@ -8,6 +8,7 @@ import {
   courseLesson,
   assignmentSubmission,
   assignments,
+  assignmentQuestions,
 } from '../models';
 
 export default async () => {
@@ -24,6 +25,7 @@ export default async () => {
     await db.query(courseLesson);
     await db.query(assignmentSubmission);
     await db.query(assignments);
+    await db.query(assignmentQuestions);
     return true;
   } catch (e) {
     console.log('db init err', e);

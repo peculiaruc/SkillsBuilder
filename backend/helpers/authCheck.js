@@ -33,6 +33,36 @@ exports.verifyToken = async (req, res, next) => {
   }
 };
 
+exports.verifyAuthorUserToken = async (req, res, next) => {
+  const token = req.headers.authorization.split(' ')[1];
+  if (!token) {
+    return res.status(404).json({
+      status: 'error',
+      error: 'User is not Authenticated',
+    });
+  }
+  try {
+    const verified = await jwt.verify(token, secretKey);
+    const userId = verified.id;
+
+    const response = await db.query('SELECT * FROM users WHERE id = $1', [userId]);
+    // console.log('response', response.rows);
+    const user = response.rows[0];
+    if (user?.role !== 1) {
+      return res.status(404).json({
+        status: 'error',
+        error: 'Only course owners can perform this action',
+      });
+    }
+    return next();
+  } catch (err) {
+    res.status(404).json({
+      status: 'error',
+      error: err,
+    });
+  }
+};
+
 exports.verifyAdminUserToken = async (req, res, next) => {
   const token = req.headers.authorization.split(' ')[1];
   if (!token) {

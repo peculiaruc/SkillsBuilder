@@ -15,15 +15,8 @@ router.get('/categories', verifyToken, courseController.getCourseCategory);
 
 router.post('/enroll-in-course', verifyToken, courseController.enrollUser);
 
-router.post('/get-course-assignment', verifyToken, courseController.getCourseAssignments);
-
-router.post('/get-assignment-submissions', verifyToken, courseController.getAssignmentSubmissions);
-
-router.post('/submit-assignment', verifyToken, courseController.createAssignmentSubmissions);
-
 router.post('/:id', verifyToken, courseController.getCoursesById);
 
-// admin routes
 router.post('/create-course', verifyAdminUserToken, adminCourseController.createCourse);
 
 router.post('/add-course-lesson', verifyAdminUserToken, adminCourseController.addCourseLesson);
