@@ -12,7 +12,7 @@ import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import Logo from '../../assets/images/Logo.png';
 import { useRegisterMutation } from '../../apiServices/authService';
-import { UserInterface } from '../../interfaces/User';
+import { UserRegisterType } from '../../interfaces/User';
 import appConfig from '../../configs/app';
 
 export default function SignupView() {
@@ -20,12 +20,12 @@ export default function SignupView() {
 
   const navigate = useNavigate();
 
-  const onSubmit = async (user:UserInterface) => {
+  const onSubmit = async (user: UserRegisterType) => {
     const res = await signup(user).unwrap();
-    if (res?.data?.token) navigate('/');
+    if (res.data.token) navigate('/');
   };
 
-  const initialValues: UserInterface = {
+  const initialValues: UserRegisterType = {
     fullname: '',
     email: '',
     city: '',
@@ -33,6 +33,7 @@ export default function SignupView() {
     rememberMe: false,
     phone: '',
   };
+
   const formik = useFormik({
     initialValues,
     onSubmit,

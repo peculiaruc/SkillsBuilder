@@ -1,42 +1,56 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { useSelector } from 'react-redux';
-import authService, { Response } from '../apiServices/authService';
-import { UserInterface } from '../interfaces/User';
+import Cookies from 'js-cookie';
+import { defaultCookieExpires, userCookie } from '../configs/app';
+import authService, { LoginResponseType } from '../apiServices/authService';
+import { UserType } from '../interfaces/User';
 
-interface AuthState {
-  token: string | undefined
-  user: Partial<UserInterface> | undefined,
-}
+type AuthState = {
+  token: string
+  user: UserType
+};
 
-interface ReducerState {
+type ReducerState = {
   auth: AuthState
-}
+};
+const auth = Cookies.get(userCookie) as string;
 
-const initialState: AuthState = {
-  token: undefined,
-  user: undefined,
+const defaultState: Partial<AuthState> = { token: undefined, user: undefined };
+
+const initialState: AuthState = auth ? JSON.parse(auth) : defaultState;
+
+const login = (state: AuthState, { payload }: { payload: LoginResponseType }) => {
+  let currentState = state;
+  currentState = payload.data;
+  Cookies.set(userCookie, JSON.stringify(currentState), {
+    expires: defaultCookieExpires,
+    domain: window.location.hostname,
+    path: '/',
+  });
+  return currentState;
 };
 
 const authReducer = createSlice({
   name: 'auth',
   initialState,
-  reducers: {},
+  reducers: { },
   extraReducers(builder) {
     builder
-      .addMatcher(
-        authService.endpoints.login.matchFulfilled,
-        (state, { payload }: { payload: Response }) => payload.data,
-      )
-      .addMatcher(
-        authService.endpoints.register.matchFulfilled,
-        (state, { payload }: { payload: Response }) => payload.data,
-      )
-      .addMatcher(authService.endpoints.logout.matchFulfilled, () => initialState);
+      .addMatcher(authService.endpoints.login.matchFulfilled, login)
+      .addMatcher(authService.endpoints.googleLogin.matchFulfilled, login)
+      .addMatcher(authService.endpoints.linkedinLogin.matchFulfilled, login)
+      .addMatcher(authService.endpoints.logout.matchFulfilled, (state:AuthState) => {
+        Cookies.remove(userCookie, {
+          domain: window.location.hostname,
+          path: '/',
+        });
+        let currentState = state;
+        currentState = defaultState as AuthState;
+        return currentState;
+      });
   },
 });
 
-const selectAuth = (state: ReducerState) => state.auth;
-
-export const useAuth = () => useSelector(selectAuth);
+export const useAuth = () => useSelector((state: ReducerState) => state.auth);
 
 export default authReducer;
