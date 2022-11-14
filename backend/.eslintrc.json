@@ -38,6 +38,7 @@
         "null" : "off",
         "class-methods-use-this" : "off",
         "no-return-await": "off",
-        "import/named" : "off"
+        "import/named" : "off",
+        "no-useless-catch" : "off"
     }
 }

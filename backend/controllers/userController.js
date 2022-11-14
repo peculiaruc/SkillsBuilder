@@ -7,7 +7,7 @@ import sendEmail from '../utils/sendEmails';
 
 dotenv.config();
 
-exports.createUser = (req, res) => {
+exports.createUser = async (req, res) => {
 try {
     // check if user exist
     const user = await db.query('SELECT * FROM users WHERE email = $1', [req.body.email]);
@@ -28,6 +28,7 @@ try {
 
     // send validation email
     const randomToken = crypto.randomBytes(32).toString('hex');
+
     const verifytoken = await db.query(
       'INSERT INTO tokens(user_id, token) VALUES($1, $2) RETURNING *',
       [newUser.rows[0].id, randomToken],
@@ -95,6 +96,8 @@ exports.login = async (req, res) => {
     });
   }
 };
+
+exports.logout = (req, res) => res.status(200).send();
 
 exports.passwordReset = async (req, res) => {
   try {
