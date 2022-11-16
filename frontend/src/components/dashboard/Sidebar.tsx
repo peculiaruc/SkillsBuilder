@@ -31,12 +31,16 @@ function Sidebar() {
       >
         <Toolbar />
         <Stack>
-          <MenuItem path="" name="Learning Center" icon={<School fontSize="large" sx={{ color: 'common.white' }} />} />
-          <MenuItem path="/" name="Home" active={location.pathname === '/'} />
-          <MenuItem path="/my-courses" name="My Cources" active={location.pathname === '/my-courses'} />
-          <MenuItem path="/my-assignments" name="My Assignments" active={location.pathname === '/my-assignments'} />
-          <MenuItem path="/my-study-plan" name="My Study plan" active={location.pathname === '/my-study-plan'} />
-          <MenuItem path="/my-groups" name="My Groups" active={location.pathname === '/my-groups'} />
+          {auth.user.role === 0 && (
+          <>
+            <MenuItem path="" name="Learning Center" icon={<School fontSize="large" sx={{ color: 'common.white' }} />} />
+            <MenuItem path="/" name="Home" active={location.pathname === '/'} />
+            <MenuItem path="/my-courses" name="My Cources" active={location.pathname === '/my-courses'} />
+            <MenuItem path="/my-assignments" name="My Assignments" active={location.pathname === '/my-assignments'} />
+            <MenuItem path="/my-study-plan" name="My Study plan" active={location.pathname === '/my-study-plan'} />
+            <MenuItem path="/my-groups" name="My Groups" active={location.pathname === '/my-groups'} />
+          </>
+          )}
           {auth.user.role !== 0 && (
           <>
             <Divider />
@@ -45,7 +49,7 @@ function Sidebar() {
             <MenuItem path="/courses" name="Cources" active={location.pathname === '/courses'} />
             <MenuItem path="/assignments" name="Assignments" active={location.pathname === '/assignments'} />
             <MenuItem path="/groups" name="Groups" active={location.pathname === '/groups'} />
-            {auth.user.role === 1 && (
+            {auth.user.role === 2 && (
               <MenuItem path="/users" name="Users" active={location.pathname === '/users'} />
             )}
           </>
