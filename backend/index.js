@@ -5,7 +5,6 @@ import dotenv from 'dotenv';
 import initializeDb from './db/dbinit';
 import { userRoute, courseRoute, socialLoginRoute } from './routes';
 
-
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -20,7 +19,7 @@ app.use('/home', (req, res) => {
 });
 
 app.use('/api/v1/auth', userRoute);
-app.use('/api/v1/auth/social', socialLoginRoute);
+app.use('/api/v1/social', socialLoginRoute);
 app.use('/api/v1/course', courseRoute);
 
 app.use((req, res) => {

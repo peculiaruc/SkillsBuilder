@@ -14,4 +14,4 @@ class Token extends Database {
   }
 }
 
-export default Course;
+export default Token;

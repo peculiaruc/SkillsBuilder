@@ -77,6 +77,19 @@ class AssignmentController {
     if (enrolledUsers.errors) return Helpers.dbError(res, enrolledUsers);
     return Helpers.sendResponse(res, 200, 'success', { assignments: enrolledUsers.rows });
   }
+  static async createAssignment(req, res) {
+    const { course_id, description, deadline, author_id } = req.body;
+
+    const newAss = {
+      course_id,
+      description,
+      deadline,
+      author_id,
+    };
+    const _assignment = await assignment.create(newAss);
+    if (_assignment.errors) return Helpers.dbError(res, _assignment);
+    return Helpers.sendResponse(res, 200, 'success', { assignment: _assignment.rows });
+  }
 }
 
 export default AssignmentController;
