@@ -1,164 +1,82 @@
-import db from '../db/db';
+import sendEmail from '../utils/sendEmails';
+import Course from '../models/course';
+import Helpers from '../helpers/helpers';
+import Enrollment from '../models/enrollments';
+import Categories from '../models/categories';
+import User from '../models/users';
+import Assignment from '../models/assignment';
+import AssignmentSubmissions from '../models/assignmentSubmissions';
+import AssignmentQuestions from '../models/assignmentQuestions';
 
-module.exports = {
-  getCourseAssignments: async (req, res) => {
+const course = new Course();
+const enrollment = new Enrollment();
+const cat = new Categories();
+const user = new User();
+const assignment = new Assignment();
+const submission = new AssignmentSubmissions();
+const assQuestions = new AssignmentQuestions();
+
+class AssignmentController {
+  static async getCourseAssignments(req, res) {
     const { course_id } = req.body;
-    try {
-      const assignments = await db.query('SELECT * FROM assignments WHERE course_id = $1', [
-        course_id,
-      ]);
-
-      return res.status(200).json({
-        status: 'success',
-        data: {
-          assignments: assignments.rows,
-        },
-      });
-    } catch (err) {
-      console.log(err);
-      return res.status(500).json({
-        status: 'error',
-        error: err.message,
-      });
-    }
-  },
-
-  getAssignmentSubmissions: async (req, res) => {
+    const ass = await assignment.getByCourse(course_id);
+    if (ass.errors) return Helpers.dbError(res, ass);
+    return Helpers.sendResponse(res, 200, 'success', { assignments: ass.rows });
+  }
+  static async getAssignmentSubmissions(req, res) {
     const { assignment_id, user_id } = req.body;
-    try {
-      const assignments = await db.query(
-        'SELECT * FROM assignment_submission WHERE assignment_id = $1 AND user_id = $2',
-        [assignment_id, user_id]
-      );
-
-      return res.status(200).json({
-        status: 'success',
-        data: {
-          assignments: assignments.rows,
-        },
-      });
-    } catch (err) {
-      console.log(err);
-      return res.status(500).json({
-        status: 'error',
-        error: err.message,
-      });
-    }
-  },
-
-  createAssignmentSubmissions: async (req, res) => {
-    const { course_id, user_id, assignment_id, grade, ass_status } = req.body;
-    try {
-      const newSubmission = await db.query(
-        'INSERT INTO assignment_submission(course_id, user_id, assignment_id, grade, status) VALUES($1, $2, $3, $4, $5) RETURNING *',
-        [course_id, user_id, assignment_id, grade, ass_status]
-      );
-
-      return res.status(200).json({
-        status: 'success',
-        data: {
-          assignments: newSubmission.rows,
-        },
-      });
-    } catch (err) {
-      console.log(err);
-      return res.status(500).json({
-        status: 'error',
-        error: err.message,
-      });
-    }
-  },
-
-  getAssignmentById: async (req, res) => {
+    const sub = await submission.allWhere({ assignment_id, user_id });
+    if (sub.errors) return Helpers.dbError(res, sub);
+    return Helpers.sendResponse(res, 200, 'success', { assignments: sub.rows });
+  }
+  static async createAssignmentSubmissions(req, res) {
+    const { course_id, user_id, assignment_id, grade, status } = req.body;
+    const newSubmission = {
+      course_id,
+      user_id,
+      assignment_id,
+      grade,
+      status,
+    };
+    const _newSubmission = await submission.create(newSubmission);
+    if (_newSubmission.errors) return Helpers.dbError(res, sub);
+    return Helpers.sendResponse(res, 200, 'success', { assignments: _newSubmission.rows });
+  }
+  static async getAssignmentById(req, res) {
     const { assignment_id } = req.body;
-    try {
-      const assignment = await db.query('SELECT * FROM assignments WHERE id = $1', [assignment_id]);
+    const oneAss = await assignment.getById(assignment_id);
+    if (oneAss.error) return Helpers.dbError(res, oneAss);
+    return Helpers.sendResponse(res, 200, 'success', { assignments: oneAss.rows });
+  }
 
-      return res.status(200).json({
-        status: 'success',
-        data: {
-          assignments: assignment.rows,
-        },
-      });
-    } catch (err) {
-      console.log(err);
-      return res.status(500).json({
-        status: 'error',
-        error: err.message,
-      });
-    }
-  },
-
-  getAssignmentQuestions: async (req, res) => {
+  static async getAssignmentQuestions(req, res) {
     const { assignment_id } = req.body;
-    try {
-      const quiz = await db.query(
-        'SELECT * FROM assignment_questions WHERE assignment_id = $1 ORDER BY question_no ASC',
-        [assignment_id]
-      );
-
-      return res.status(200).json({
-        status: 'success',
-        data: {
-          questions: quiz.rows,
-        },
-      });
-    } catch (err) {
-      console.log(err);
-      return res.status(500).json({
-        status: 'error',
-        error: err.message,
-      });
-    }
-  },
-
-  createAssignmentQuestions: async (req, res) => {
+    const qs = await assQuestions.where(assignment_id, assignment_id, question_no);
+    if (qs.error) return Helpers.dbError(res, qs);
+    return Helpers.sendResponse(res, 200, 'success', { assignments: qs.rows });
+  }
+  static async createAssignmentQuestions(req, res) {
     const { questions } = req.body;
-
-    try {
-      await questions.map(async (q) => {
-        const { assignment_id, question, choices, answer, question_no } = q;
-        await db.query(
-          'INSERT INTO assignment_questions(assignment_id, question, choices, answer, question_no) VALUES($1, $2, $3, $4, $5) RETURNING *',
-          [assignment_id, question, choices, answer, question_no]
-        );
-      });
-
-      const newSubmission = await db.query('SELECT * FROM assignments WHERE id = $1', [
-        questions[0].assignment_id,
-      ]);
-
-      return res.status(200).json({
-        status: 'success',
-        data: {
-          questions: newSubmission.rows,
-        },
-      });
-    } catch (err) {
-      console.log(err);
-      return res.status(500).json({
-        status: 'error',
-        error: err.message,
-      });
-    }
-  },
-
-  getUsersInMyCourse: async (req, res) => {
+    await questions.map(async (q) => {
+      const { assignment_id, question, choices, answer, question_no } = q;
+      const newQuestion = {
+        assignment_id,
+        question,
+        choices,
+        answer,
+        question_no,
+      };
+      const saveQs = await assQuestions.create(newQuestion);
+      if (saveQs.errors) return Helpers.dbError(res, saveQs);
+    });
+    return Helpers.sendResponse(res, 200, 'success', {});
+  }
+  static async getUsersInMyCourse(req, res) {
     const { course_id } = req.body;
-    try {
-      const users = await db.query('SELECT * FROM enrollments WHERE course_id = $1', [course_id]);
-      return res.status(200).json({
-        status: 'success',
-        data: {
-          users: users.rows,
-        },
-      });
-    } catch (err) {
-      console.log(err);
-      return res.status(500).json({
-        status: 'error',
-        error: err.message,
-      });
-    }
-  },
-};
+    const enrolledUsers = enrollment.where(course_id, course_id);
+    if (enrolledUsers.errors) return Helpers.dbError(res, enrolledUsers);
+    return Helpers.sendResponse(res, 200, 'success', { assignments: enrolledUsers.rows });
+  }
+}
+
+export default AssignmentController;
