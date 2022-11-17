@@ -7,6 +7,7 @@ import { courseLesson } from './create_course_lessons_table';
 import { assignments } from './create_assignments_table';
 import { assignmentSubmission } from './create_assignments_submissions_table';
 import { assignmentQuestions } from './create_assignment_questions_table';
+import { makePassNullable } from './make_password_optional';
 
 export {
   users,
@@ -18,4 +19,5 @@ export {
   assignments,
   assignmentSubmission,
   assignmentQuestions,
+  makePassNullable,
 };

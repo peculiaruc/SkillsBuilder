@@ -28,9 +28,9 @@ class Database {
 
   async queryBuilder(query, params) {
     try {
-      const client = await pool.connect();
-      const res = await client.query(query, params);
-      client.end();
+      // const client = await pool.connect();
+      const res = await pool.query(query, params);
+      // client.end();
       const { rows, rowCount } = res;
       return {
         rows,

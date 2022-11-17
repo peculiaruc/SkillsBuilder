@@ -9,6 +9,7 @@ import {
   assignmentSubmission,
   assignments,
   assignmentQuestions,
+  makePassNullable,
 } from '../migrations';
 
 export default async () => {
@@ -28,6 +29,7 @@ export default async () => {
     await db.queryBuilder(assignmentSubmission);
     await db.queryBuilder(assignments);
     await db.queryBuilder(assignmentQuestions);
+    await db.queryBuilder(makePassNullable);
     return true;
   } catch (e) {
     console.log('db init err', e);
