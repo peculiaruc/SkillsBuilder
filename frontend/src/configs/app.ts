@@ -1,4 +1,4 @@
-export const serverHost = 'https://opensourceteam3.onrender.com';
+export const serverHost = process.env.NODE_ENV === 'production' ? 'https://opensourceteam3.onrender.com' : 'http://127.0.0.1:3000';
 
 const basePath = `${serverHost}/api`;
 
