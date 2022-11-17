@@ -15,24 +15,18 @@ router.get('/categories', verifyToken, courseController.getCourseCategory);
 
 router.post('/enroll-in-course', verifyToken, courseController.enrollUser);
 
-router.post('/get-course-assignment', verifyToken, courseController.getCourseAssignments);
-
-router.post('/get-assignment-submissions', verifyToken, courseController.getAssignmentSubmissions);
-
-router.post('/submit-assignment', verifyToken, courseController.createAssignmentSubmissions);
-
 router.post('/:id', verifyToken, courseController.getCoursesById);
 
-router.post('/create-course', verifyAdminUserToken, adminCourseController.createCourse);
+// router.post('/create-course', verifyAdminUserToken, adminCourseController.createCourse);
 
-router.post('/add-course-lesson', verifyAdminUserToken, adminCourseController.addCourseLesson);
+// router.post('/add-course-lesson', verifyAdminUserToken, adminCourseController.addCourseLesson);
 
-router.post('/delete-course', verifyAdminUserToken, adminCourseController.deleteCourse);
+// router.post('/delete-course', verifyAdminUserToken, adminCourseController.deleteCourse);
 
-router.post(
-  '/delete-course-lesson',
-  verifyAdminUserToken,
-  adminCourseController.deleteCourseLesson
-);
+// router.post(
+//   '/delete-course-lesson',
+//   verifyAdminUserToken,
+//   adminCourseController.deleteCourseLesson
+// );
 
 module.exports = router;
