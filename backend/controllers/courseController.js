@@ -27,6 +27,7 @@ class CourseController {
       courses: _courses.rows,
     });
   }
+
   static async getCoursesById(req, res) {
     const { id } = req.params;
     const _courses = await course.getById(id);
@@ -35,12 +36,13 @@ class CourseController {
       course: _courses.rows[0],
     });
   }
+
   static async getEnrolledCourses(req, res) {
-    const { userId } = req.body;
-    const _courses = await enrollment.getByUser(userId);
+    const { user_id } = req.body;
+    const _courses = await enrollment.getByUser(user_id);
     if (_courses.errors) return Helpers.dbError(res, _courses);
     return Helpers.sendResponse(res, 200, 'success', {
-      course: _courses.rows[0],
+      course: _courses.rows,
       totalCourses: _courses.count,
     });
   }
@@ -49,7 +51,7 @@ class CourseController {
     const _categories = await cat.all();
     if (_categories.errors) return Helpers.dbError(res, _categories);
     return Helpers.sendResponse(res, 200, 'success', {
-      categories: _categories.rows[0],
+      categories: _categories.rows,
     });
   }
 
@@ -67,9 +69,9 @@ class CourseController {
     const _enroll = await enrollment.create(newEnroll);
     if (_enroll.errors) return Helpers.dbError(res, _user);
     await sendEmail(
-      _user.rows[0].email,
+      _user.row.email,
       'Enrollment Confirmation',
-      `You have successfully enrolled in ${courseName}`
+      `You have successfully enrolled in ${courseName}`,
     );
     return Helpers.sendResponse(res, 200, 'success', {});
   }
