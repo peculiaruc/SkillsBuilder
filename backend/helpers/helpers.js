@@ -35,7 +35,7 @@ class Helpers {
     if (data !== undefined) {
       res.data = data;
     }
-    return response.status(codeStatus).send(res);
+    return response.status(codeStatus).json(res);
   }
 
   static dbError(response, query) {
@@ -51,7 +51,6 @@ class Helpers {
       return Helpers.sendResponse(response, 501, 'Oops Something went wrong.');
     }
   }
-  
 }
 
 export default Helpers;

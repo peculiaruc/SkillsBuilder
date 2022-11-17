@@ -12,13 +12,15 @@ const tokn = new Token();
 
 class UserController {
   static async createUser(req, res) {
+    // console.log('here1');
     const { email, password, fullname, city, auth_method } = req.body;
 
     const hashedPassword = Helpers.hashPassword(password);
-
+    // console.log('here2', hashedPassword);
     const checkEmail = await user.getByEmail(email);
 
-    if (checkEmail.errors) return Helpers.dbError(res, checkEmail);
+    console.log('user', checkEmail);
+    if (checkEmail.error) return Helpers.dbError(res, checkEmail);
 
     if (checkEmail.count > 0)
       return Helpers.sendResponse(res, 409, 'A user with Email address already exists !');
@@ -28,7 +30,6 @@ class UserController {
       password: hashedPassword,
       fullname,
       city,
-      phone,
       auth_method,
     };
 
@@ -76,7 +77,7 @@ class UserController {
     const { email } = req.body;
 
     const _user = await user.getByEmail(email);
-    if (_user.errors) return Helpers.dbError(res, _user);
+    if (_user.error) return Helpers.dbError(res, _user);
     if (_user.count > 0) {
       let randomToken = createRandomToken();
       // check if already saved tokens and delete it

@@ -2,7 +2,7 @@ import Database from '../db/db';
 
 class User extends Database {
   constructor() {
-    super('employees');
+    super('users');
   }
 
   async getByEmail(email) {
