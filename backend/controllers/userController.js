@@ -1,227 +1,143 @@
-import bcryptjs from 'bcryptjs';
-import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import crypto from 'crypto';
-import db from '../db/db';
 import sendEmail from '../utils/sendEmails';
+import User from '../models/users';
+import Token from '../models/token';
+import Helpers from '../helpers/helpers';
+import { createRandomToken } from '../utils/tokentools';
 
 dotenv.config();
 
-module.exports = {
-  createUser: async (req, res) => {
-    const { email, password, fullname, city, auth_method } = req.body;
-    try {
-      const user = await db.query('SELECT * FROM users WHERE email = $1', [email]);
-      if (user.rows.length) {
-        return res.status(400).json({
-          status: 'error',
-          error: 'User with email already exists. Please Log in',
-        });
-      }
+const user = new User();
+const tokn = new Token();
 
-      const salt = await bcryptjs.genSalt(10);
-      const hashedPassword = await bcryptjs.hash(password, salt);
-      const newUser = await db.query(
-        'INSERT INTO users(fullName, email, password, city, auth_method) VALUES($1, $2, $3, $4, $5) RETURNING *',
-        [fullname, email, hashedPassword, city, auth_method]
-      );
+class UserController {
+  static async createUser(req, res) {
+    const { email, password, fullname, city } = req.body;
+    const hashedPassword = Helpers.hashPassword(password);
+    const checkEmail = await user.getByEmail(email);
 
-      const randomToken = crypto.randomBytes(32).toString('hex');
-      const verifytoken = await db.query(
-        'INSERT INTO tokens(user_id, token) VALUES($1, $2) RETURNING *',
-        [newUser.rows[0].id, randomToken]
-      );
-      const link = `${process.env.BASE_URL}/api/v1/auth/verify-email/${newUser.rows[0].id}/${verifytoken.rows[0].token}`;
-      await sendEmail(newUser.rows[0].email, 'Verify Email', link);
+    if (checkEmail.errors) {
+      return Helpers.dbError(res, checkEmail);
+    }
 
-      const token = jwt.sign({ id: newUser.rows[0].id }, process.env.JWT_PRIVATE_KEY, {
-        expiresIn: '24H',
-      });
+    if (checkEmail.count > 0) {
+      return Helpers.sendResponse(res, 400, 'A user with Email address already exists !');
+    }
+    const newUser = {
+      email,
+      password: hashedPassword,
+      fullname,
+      city,
+      auth_method: req.body.auth_method,
+    };
 
-      return res.status(200).json({
-        status: 'success',
-        data: {
-          token,
-          user: newUser.rows[0],
-        },
-      });
-    } catch (err) {
-      console.log(err);
-      return res.status(500).json({
-        status: 'error',
-        error: err.message,
+    const saveUser = await user.create(newUser);
+    const randomToken = createRandomToken();
+    if (saveUser.errors) return Helpers.dbError(res, saveUser);
+    if (saveUser.count > 0) {
+      const newToken = {
+        user_id: saveUser.rows[0].id,
+        token: randomToken,
+      };
+      const saveToken = await tokn.create(newToken);
+      if (saveToken.errors) return Helpers.dbError(res, saveToken);
+
+      const link = `${process.env.BASE_URL}/api/v1/auth/verify-email/${saveUser.rows[0].id}/${saveToken.rows[0].token}`;
+      await sendEmail(saveUser.rows[0].email, 'Verify Email', link);
+
+      const token = Helpers.generateToken(saveUser.rows[0].id);
+
+      return Helpers.sendResponse(res, 200, 'User created successfully', {
+        token,
+        user: saveUser.rows[0],
       });
     }
-  },
+  }
 
-  login: async (req, res) => {
+  static async login(req, res) {
     const { email, password } = req.body;
-    try {
-      const user = await db.query('SELECT * FROM users WHERE email = $1', [email]);
 
-      if (user.rows.length) {
-        const validPass = await bcryptjs.compare(password, user.rows[0].password);
+    const _user = await user.getByEmail(email);
 
-        if (!validPass) {
-          return res.status(400).json({
-            status: 'error',
-            error: 'invalid Password',
-          });
-        }
-        const token = jwt.sign({ id: user.rows[0].id }, process.env.JWT_PRIVATE_KEY, {
-          expiresIn: '24H',
-        });
-        return res.status(200).json({
-          status: 'success',
-          data: {
-            token,
-            user: user.rows[0],
-          },
-        });
-      }
-      return res.status(400).json({
-        status: 'error',
-        error: 'invalid email',
-      });
-    } catch (err) {
-      console.log(err);
-      return res.status(500).json({
-        status: 'error',
-        error: err.message,
+    if (_user.error) return Helpers.dbError(res, _user);
+
+    if (_user.count > 0 && Helpers.comparePassword(_user.row.password, password)) {
+      const token = Helpers.generateToken(_user.row.id);
+      return Helpers.sendResponse(res, 200, 'User is successfully logged in', {
+        token,
+        user: _user.row,
       });
     }
-  },
+    return Helpers.sendResponse(res, 400, 'Invalid credentials');
+  }
 
-  passwordReset: async (req, res) => {
+  static async passwordReset(req, res) {
     const { email } = req.body;
-    try {
-      const user = await db.query('SELECT * FROM users WHERE email = $1', [email]);
-
-      if (!user.rows.length) {
-        return res.status(400).json({
-          status: 'error',
-          error: 'User with given email does not exist',
-        });
+    const _user = await user.getByEmail(email);
+    if (_user.errors) return Helpers.dbError(res, _user);
+    if (_user.count > 0) {
+      const randomToken = createRandomToken();
+      const savedToken = await tokn.getTokenByUser(_user.row.id);
+      if (savedToken.count > 0) {
+        tokn.delete({ token: savedToken.row.id });
       }
+      const newToken = {
+        user_id: _user.row.id,
+        token: randomToken,
+      };
+      const saveToken = await tokn.create(newToken);
+      if (saveToken.errors) return Helpers.dbError(res, saveToken);
 
-      const userId = user.rows[0].id;
-      let randomToken = crypto.randomBytes(32).toString('hex');
-      let token = await db.query('SELECT * FROM tokens WHERE user_id = $1', [userId]);
-      if (!token.rows.length) {
-        token = await db.query('INSERT INTO tokens(user_id, token) VALUES($1, $2) RETURNING *', [
-          userId,
-          randomToken,
-        ]);
-      } else {
-        return res.status(400).json({
-          status: 'error',
-          error: 'Account not verified',
-        });
-      }
-
-      const link = `${process.env.BASE_URL}/password-reset/${userId}/${token.rows[0].token}`;
-      const sent = await sendEmail(email, 'Password reset', link);
-
-      if (sent) {
-        return res.status(200).json({
-          status: 'success',
-          data: {
-            message: 'password reset link sent to your email account',
-          },
-        });
-      } else {
-        await db.query('DELETE FROM tokens WHERE user_id = $1', [userId]);
-        return res.status(500).json({
-          status: 'error',
-          error: `Email not sent ${sent}`,
-        });
-      }
-    } catch (err) {
-      console.log(err);
-      return res.status(500).json({
-        status: 'error',
-        error: err.message,
+      return Helpers.sendResponse(res, 200, 'User password reset details', {
+        reset_token: saveToken.rows[0].token,
+        user_id: saveToken.rows[0].user_id,
       });
     }
-  },
+    return Helpers.sendResponse(res, 400, 'User with email does not exist');
+  }
 
-  passwordUpdate: async (req, res) => {
-    const { user_id, password } = req.body;
-    try {
-      const user = await db.query('SELECT * FROM users WHERE id = $1', [user_id]);
-      if (!user) {
-        return res.status(400).json({
-          status: 'error',
-          error: 'User does not exist',
-        });
+  static async passwordUpdate(req, res) {
+    const { resetToken, user_id, password } = req.body;
+
+    const _user = await user.getById(user_id);
+    if (_user.errors) return Helpers.dbError(res, _user);
+    if (_user.count > 0) {
+      // check if token is valid
+      const savedToken = await tokn.getTokenByUser(user_id, resetToken);
+      if (savedToken.errors) return Helpers.dbError(res, savedToken);
+      if (savedToken.count > 0) {
+        const hashedPass = Helpers.hashPassword(password);
+        const update = await user.update({ password: hashedPass }, { id: user_id });
+        if (update.errors) return Helpers.dbError(res, update);
+        if (update.count > 0) {
+          await tokn.delete({ id: savedToken.row.id });
+          return Helpers.sendResponse(res, 200, 'password reset sucessfully', {});
+        }
       }
-      const token = await db.query('SELECT * FROM tokens WHERE user_id = $1', [user_id]);
-
-      if (!token) {
-        return res.status(400).json({
-          status: 'error',
-          error: 'Link is invalid or expired',
-        });
-      }
-      const salt = await bcryptjs.genSalt(10);
-      const hashedPassword = await bcryptjs.hash(password, salt);
-
-      const update = await db.query('UPDATE users SET password = $1 WHERE id = $2 RETURNING *', [
-        hashedPassword,
-        user_id,
-      ]);
-
-      await db.query('DELETE FROM tokens WHERE user_id = $1', [user_id]);
-
-      return res.status(200).json({
-        status: 'success',
-        data: {
-          message: 'password reset sucessfully!',
-        },
-      });
-    } catch (err) {
-      console.log(err);
-      return res.status(400).json({
-        status: 'error',
-        error: err.message,
-      });
     }
-  },
+    return Helpers.sendResponse(res, 400, 'User does not exist');
+  }
 
-  verifyEmail: async (req, res) => {
+  static async verifyEmail(req, res) {
     const { id, token } = req.params;
-    try {
-      const user = await db.query('SELECT * FROM users WHERE id = $1', [id]);
-      if (!user) {
-        return res.status(400).json({
-          status: 'error',
-          error: 'User does not exist',
-        });
+    const _user = await user.getById(id);
+    if (_user.errors) return Helpers.dbError(res, _user);
+    if (_user.count > 0) {
+      const savedToken = await tokn.getTokenByUser(id, token);
+      console.log('savet', savedToken);
+      if (savedToken.errors) return Helpers.dbError(res, savedToken);
+      if (savedToken.count > 0) {
+        const update = await user.update({ verified: true }, { id });
+        if (update.errors) return Helpers.dbError(res, update);
+        if (update.count > 0) {
+          await tokn.delete({ id: savedToken.row.id });
+          return Helpers.sendResponse(res, 200, 'email verified successfully', {});
+        }
       }
-
-      const savedToken = await db.query('SELECT * FROM tokens WHERE token = $1', [token]);
-      if (!savedToken) {
-        return res.status(400).json({
-          status: 'error',
-          error: 'Link is invalid or expired',
-        });
-      }
-
-      const update = await db.query('UPDATE users SET verified = $1 WHERE id = $2 RETURNING *', [
-        true,
-        user.rows[0].id,
-      ]);
-
-      return res.status(200).json({
-        status: 'success',
-      });
-    } catch (err) {
-      console.log(err);
-      return res.status(400).json({
-        status: 'error',
-        error: err.message,
-      });
+      return Helpers.sendResponse(res, 400, 'Link is invalid or expired');
     }
-  },
-};
+    return Helpers.sendResponse(res, 400, 'User does not exist');
+  }
+}
 
+export default UserController;

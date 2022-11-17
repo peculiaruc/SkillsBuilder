@@ -24,11 +24,11 @@ module.exports = {
   },
 
   addCourseLesson: async (req, res) => {
-    const { course_id, description, lesson_no, lesson_content, lesson_content_type } = req.body;
+    const { courseId, description, lessonNo, lessonContent, lessonContentType } = req.body;
     try {
       const newCourseLesson = await db.query(
         'INSERT INTO course_lesson(course_id, description, lesson_no, lesson_content, lesson_content_type) VALUES($1, $2, $3, $4, $5) RETURNING *',
-        [course_id, description, lesson_no, lesson_content, lesson_content_type]
+        [courseId, description, lessonNo, lessonContent, lessonContentType]
       );
       return res.status(200).json({
         status: 'success',
@@ -46,12 +46,12 @@ module.exports = {
   },
 
   deleteCourse: async (req, res) => {
-    const { course_id } = req.body;
+    const { courseId } = req.body;
     try {
-      await db.query('DELETE FROM courses WHERE course_id = $1', [course_id]);
-      await db.query('DELETE FROM course_lesson WHERE course_id = $1', [course_id]);
-      await db.query('DELETE FROM assignments WHERE course_id = $1', [course_id]);
-      await db.query('DELETE FROM assignment_submission WHERE course_id = $1', [course_id]);
+      await db.query('DELETE FROM courses WHERE course_id = $1', [courseId]);
+      await db.query('DELETE FROM course_lesson WHERE course_id = $1', [courseId]);
+      await db.query('DELETE FROM assignments WHERE course_id = $1', [courseId]);
+      await db.query('DELETE FROM assignment_submission WHERE course_id = $1', [courseId]);
 
       return res.status(200).json({
         status: 'success',
@@ -66,9 +66,9 @@ module.exports = {
   },
 
   deleteCourseLesson: async (req, res) => {
-    const { course_id } = req.body;
+    const { courseId } = req.body;
     try {
-      await db.query('DELETE FROM course_lesson WHERE course_id = $1', [course_id]);
+      await db.query('DELETE FROM course_lesson WHERE course_id = $1', [courseId]);
 
       return res.status(200).json({
         status: 'success',
@@ -83,9 +83,9 @@ module.exports = {
   },
 
   deleteCourseAssignment: async (req, res) => {
-    const { assignment_id } = req.body;
+    const { assignmentId } = req.body;
     try {
-      await db.query('DELETE FROM assignments WHERE id = $1', [assignment_id]);
+      await db.query('DELETE FROM assignments WHERE id = $1', [assignmentId]);
       return res.status(200).json({
         status: 'success',
       });
@@ -99,9 +99,9 @@ module.exports = {
   },
 
   deleteCourseAssignmentSubmission: async (req, res) => {
-    const { submission_id } = req.body;
+    const { submissionId } = req.body;
     try {
-      await db.query('DELETE FROM assignment_submission WHERE id = $1', [submission_id]);
+      await db.query('DELETE FROM assignment_submission WHERE id = $1', [submissionId]);
 
       return res.status(200).json({
         status: 'success',
