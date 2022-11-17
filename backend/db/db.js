@@ -52,10 +52,15 @@ class Database {
       values.push(`$${params.length}`);
     });
     chunks.push(`(${values.join(', ')})`);
-    const query = `INSERT INTO ${this.table}(${keys.join(', ')}) values${chunks.join(
+    const sql = `INSERT INTO ${this.table}(${keys.join(', ')}) values${chunks.join(
       ', '
     )} RETURNING *`;
-    return await this.queryBuilder(query, params);
+    const query = await this.queryBuilder(sql, params);
+    if (query.errors) return query;
+    return {
+      rows: query.rows,
+      count: query.count,
+    };
   }
 
   async where(column, op = '=', value, orderBy = 'id DESC') {

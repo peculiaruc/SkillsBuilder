@@ -1,10 +1,11 @@
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import db from '../db/db';
+import Database from '../db/db';
 
 dotenv.config();
 
 const secretKey = process.env.JWT_PRIVATE_KEY;
+const db = new Database();
 
 exports.verifyToken = async (req, res, next) => {
   const token = req.headers.authorization.split(' ')[1];
@@ -45,7 +46,7 @@ exports.verifyAuthorUserToken = async (req, res, next) => {
     const verified = await jwt.verify(token, secretKey);
     const userId = verified.id;
 
-    const response = await db.query('SELECT * FROM users WHERE id = $1', [userId]);
+    const response = await db.queryBuilder('SELECT * FROM users WHERE id = $1', [userId]);
     // console.log('response', response.rows);
     const user = response.rows[0];
     if (user?.role !== 1) {
@@ -58,7 +59,7 @@ exports.verifyAuthorUserToken = async (req, res, next) => {
   } catch (err) {
     res.status(404).json({
       status: 'error',
-      error: err,
+      error: err.message,
     });
   }
 };
@@ -75,7 +76,7 @@ exports.verifyAdminUserToken = async (req, res, next) => {
     const verified = await jwt.verify(token, secretKey);
     const userId = verified.id;
 
-    const response = await db.query('SELECT * FROM users WHERE id = $1', [userId]);
+    const response = await db.queryBuilder('SELECT * FROM users WHERE id = $1', [userId]);
     // console.log('response', response.rows);
     const user = response.rows[0];
     if (user?.role !== 2) {
@@ -88,7 +89,7 @@ exports.verifyAdminUserToken = async (req, res, next) => {
   } catch (err) {
     res.status(404).json({
       status: 'error',
-      error: err,
+      error: err.message,
     });
   }
 };
