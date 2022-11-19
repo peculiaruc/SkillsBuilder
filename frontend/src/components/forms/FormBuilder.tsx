@@ -47,7 +47,7 @@ function FormBuilder(props: Required<FormProps>) {
                 <MixedInput
                   {...field}
                   error={fieldNames.includes(field.name)}
-                  helperText={fieldNames.includes(field.name) ? errors[field.name] : undefined}
+                  helperText={fieldNames.includes(field.name) ? errors[field.name] as string : ''}
                   onChange={formik.handleChange}
                   key={field.name}
                 />

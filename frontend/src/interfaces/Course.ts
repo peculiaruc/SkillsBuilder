@@ -4,7 +4,7 @@ export type CourseItem = {
   description: string,
   thumbnail?: string,
   updated_at?: string,
-  id?: number,
+  id: number,
   created_at?:string;
 };
 
