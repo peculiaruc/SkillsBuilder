@@ -37,6 +37,7 @@ class Model {
     const values:Field = {};
     this.fields.forEach((field: FieldProps) => {
       values[field.name] = FieldType[field.type || 'text'];
+      field.label = field.name.charAt(0).toUpperCase().concat(field.name.slice(1));
     });
     this.initialValues = values;
   }

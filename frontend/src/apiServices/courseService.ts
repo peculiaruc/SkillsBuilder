@@ -26,7 +26,7 @@ type UserId = {
 
 const courseService = api.injectEndpoints({
   endpoints: (builder) => ({
-    createOneCourse: builder.mutation<GetCourseResponse, GetCourseRequest>({
+    createCourse: builder.mutation<GetCourseResponse, GetCourseRequest>({
       query: (course) => ({ url: '/create-course', method: 'POST', data: course }),
     }),
     updateOneCourse: builder.mutation<GetCourseResponse, GetCourseRequest>({
@@ -55,7 +55,7 @@ const courseService = api.injectEndpoints({
 
 export const {
   useEnrolleInOneCourseMutation,
-  useCreateOneCourseMutation,
+  useCreateCourseMutation,
   useGetCourseByIdQuery,
   useDeleteOneCourseMutation,
   useUpdateOneCourseMutation,

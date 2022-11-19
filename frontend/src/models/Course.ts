@@ -6,10 +6,10 @@ class Course extends Model {
     super();
     this.name = 'courses';
     this.validationSchema = Yup.object().shape({
-      name: Yup.string().min(3).required('The name field is required'),
+      name: Yup.string().min(3, 'The Name must be at least 3 characters').required('Please, provide a summary.'),
       thumbnail: Yup.string().min(3),
-      summary: Yup.string().min(3).required('The summary field is required'),
-      description: Yup.string().min(3).required('The summary field is required'),
+      summary: Yup.string().min(3, 'The summary must be at least 3 characters').required('Please, provide a summary.'),
+      description: Yup.string().min(3),
     });
     this.fields = [
       {
