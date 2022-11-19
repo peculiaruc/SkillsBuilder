@@ -1,6 +1,6 @@
 import { Stack } from '@mui/material';
 import { FormikValues, useFormik } from 'formik';
-import Model from '../../models/Model';
+import Model from '../models/Model';
 import MixedInput from './inputs/MixedInput';
 
 interface FormProps {
