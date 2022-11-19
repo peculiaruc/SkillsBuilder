@@ -2,11 +2,10 @@ export type CourseItem = {
   name: string,
   summary: string,
   description: string,
-  thumbnail: string,
-  updated_at: string,
-  id: number,
-  status:string;
-  created_at:string;
+  thumbnail?: string,
+  updated_at?: string,
+  id?: number,
+  created_at?:string;
 };
 
 export type CourseListType = {

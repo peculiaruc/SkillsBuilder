@@ -3,7 +3,7 @@ import {
   CourseItem, EnrolledCourseResponseType, EnrolledCourseType, EnrollInCourseResponse,
 } from '../interfaces/Course';
 
-export type GetAllType = {
+export type GetAllCoursesResponse = {
   status: string,
   error?: string,
   data: {
@@ -12,11 +12,13 @@ export type GetAllType = {
   }
 };
 
-type GetOneType = {
+type GetCourseResponse = {
   status: string,
   error?: string,
   data: CourseItem
 };
+
+type GetCourseRequest = Partial<CourseItem>;
 
 type UserId = {
   user_id:number
@@ -24,17 +26,17 @@ type UserId = {
 
 const courseService = api.injectEndpoints({
   endpoints: (builder) => ({
-    createOneCourse: builder.mutation<GetOneType, Partial<CourseItem>>({
+    createOneCourse: builder.mutation<GetCourseResponse, GetCourseRequest>({
       query: (course) => ({ url: '/create-course', method: 'POST', data: course }),
     }),
-    updateOneCourse: builder.mutation<GetOneType, Partial<CourseItem>>({
+    updateOneCourse: builder.mutation<GetCourseResponse, GetCourseRequest>({
       query: (course) => ({ url: `/course/${course.id}`, method: 'PUT', data: course }),
     }),
-    getOneCourse: builder.query<GetOneType, string>({
+    getCourseById: builder.query<GetCourseResponse, number>({
       query: (id) => ({ url: `/course/${id}`, method: 'GET' }),
       providesTags: ['LIST_ALL_COURSES'],
     }),
-    getAllCourses: builder.query<GetAllType, void>({
+    getAllCourses: builder.query<GetAllCoursesResponse, void>({
       query: () => ({ url: '/course/courses', method: 'GET' }),
     }),
     deleteOneCourse: builder.mutation({
@@ -54,7 +56,7 @@ const courseService = api.injectEndpoints({
 export const {
   useEnrolleInOneCourseMutation,
   useCreateOneCourseMutation,
-  useGetOneCourseQuery,
+  useGetCourseByIdQuery,
   useDeleteOneCourseMutation,
   useUpdateOneCourseMutation,
   useGetEnrolledCoursesQuery,
