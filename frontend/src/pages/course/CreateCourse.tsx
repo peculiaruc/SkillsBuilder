@@ -11,8 +11,8 @@ function CreateCourse() {
 
   const onSubmit = async (values: FormikValues) => {
     const data = values as CourseItem;
-    const response = await createCourse(data);
-    console.log(response);
+    await createCourse(data).unwrap();
+    // console.log(response);
   };
   const [open, setOpen] = useState(false);
 
@@ -20,7 +20,7 @@ function CreateCourse() {
 
   return (
     <FormBuilder
-      open
+      open={open}
       dialog
       title="Create course"
       model={course}

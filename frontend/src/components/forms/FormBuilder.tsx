@@ -1,5 +1,5 @@
 import {
-  Button, Dialog, DialogActions, DialogContent, DialogTitle, Paper, Stack
+  Button, Dialog, DialogActions, DialogContent, DialogTitle, Paper, Stack,
 } from '@mui/material';
 import { FormikValues, useFormik } from 'formik';
 import Model from '../../models/Model';
@@ -33,16 +33,15 @@ function FormBuilder(props: Required<FormProps>) {
     formik.resetForm();
   };
 
-  const { errors, touched } = formik;
+  const { errors } = formik;
   const fieldNames = Object.keys(errors);
-  console.log(touched);
 
   const formContent = (
     <>
       <DialogTitle>{title}</DialogTitle>
       <DialogContent>
         <form onSubmit={formik.handleSubmit}>
-          <Stack spacing={2}>
+          <Stack spacing={2} pt={dialog ? 1.5 : 0}>
             {model.fields.map(
               (field) => (
                 <MixedInput
