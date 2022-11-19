@@ -1,6 +1,5 @@
 import CourseList from './CourseList';
 import CreateCourse from './CreateCourse';
-import ViewCourse from './ViewCourse';
 
 const courseRoutes = {
   path: '/courses',
@@ -13,14 +12,6 @@ const courseRoutes = {
       path: 'create',
       exact: true,
       element: <CreateCourse />,
-    },
-    {
-      path: ':id',
-      element: <ViewCourse />,
-    },
-    {
-      path: ':id/edit',
-      element: <ViewCourse />,
     },
   ],
 };
