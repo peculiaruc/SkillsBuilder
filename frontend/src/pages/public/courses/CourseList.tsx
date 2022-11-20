@@ -8,7 +8,7 @@ function CourseList() {
   const courseIds = enrolled.map((e) => e.id);
   const allCourses : CourseItem[] = useCourses();
 
-  const courses = allCourses.filter((c) => courseIds.includes(c.id));
+  const courses = allCourses.filter((c:CourseItem) => courseIds.includes(c.id));
 
   return (
 

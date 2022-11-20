@@ -1,10 +1,10 @@
 import express from 'express';
 
-import socialLoginController from '../controllers/socialLoginController';
+import { linkedInLogin, googleLogin } from '../controllers/socialLoginController';
 
 const router = express.Router();
 
-router.post('/google', socialLoginController.googleLogin);
-router.post('/linkedin', socialLoginController.linkedInLogin);
+router.post('/google', googleLogin);
+router.post('/linkedin', linkedInLogin);
 
 module.exports = router;

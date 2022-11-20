@@ -3,7 +3,7 @@ import {
   CourseItem, EnrolledCourseResponseType, EnrolledCourseType, EnrollInCourseResponse,
 } from '../interfaces/Course';
 
-export type GetAllType = {
+export type GetAllCoursesResponse = {
   status: string,
   error?: string,
   data: {
@@ -12,11 +12,13 @@ export type GetAllType = {
   }
 };
 
-type GetOneType = {
+type GetCourseResponse = {
   status: string,
   error?: string,
   data: CourseItem
 };
+
+type GetCourseRequest = Partial<CourseItem>;
 
 type UserId = {
   user_id:number
@@ -24,21 +26,21 @@ type UserId = {
 
 const courseService = api.injectEndpoints({
   endpoints: (builder) => ({
-    createOneCourse: builder.mutation<GetOneType, Partial<CourseItem>>({
-      query: (course) => ({ url: '/course/create', method: 'POST', data: course }),
+    createCourse: builder.mutation<GetCourseResponse, GetCourseRequest>({
+      query: (course) => ({ url: '/create-course', method: 'POST', data: course }),
     }),
-    updateOneCourse: builder.mutation<GetOneType, Partial<CourseItem>>({
+    updateOneCourse: builder.mutation<GetCourseResponse, GetCourseRequest>({
       query: (course) => ({ url: `/course/${course.id}`, method: 'PUT', data: course }),
     }),
-    getOneCourse: builder.query<GetOneType, string>({
+    getCourseById: builder.query<GetCourseResponse, number>({
       query: (id) => ({ url: `/course/${id}`, method: 'GET' }),
       providesTags: ['LIST_ALL_COURSES'],
     }),
-    getAllCourse: builder.query<GetAllType, void>({
+    getAllCourses: builder.query<GetAllCoursesResponse, void>({
       query: () => ({ url: '/course/courses', method: 'GET' }),
     }),
     deleteOneCourse: builder.mutation({
-      query: (id) => ({ url: `/course/${id}`, method: 'DELETE' }),
+      query: (course_id) => ({ url: '/course/delete-course', method: 'POST', data: { course_id } }),
     }),
     enrolleInOneCourse: builder.mutation<EnrollInCourseResponse, Partial<EnrolledCourseType>>({
       query: (data) => ({ url: '/course/enroll-in-course', method: 'POST', data }),
@@ -53,12 +55,12 @@ const courseService = api.injectEndpoints({
 
 export const {
   useEnrolleInOneCourseMutation,
-  useCreateOneCourseMutation,
-  useGetOneCourseQuery,
+  useCreateCourseMutation,
+  useGetCourseByIdQuery,
   useDeleteOneCourseMutation,
   useUpdateOneCourseMutation,
   useGetEnrolledCoursesQuery,
-  useGetAllCourseQuery,
+  useGetAllCoursesQuery,
 } = courseService;
 
 export default courseService;

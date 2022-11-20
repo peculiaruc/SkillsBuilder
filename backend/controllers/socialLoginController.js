@@ -4,8 +4,8 @@ import tokentools from '../utils/tokentools';
 
 module.exports = {
   googleLogin: async (req, res) => {
-    const { code, redirect_uri } = req.body;
     try {
+      const { code, redirect_uri } = req.body;
       /**
        * Request google access token
        */
@@ -44,16 +44,20 @@ module.exports = {
           },
         });
       }
-    } catch (err) {
-      console.log(err);
       res.status(400).send({
-        status: err?.data?.message,
+        status: 'error',
+        message: 'Invalid params',
+      });
+    } catch (err) {
+      // console.log(err);
+      res.status(400).send({
+        status: err.data.message,
       });
     }
   },
   linkedInLogin: async (req, res) => {
-    const { code, redirect_uri } = req.body;
     try {
+      const { code, redirect_uri } = req.body;
       /**
        * Request linkedin access token
        */
@@ -92,8 +96,12 @@ module.exports = {
           },
         });
       }
+      res.status(400).send({
+        status: 'error',
+        message: 'Invalid params',
+      });
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       res.status(400).send({
         status: err?.data?.message,
       });
