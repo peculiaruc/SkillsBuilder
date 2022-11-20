@@ -3,6 +3,7 @@ import {
 } from '@mui/material';
 import { FormikValues, useFormik } from 'formik';
 import Model from '../../models/Model';
+import { useFormState } from '../../store/dialogFormReducer';
 import MixedInput from './inputs/MixedInput';
 
 interface FormProps {
@@ -10,27 +11,19 @@ interface FormProps {
   dialog: boolean,
   model: Model,
   onSubmit: (values: FormikValues) => void,
-  handleClose: () => void,
-  open: boolean,
+  onCancel: () => void,
 }
 
-function FormBuilder(props: Required<FormProps>) {
-  const {
-    onSubmit,
-    model,
-    open,
-    handleClose,
-    title,
-    dialog,
-  } = props;
+function FormBuilder({
+  onSubmit, model, onCancel, title, dialog,
+} : Required<FormProps>) {
+  const open = useFormState();
   const formik = useFormik({
     initialValues: model.initialValues,
     validationSchema: model.validationSchema,
     onSubmit,
   });
-  const handleSubmit = () => {
-    formik.submitForm();
-  };
+  const handleSubmit = () => formik.submitForm();
 
   const { errors } = formik;
   const fieldNames = Object.keys(errors);
@@ -56,7 +49,7 @@ function FormBuilder(props: Required<FormProps>) {
         </form>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
+        <Button onClick={onCancel}>Cancel</Button>
         <Button onClick={handleSubmit}>Save</Button>
       </DialogActions>
     </>
