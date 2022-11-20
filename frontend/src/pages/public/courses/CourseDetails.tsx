@@ -1,21 +1,20 @@
 import {
-  Box, Button, CircularProgress, Grid, Paper, Stack, Typography,
+  Box, Button, CircularProgress, Grid, Paper, Stack, Typography
 } from '@mui/material';
-import { Navigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useEnrolleInOneCourseMutation, useGetEnrolledCoursesQuery } from '../../../apiServices/courseService';
+import { useEnrolleInOneCourseMutation, useGetCourseByIdQuery, useGetEnrolledCoursesQuery } from '../../../apiServices/courseService';
 import TabView from '../../../components/TabView';
 import { CourseItem, EnrolledCourseType } from '../../../interfaces/Course';
 import { useAuth } from '../../../store/authReducer';
-import { useCourses } from '../../../store/courseReducer';
+import EmptyView from '../../errors/EmptyView';
 
 function CourseDetails() {
   const params = useParams();
   const id = Number(params.id);
-  // const { data, isLoading } = useGetOneCourseQuery(id as string);
   const auth = useAuth();
 
-  const courses = useCourses();
+  const { data, isLoading: CourseLoading } = useGetCourseByIdQuery(id);
 
   const { data: enrolled, isLoading } = useGetEnrolledCoursesQuery({
     user_id: auth.user.id,
@@ -23,19 +22,15 @@ function CourseDetails() {
 
   const [enroleInCourse] = useEnrolleInOneCourseMutation();
 
-  if (isLoading) return <CircularProgress />;
+  if (isLoading || CourseLoading) return <CircularProgress />;
 
-  const course = courses.find((c:CourseItem) => c.id === id) as CourseItem;
+  const course = data?.data as CourseItem;
 
-  if (!course) {
-    return <Navigate to="/my-courses" />;
-  }
+  const isEnrolled = !((enrolled
+       // eslint-disable-next-line max-len
+       && !enrolled.data?.courses?.find((c:EnrolledCourseType) => c.course_id === id)) || !enrolled);
 
-  if (!enrolled) return <Typography>Course Not found</Typography>;
-
-  const isEnrolled = enrolled.data?.courses.find(
-    (c:EnrolledCourseType) => c.course_id === id,
-  );
+  if (!course) return <EmptyView title="Course not found" code={404} />;
 
   const { name, summary, thumbnail } = course;
 
