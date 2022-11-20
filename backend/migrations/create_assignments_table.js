@@ -4,6 +4,8 @@ export const assignments = `CREATE TABLE IF NOT EXISTS assignments (
     author_id INT NOT NULL,
     description TEXT NOT NULL,
     deadline VARCHAR NOT NULL,
+    passing_score INT DEFAULT 100,
+    max_attemps INT DEFAULT 5,
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW()
 );`;

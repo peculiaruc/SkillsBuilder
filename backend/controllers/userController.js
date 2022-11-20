@@ -12,7 +12,9 @@ const tokn = new Token();
 
 class UserController {
   static async createUser(req, res) {
-    const { email, password, fullname, city } = req.body;
+    const {
+      email, password, fullname, city,
+    } = req.body;
     const hashedPassword = Helpers.hashPassword(password);
     const checkEmail = await user.getByEmail(email);
 
@@ -137,6 +139,10 @@ class UserController {
       return Helpers.sendResponse(res, 400, 'Link is invalid or expired');
     }
     return Helpers.sendResponse(res, 400, 'User does not exist');
+  }
+
+  static async logout(req, res) {
+    return Helpers.sendResponse(res, 200, 'ok');
   }
 }
 

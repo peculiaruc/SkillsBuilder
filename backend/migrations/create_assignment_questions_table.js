@@ -4,6 +4,7 @@ export const assignmentQuestions = `CREATE TABLE IF NOT EXISTS assignment_questi
     question TEXT NOT NULL,
     choices VARCHAR[] NOT NULL,
     answer VARCHAR NOT NULL,
+    type VARCHAR DEFAULT 'single_choice',
     question_no INT NOT NULL,
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW()
