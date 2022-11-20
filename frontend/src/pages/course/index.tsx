@@ -1,5 +1,4 @@
 import CourseList from './CourseList';
-import CreateCourse from './CreateCourse';
 
 const courseRoutes = {
   path: '/courses',
@@ -7,11 +6,6 @@ const courseRoutes = {
     {
       index: true,
       element: <CourseList />,
-    },
-    {
-      path: 'create',
-      exact: true,
-      element: <CreateCourse />,
     },
   ],
 };
