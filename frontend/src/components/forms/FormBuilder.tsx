@@ -30,7 +30,6 @@ function FormBuilder(props: Required<FormProps>) {
   });
   const handleSubmit = () => {
     formik.submitForm();
-    formik.resetForm();
   };
 
   const { errors } = formik;
@@ -40,7 +39,7 @@ function FormBuilder(props: Required<FormProps>) {
     <>
       <DialogTitle>{title}</DialogTitle>
       <DialogContent>
-        <form onSubmit={formik.handleSubmit}>
+        <form onSubmit={formik.handleSubmit} autoComplete="off">
           <Stack spacing={2} pt={dialog ? 1.5 : 0}>
             {model.fields.map(
               (field) => (

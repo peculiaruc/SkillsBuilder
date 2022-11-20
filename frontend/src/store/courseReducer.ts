@@ -18,7 +18,12 @@ const courseReducer = createSlice({
     enrolled: [],
     courses: [],
   },
-  reducers: { },
+  reducers: {
+    addCourse: (state:InitialStateType, { payload }:{ payload:CourseItem }) => {
+      const currentState = state;
+      currentState.courses.push(payload);
+    },
+  },
   extraReducers(builder) {
     builder
       .addMatcher(
@@ -39,5 +44,5 @@ const courseReducer = createSlice({
 
 export const useCourses = () => useSelector((state:ReducerState) => state.courses.courses);
 export const useEnrolledCourses = () => useSelector((state:ReducerState) => state.courses.enrolled);
-
+export const { addCourse } = courseReducer.actions;
 export default courseReducer;

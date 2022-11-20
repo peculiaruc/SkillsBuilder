@@ -1,20 +1,28 @@
 import { FormikValues } from 'formik';
 import { useState } from 'react';
-import { useCreateCourseMutation } from '../../apiServices/courseService';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+// import { useCreateCourseMutation } from '../../apiServices/courseService';
 import FormBuilder from '../../components/forms/FormBuilder';
 import { CourseItem } from '../../interfaces/Course';
 import Course from '../../models/Course';
+import { addCourse } from '../../store/courseReducer';
 
 function CreateCourse() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const course = new Course();
-  const [createCourse] = useCreateCourseMutation();
+  // const [createCourse] = useCreateCourseMutation();
 
   const onSubmit = async (values: FormikValues) => {
     const data = values as CourseItem;
-    await createCourse(data).unwrap();
+    //console.log(data, values);
+    dispatch(addCourse(data));
+    navigate('/courses');
+    // await createCourse(data).unwrap();
     // console.log(response);
   };
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
 
   const handleClose = () => setOpen(false);
 
