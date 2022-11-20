@@ -1,10 +1,11 @@
 import styled from '@emotion/styled';
-import { Button, Grid, Paper, Typography } from '@mui/material';
+import {
+  Button, Grid, Paper, Typography, Stack,
+} from '@mui/material';
 import theme from '../../../theme/theme';
 import CourseTitle from './CourseTitle';
 import courseImage from '../../../assets/images/Group.png';
 import AssignmentDescription from './AssignmentDescription';
-import { Stack } from '@mui/system';
 
 const SlyledPaper = styled(Paper)({
   width: '100%',

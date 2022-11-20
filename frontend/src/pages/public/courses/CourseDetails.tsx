@@ -1,5 +1,5 @@
 import {
-  Box, Button, CircularProgress, Grid, Paper, Stack, Typography
+  Box, Button, CircularProgress, Grid, Paper, Stack, Typography,
 } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';

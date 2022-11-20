@@ -10,7 +10,7 @@ export default function AssignmentDescription() {
         Evaluate the basic knowedge of cloud
         computing models and providers.
       </Typography>
-      <Typography fontWeight="bold" variant="outlined">
+      <Typography fontWeight="bold">
         <Chip label="Max Score : 82" variant="outlined" />
         <Chip label="Attempts : 2/5" variant="outlined" />
         <Chip label={`Date : ${new Date().toLocaleString()}`} variant="outlined" />
