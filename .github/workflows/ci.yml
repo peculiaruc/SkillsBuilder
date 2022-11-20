@@ -38,7 +38,7 @@ jobs:
       run: |
         cd frontend
         npm test --if present
-    - name: Start the application
+    - name: Lint and fix linter warning
       run: |
         cd frontend
-        yarn dev
+        yarn lint:fix
