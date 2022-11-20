@@ -30,6 +30,10 @@ jobs:
       run: |
         cd frontend
         yarn install
+    - name: Lint and fix linter warning
+      run: |
+        cd frontend
+        yarn lint:fix
     - name: Build the skillbuddy app
       run: |
         cd frontend
@@ -38,7 +42,4 @@ jobs:
       run: |
         cd frontend
         npm test --if present
-    - name: Lint and fix linter warning
-      run: |
-        cd frontend
-        yarn lint:fix
+
