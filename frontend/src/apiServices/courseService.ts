@@ -14,7 +14,7 @@ export type GetAllCoursesResponse = {
 
 type GetCourseResponse = {
   status: string,
-  error?: string,
+  error: string,
   data: CourseItem
 };
 
