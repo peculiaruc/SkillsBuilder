@@ -16,7 +16,7 @@ function CreateCourse() {
 
   const onSubmit = async (values: FormikValues) => {
     const data = values as CourseItem;
-    //console.log(data, values);
+    // console.log(data, values);
     dispatch(addCourse(data));
     navigate('/courses');
     // await createCourse(data).unwrap();
