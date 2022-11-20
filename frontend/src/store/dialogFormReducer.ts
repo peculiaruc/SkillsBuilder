@@ -35,5 +35,5 @@ const dialogFormReducer = createSlice({
 });
 
 export const useDialog = () => useSelector((state:ReducerState) => state.form);
-export const { openDialog, closeDialog } = formReducer.actions;
+export const { openDialog, closeDialog } = dialogFormReducer.actions;
 export default dialogFormReducer;
