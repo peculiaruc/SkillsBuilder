@@ -15,4 +15,8 @@ router.post('/password-update', userController.passwordUpdate);
 
 router.get('/verify-email/:id/:token', userController.verifyEmail);
 
+router.post('/refreshToken', userController.refreshToken)
+
+router.delete('/refreshToken', userController.deleteRefreshToken)
+
 module.exports = router;

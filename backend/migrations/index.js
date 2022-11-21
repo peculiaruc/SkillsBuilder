@@ -8,6 +8,8 @@ import { assignments } from './create_assignments_table';
 import { assignmentSubmission } from './create_assignments_submissions_table';
 import { assignmentQuestions } from './create_assignment_questions_table';
 import { makePassNullable } from './make_password_optional';
+import { addType } from './add_column_questions_table';
+import { addColumns } from './add_column_assignments_table';
 
 export {
   users,
@@ -20,4 +22,6 @@ export {
   assignmentSubmission,
   assignmentQuestions,
   makePassNullable,
+  addType,
+  addColumns,
 };

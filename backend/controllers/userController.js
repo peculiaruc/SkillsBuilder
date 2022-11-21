@@ -3,7 +3,6 @@ import sendEmail from '../utils/sendEmails';
 import User from '../models/users';
 import Token from '../models/token';
 import Helpers from '../helpers/helpers';
-import { createRandomToken } from '../utils/tokentools';
 
 dotenv.config();
 
@@ -12,9 +11,7 @@ const tokn = new Token();
 
 class UserController {
   static async createUser(req, res) {
-    const {
-      email, password, fullname, city,
-    } = req.body;
+    const { email, password, fullname, city } = req.body;
     const hashedPassword = Helpers.hashPassword(password);
     const checkEmail = await user.getByEmail(email);
 
@@ -34,12 +31,13 @@ class UserController {
     };
 
     const saveUser = await user.create(newUser);
-    const randomToken = createRandomToken();
+    const randomToken = Helpers.createRandomToken();
     if (saveUser.errors) return Helpers.dbError(res, saveUser);
     if (saveUser.count > 0) {
       const newToken = {
         user_id: saveUser.rows[0].id,
         token: randomToken,
+        type: 'verify',
       };
       const saveToken = await tokn.create(newToken);
       if (saveToken.errors) return Helpers.dbError(res, saveToken);
@@ -78,7 +76,7 @@ class UserController {
     const _user = await user.getByEmail(email);
     if (_user.errors) return Helpers.dbError(res, _user);
     if (_user.count > 0) {
-      const randomToken = createRandomToken();
+      const randomToken = Helpers.createRandomToken();
       const savedToken = await tokn.getTokenByUser(_user.row.id);
       if (savedToken.count > 0) {
         tokn.delete({ token: savedToken.row.id });
@@ -86,6 +84,7 @@ class UserController {
       const newToken = {
         user_id: _user.row.id,
         token: randomToken,
+        type: 'reset',
       };
       const saveToken = await tokn.create(newToken);
       if (saveToken.errors) return Helpers.dbError(res, saveToken);
@@ -126,7 +125,6 @@ class UserController {
     if (_user.errors) return Helpers.dbError(res, _user);
     if (_user.count > 0) {
       const savedToken = await tokn.getTokenByUser(id, token);
-      console.log('savet', savedToken);
       if (savedToken.errors) return Helpers.dbError(res, savedToken);
       if (savedToken.count > 0) {
         const update = await user.update({ verified: true }, { id });

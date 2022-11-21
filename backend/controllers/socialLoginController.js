@@ -1,7 +1,8 @@
 import { google, linkedin } from '../services/socialAuthService';
-import db from '../db/db';
-import tokentools from '../utils/tokentools';
+import Database from '../db/db';
+import Helpers from '../helpers/helpers';
 
+const db = new Database();
 module.exports = {
   googleLogin: async (req, res) => {
     try {
@@ -20,13 +21,13 @@ module.exports = {
         /**
          * Verify if the user exists in database
          */
-        let user = await db.query('SELECT * FROM users WHERE email = $1 LIMIT 1', [email]);
+        let user = await db.queryBuilder('SELECT * FROM users WHERE email = $1 LIMIT 1', [email]);
 
         if (!user.rowCount) {
           /**
            * If not register the user
            */
-          user = await db.query(
+          user = await db.queryBuilder(
             'INSERT INTO users(fullName, email, password, city, auth_method) VALUES($1, $2, $3, $4, $5) RETURNING *',
             [name, email, '', '', 'google']
           );
@@ -34,7 +35,7 @@ module.exports = {
         /**
          * Create a token for the current user
          */
-        const token = tokentools.createUserToken(user.rows[0]);
+        const token = Helpers.generateToken(user.rows[0].id);
 
         res.status(200).send({
           status: 'success',
@@ -72,7 +73,9 @@ module.exports = {
         /**
          * Verify if the user exists in database
          */
-        let user = await db.query('SELECT * FROM users WHERE email = $1 LIMIT 1', [emailAddress]);
+        let user = await db.queryBuilder('SELECT * FROM users WHERE email = $1 LIMIT 1', [
+          emailAddress,
+        ]);
 
         if (!user.rowCount) {
           /**
@@ -86,7 +89,7 @@ module.exports = {
         /**
          * Create a token for the current user
          */
-        const token = tokentools.createUserToken(user.rows[0]);
+        const token = Helpers.generateToken(user.rows[0].id);
 
         res.status(200).send({
           status: 'success',

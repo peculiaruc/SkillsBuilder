@@ -1,5 +1,5 @@
 import express from 'express';
-import { verifyToken, verifyAdminUserToken, verifyAuthorUserToken } from '../helpers/authCheck';
+import { verifyToken, verifyAdminUserToken, verifyAuthorUserToken } from '../middlewares/authCheck';
 import assignmentController from '../controllers/assignmentController';
 
 const router = express.Router();

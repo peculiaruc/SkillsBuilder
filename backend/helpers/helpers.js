@@ -1,6 +1,6 @@
 import bcryptjs from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-
+import crypto from 'crypto';
 class Helpers {
   static hashPassword(password) {
     return bcryptjs.hashSync(password, bcryptjs.genSaltSync(10));
@@ -12,6 +12,10 @@ class Helpers {
 
   static generateToken(userId) {
     return jwt.sign({ id: userId }, process.env.JWT_PRIVATE_KEY, { expiresIn: '1h' });
+  }
+
+  static createRandomToken() {
+    crypto.randomBytes(32).toString('hex');
   }
 
   static validationResponse(validation, response) {
@@ -48,7 +52,7 @@ class Helpers {
   static Error(response, query) {
     if (query.errors) {
       console.log(query.errors);
-      return Helpers.sendResponse(response, 501, 'Oops Something went wrong.');
+      return Helpers.sendResponse(response, 501, errors.message);
     }
   }
 }
