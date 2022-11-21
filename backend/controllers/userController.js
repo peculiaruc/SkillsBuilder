@@ -194,6 +194,35 @@ class UserController {
       });
     }
   }
+
+  static async retryEmailVerification(req, res) {
+    const savedToken = await tokn.allWhere({ user_id: req.body.userId, type: 'verify' });
+    if (savedToken.errors) return Helpers.dbError(res, savedToken);
+    if (savedToken.count > 0) {
+      const del = await tokn.delete({ id: savedToken.rows[0].id });
+      if (del.errors) {
+        return Helpers.dbError(res, del);
+      }
+
+      const randomToken = Helpers.createRandomToken();
+      const newToken = {
+        user_id: req.body.userId,
+        token: randomToken,
+        type: 'verify',
+      };
+      const saveToken = await tokn.create(newToken);
+      if (saveToken.errors) return Helpers.dbError(res, saveToken);
+
+      const _user = await user.getById(req.body.userId);
+      if (_user.errors) {
+        return Helpers.dbError(res, _user);
+      }
+
+      const link = `${process.env.BASE_URL}/api/v1/auth/verify-email/${_user.row.id}/${saveToken.rows[0].token}`;
+      await sendEmail(_user.row.email, 'Verify Email', link);
+      return Helpers.sendResponse(res, 200, 'Verification email sent!', {});
+    }
+  }
 }
 
 export default UserController;
