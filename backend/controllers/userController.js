@@ -177,6 +177,16 @@ class UserController {
       if (deleteOld.errors) {
         return Helpers.dbError(res, deleteOld);
       }
+      const newTokenToSave = {
+        user_id: req.body.userId,
+        token: newRefreshToken,
+        type: 'refresh',
+      };
+
+      const saveToken = await tokn.create(newTokenToSave);
+      if (saveToken.errors) {
+        return Helpers.dbError(res, saveToken);
+      }
 
       return Helpers.sendResponse(res, 200, 'token refreshed successfully', {
         token: newToken,
