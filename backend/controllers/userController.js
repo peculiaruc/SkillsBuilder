@@ -11,6 +11,7 @@ const tokn = new Token();
 
 class UserController {
   static async createUser(req, res) {
+    
     const { email, password, fullname, city } = req.body;
     const hashedPassword = Helpers.hashPassword(password);
     const checkEmail = await user.getByEmail(email);
