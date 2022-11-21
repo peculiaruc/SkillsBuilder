@@ -1,3 +1,3 @@
 export const addType = `
-ALTER TABLE assignments
+ALTER TABLE assignment_questions
 ADD COLUMN type VARCHAR DEFAULT 'single-choice';`;
