@@ -10,11 +10,6 @@ const user = new User();
 const tokn = new Token();
 
 class UserController {
-  async getSavedToken(userId, tkn, type) {
-    const savedToken = await tokn.allWhere({ user_id: userId, token: tkn, type });
-    return savedToken;
-  }
-
   static async createUser(req, res) {
     const { email, password, fullname, city } = req.body;
     const hashedPassword = Helpers.hashPassword(password);
@@ -70,7 +65,7 @@ class UserController {
 
     if (_user.count > 0 && Helpers.comparePassword(_user.row.password, password)) {
       const token = Helpers.generateToken(_user.row.id);
-      const refreshToken = Helpers.generateRefreshToken(saveUser.rows[0].id);
+      const refreshToken = Helpers.generateRefreshToken(_user.row.id);
       return Helpers.sendResponse(res, 200, 'User is successfully logged in', {
         token,
         refreshToken,
@@ -149,8 +144,8 @@ class UserController {
   }
 
   static async logout(req, res) {
-    const deleteTokens = await tokn.delete({user_id: req.body.userId})
-    if(deleteTokens.errors){
+    const deleteTokens = await tokn.delete({ user_id: req.body.userId });
+    if (deleteTokens.errors) {
       return Helpers.dbError(res, deleteTokens);
     }
     return Helpers.sendResponse(res, 200, 'Logout Sucessfull!');
