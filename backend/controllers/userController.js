@@ -162,7 +162,7 @@ class UserController {
 
   static async refreshToken(req, res) {
     const savedToken = await tokn.allWhere({
-      id: req.body.userId,
+      user_id: req.body.userId,
       token: req.body.refreshToken,
       type: 'refresh',
     });
