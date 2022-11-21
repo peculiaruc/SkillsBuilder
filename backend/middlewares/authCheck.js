@@ -1,11 +1,14 @@
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import Database from '../db/db';
+import Token from '../models/token';
+import Helpers from '../helpers/helpers';
 
 dotenv.config();
 
 const secretKey = process.env.JWT_PRIVATE_KEY;
 const db = new Database();
+const tokn = new Token();
 
 exports.verifyToken = async (req, res, next) => {
   const token = req.headers.authorization.split(' ')[1];

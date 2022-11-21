@@ -10,6 +10,11 @@ const user = new User();
 const tokn = new Token();
 
 class UserController {
+  async getSavedToken(userId, tkn, type) {
+    const savedToken = await tokn.allWhere({ user_id: userId, token: tkn, type });
+    return savedToken;
+  }
+
   static async createUser(req, res) {
     const { email, password, fullname, city } = req.body;
     const hashedPassword = Helpers.hashPassword(password);
@@ -46,9 +51,11 @@ class UserController {
       await sendEmail(saveUser.rows[0].email, 'Verify Email', link);
 
       const token = Helpers.generateToken(saveUser.rows[0].id);
+      const refreshToken = Helpers.generateRefreshToken(saveUser.rows[0].id);
 
       return Helpers.sendResponse(res, 200, 'User created successfully', {
         token,
+        refreshToken,
         user: saveUser.rows[0],
       });
     }
@@ -63,8 +70,10 @@ class UserController {
 
     if (_user.count > 0 && Helpers.comparePassword(_user.row.password, password)) {
       const token = Helpers.generateToken(_user.row.id);
+      const refreshToken = Helpers.generateRefreshToken(saveUser.rows[0].id);
       return Helpers.sendResponse(res, 200, 'User is successfully logged in', {
         token,
+        refreshToken,
         user: _user.row,
       });
     }
@@ -104,14 +113,14 @@ class UserController {
     if (_user.errors) return Helpers.dbError(res, _user);
     if (_user.count > 0) {
       // check if token is valid
-      const savedToken = await tokn.getTokenByUser(user_id, resetToken);
+      const savedToken = await tokn.allWhere({ id, token: resetToken, type: 'reset' });
       if (savedToken.errors) return Helpers.dbError(res, savedToken);
       if (savedToken.count > 0) {
         const hashedPass = Helpers.hashPassword(password);
         const update = await user.update({ password: hashedPass }, { id: user_id });
         if (update.errors) return Helpers.dbError(res, update);
         if (update.count > 0) {
-          await tokn.delete({ id: savedToken.row.id });
+          await tokn.delete({ id: savedToken.rows[0].id });
           return Helpers.sendResponse(res, 200, 'password reset sucessfully', {});
         }
       }
@@ -124,13 +133,13 @@ class UserController {
     const _user = await user.getById(id);
     if (_user.errors) return Helpers.dbError(res, _user);
     if (_user.count > 0) {
-      const savedToken = await tokn.getTokenByUser(id, token);
+      const savedToken = await tokn.allWhere({ id, token, type: 'verify' });
       if (savedToken.errors) return Helpers.dbError(res, savedToken);
       if (savedToken.count > 0) {
         const update = await user.update({ verified: true }, { id });
         if (update.errors) return Helpers.dbError(res, update);
         if (update.count > 0) {
-          await tokn.delete({ id: savedToken.row.id });
+          await tokn.delete({ id: savedToken.rows[0].id });
           return Helpers.sendResponse(res, 200, 'email verified successfully', {});
         }
       }
@@ -140,7 +149,36 @@ class UserController {
   }
 
   static async logout(req, res) {
-    return Helpers.sendResponse(res, 200, 'ok');
+    const deleteTokens = await tokn.delete({user_id: req.body.userId})
+    if(deleteTokens.errors){
+      return Helpers.dbError(res, deleteTokens);
+    }
+    return Helpers.sendResponse(res, 200, 'Logout Sucessfull!');
+  }
+
+  static async refreshToken(req, res) {
+    const savedToken = await tokn.allWhere({
+      id: req.body.userId,
+      token: req.body.refreshToken,
+      type: 'refresh',
+    });
+    if (savedToken.errors) {
+      return Helpers.dbError(res, savedToken);
+    }
+    if (savedToken.count > 0) {
+      const newToken = Helpers.generateToken(req.body.userId);
+      const newRefreshToken = Helpers.generateRefreshToken(req.body.userId);
+
+      const deleteOld = await tokn.delete({ id: savedToken.rows[0].id });
+      if (deleteOld.errors) {
+        return Helpers.dbError(res, deleteOld);
+      }
+
+      return Helpers.sendResponse(res, 200, 'token refreshed successfully', {
+        token: newToken,
+        refreshToken: newRefreshToken,
+      });
+    }
   }
 }
 
