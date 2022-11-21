@@ -66,6 +66,15 @@ class UserController {
     if (_user.count > 0 && Helpers.comparePassword(_user.row.password, password)) {
       const token = Helpers.generateToken(_user.row.id);
       const refreshToken = Helpers.generateRefreshToken(_user.row.id);
+      const newToken = {
+        user_id: _user.row.id,
+        token: refreshToken,
+        type: 'refresh',
+      };
+      const saveToken = await tokn.create(newToken);
+      if (saveToken.errors) {
+        return Helpers.dbError(res, saveToken);
+      }
       return Helpers.sendResponse(res, 200, 'User is successfully logged in', {
         token,
         refreshToken,
