@@ -1,5 +1,4 @@
 import express from 'express';
-import { verify } from 'jsonwebtoken';
 import GroupController from '../controllers/groupController';
 import { verifyToken } from '../middlewares/authCheck';
 

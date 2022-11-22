@@ -27,7 +27,7 @@ class GroupController {
     if (_join.errors) {
       return Helpers.dbError(res, _join);
     }
-    return Helpers.sendResponse(res, 200, 'Group created successfully', {});
+    return Helpers.sendResponse(res, 200, 'Group created successfully', { group: _group.rows[0] });
   }
 
   // join group
@@ -76,6 +76,7 @@ class GroupController {
     if (_group.errors) {
       return Helpers.dbError(res, _group);
     }
+    console.log('resp', _group);
     return Helpers.sendResponse(res, 200, 'success', { myGroups: _group.rows });
   }
 
