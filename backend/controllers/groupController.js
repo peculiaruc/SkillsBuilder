@@ -72,7 +72,7 @@ class GroupController {
   // get users joined groups
   static async myGroups(req, res) {
     const { userId } = req.body;
-    const _group = await joinedG.getByUser(userId);
+    const _group = await joinedG.allWhere({ user_id: userId });
     if (_group.errors) {
       return Helpers.dbError(res, _group);
     }
@@ -87,7 +87,7 @@ class GroupController {
     if (_group.errors) {
       return Helpers.dbError(res, _group);
     }
-    return Helpers.sendResponse(res, 200, 'success', { groups: _group.rows[0] });
+    return Helpers.sendResponse(res, 200, 'success', { groups: _group.row });
   }
 
   // get group by course
@@ -97,7 +97,7 @@ class GroupController {
     if (_group.errors) {
       return Helpers.dbError(res, _group);
     }
-    return Helpers.sendResponse(res, 200, 'success', { groups: _group.rows });
+    return Helpers.sendResponse(res, 200, 'success', { groups: _group.row });
   }
 
   //
