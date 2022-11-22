@@ -8,20 +8,30 @@ const joinedG = new JoinedGroup();
 class GroupController {
   // create group
   static async createGroup(req, res) {
-    const { name, userId } = req.body;
+    const { name, userId, courseId } = req.body;
     const newGroup = {
       name,
       creator_id: userId,
+      course_id: courseId,
     };
     const _group = await group.create(newGroup);
     if (_group.errors) {
       return Helpers.dbError(res, _group);
     }
+    const newJoin = {
+      user_id: userId,
+      group_id: _group.rows[0].id,
+      join_date: new Date(),
+    };
+    const _join = await joinedG.create(newJoin);
+    if (_join.errors) {
+      return Helpers.dbError(res, _join);
+    }
     return Helpers.sendResponse(res, 200, 'Group created successfully', {});
   }
 
   // join group
-  static async joinedGroup(req, res) {
+  static async joinGroup(req, res) {
     const { groupId, userId } = req.body;
     const newJoin = {
       user_id: userId,
@@ -39,8 +49,8 @@ class GroupController {
 
   // delete group
   static async deleteGroup(req, res) {
-    const { groupId } = req.body;
-    const _group = await group.delete({ id: groupId });
+    const { id } = req.params;
+    const _group = await group.delete({ id });
     if (_group.errors) {
       return Helpers.dbError(res, _group);
     }
@@ -81,7 +91,7 @@ class GroupController {
 
   // get group by course
   static async groupByCourse(req, res) {
-    const { courseId } = req.body;
+    const { courseId } = req.params;
     const _group = await group.getByCourse(courseId);
     if (_group.errors) {
       return Helpers.dbError(res, _group);
