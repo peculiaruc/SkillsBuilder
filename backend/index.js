@@ -3,7 +3,14 @@ import cors from 'cors';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
 import initializeDb from './db/dbinit';
-import { userRoute, courseRoute, socialLoginRoute, assignmentRoute, groupRoute } from './routes';
+import {
+  userRoute,
+  courseRoute,
+  socialLoginRoute,
+  assignmentRoute,
+  groupRoute,
+  adminRoute,
+} from './routes';
 
 dotenv.config();
 const app = express();
@@ -23,6 +30,7 @@ app.use('/api/v1/social', socialLoginRoute);
 app.use('/api/v1/course', courseRoute);
 app.use('/api/v1/assignment', assignmentRoute);
 app.use('/api/v1/group', groupRoute);
+app.use('/api/v1/admin', adminRoute);
 
 app.use((req, res) => {
   res.status(404).send({

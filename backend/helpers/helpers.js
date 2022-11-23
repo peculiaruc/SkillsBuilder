@@ -18,6 +18,19 @@ class Helpers {
     return jwt.sign({ id: userId }, process.env.JWT_PRIVATE_KEY, { expiresIn: '30d' });
   }
 
+  static generateRandomPassword() {
+    let pass = '';
+    const str = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' + 'abcdefghijklmnopqrstuvwxyz0123456789@#$';
+
+    for (let i = 1; i <= 8; i++) {
+      var char = Math.floor(Math.random() * str.length + 1);
+
+      pass += str.charAt(char);
+    }
+
+    return pass;
+  }
+
   static createRandomToken() {
     crypto.randomBytes(32).toString('hex');
   }
