@@ -105,7 +105,7 @@ class AdminController {
       <p>Welcome to skillBuddy</p>
       <p>Log in to your account using the following credentials</p>
       <p>email: ${_user.rows[0].email}</p>
-      <p>password: password}</p>`;
+      <p>password: ${password}</p>`;
 
       await sendEmail(_user.rows[0].email, 'Verify Email', link);
 
@@ -135,10 +135,11 @@ class AdminController {
   }
 
   static async allUsers(req, res) {
-    const _users = user.all(req.query.limit, req.query.offset);
+    const _users = user.all(req.query.limit || 5, req.query.offset || 0);
     if (_users.errors) {
       return Helpers.dbError(res, _users);
     }
+    console.log(_users)
     return Helpers.sendResponse(res, 200, 'success', { users: _users.rows });
   }
 }
