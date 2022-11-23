@@ -1,6 +1,6 @@
 import bcryptjs from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-
+import crypto from 'crypto';
 class Helpers {
   static hashPassword(password) {
     return bcryptjs.hashSync(password, bcryptjs.genSaltSync(10));
@@ -11,7 +11,15 @@ class Helpers {
   }
 
   static generateToken(userId) {
-    return jwt.sign({ id: userId }, process.env.JWT_PRIVATE_KEY, { expiresIn: '1h' });
+    return jwt.sign({ id: userId }, process.env.JWT_PRIVATE_KEY, { expiresIn: '2h' });
+  }
+
+  static generateRefreshToken(userId) {
+    return jwt.sign({ id: userId }, process.env.JWT_PRIVATE_KEY, { expiresIn: '30d' });
+  }
+
+  static createRandomToken() {
+    crypto.randomBytes(32).toString('hex');
   }
 
   static validationResponse(validation, response) {
@@ -20,10 +28,7 @@ class Helpers {
       for (let index = 0; index < validation.error.details.length; index++) {
         errors.push(validation.error.details[index].message.split('"').join(''));
       }
-      return response.status(422).send({
-        status: response.statusCode,
-        message: errors,
-      });
+      return Helpers.sendResponse(response, 422, errors);
     }
   }
 
@@ -41,14 +46,14 @@ class Helpers {
   static dbError(response, query) {
     if (query.errors) {
       console.log(query.errors);
-      return Helpers.sendResponse(response, 501, 'Oops Something went wrong.');
+      return Helpers.sendResponse(response, 500, 'Oops Something went wrong.');
     }
   }
 
   static Error(response, query) {
     if (query.errors) {
       console.log(query.errors);
-      return Helpers.sendResponse(response, 501, 'Oops Something went wrong.');
+      return Helpers.sendResponse(response, 500, errors.message);
     }
   }
 }

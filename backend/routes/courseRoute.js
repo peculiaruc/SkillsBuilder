@@ -1,5 +1,5 @@
 import express from 'express';
-import { verifyToken, verifyAdminUserToken } from '../helpers/authCheck';
+import { verifyToken, verifyAdminUserToken } from '../middlewares/authCheck';
 import courseController from '../controllers/courseController';
 import adminCourseController from '../controllers/adminCourseController';
 
