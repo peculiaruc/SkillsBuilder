@@ -99,7 +99,7 @@ class AdminController {
       if (saveToken.errors) return Helpers.dbError(res, saveToken);
 
       const link = `<p>
-      ${process.env.BASE_URL}/api/v1/auth/verify-email/${saveUser.rows[0].id}/${saveToken.rows[0].token}</p>`;
+      ${process.env.BASE_URL}/api/v1/auth/verify-email/${_user.rows[0].id}/${saveToken.rows[0].token}</p>`;
 
       const credentials = `
       <p>Welcome to skillBuddy</p>
