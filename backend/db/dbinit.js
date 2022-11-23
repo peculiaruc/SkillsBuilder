@@ -12,6 +12,8 @@ import {
   makePassNullable,
   addType,
   addColumns,
+  joinedGroups,
+  groups,
 } from '../migrations';
 
 export default async () => {
@@ -34,6 +36,8 @@ export default async () => {
     await db.queryBuilder(makePassNullable);
     await db.queryBuilder(addType);
     await db.queryBuilder(addColumns);
+    await db.queryBuilder(groups);
+    await db.queryBuilder(joinedGroups);
     return true;
   } catch (e) {
     console.log('db init err', e);
