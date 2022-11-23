@@ -2,7 +2,7 @@ import Database from '../db/db';
 
 class CourseLesson extends Database {
   constructor() {
-    super('courses_lesson');
+    super('course_lesson');
   }
 
   async getById(id) {

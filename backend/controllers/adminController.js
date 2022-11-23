@@ -135,11 +135,11 @@ class AdminController {
   }
 
   static async allUsers(req, res) {
-    const _users = user.all(req.query.limit || 5, req.query.offset || 0);
+    const _users = await user.all(req.query.limit || 5, req.query.offset || 0);
     if (_users.errors) {
       return Helpers.dbError(res, _users);
     }
-    console.log(_users)
+    console.log(_users);
     return Helpers.sendResponse(res, 200, 'success', { users: _users.rows });
   }
 }
