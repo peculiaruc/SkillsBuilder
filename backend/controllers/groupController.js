@@ -97,7 +97,7 @@ class GroupController {
     if (_group.errors) {
       return Helpers.dbError(res, _group);
     }
-    return Helpers.sendResponse(res, 200, 'success', { groups: _group.row });
+    return Helpers.sendResponse(res, 200, 'success', { groups: _group.row});
   }
 
   //
