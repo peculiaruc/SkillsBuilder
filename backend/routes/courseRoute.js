@@ -1,32 +1,21 @@
 import express from 'express';
-import { verifyToken, verifyAdminUserToken } from '../middlewares/authCheck';
+import { verifyToken } from '../middlewares/authCheck';
 import courseController from '../controllers/courseController';
-import adminCourseController from '../controllers/adminCourseController';
 
 const router = express.Router();
 
-router.get('/courses', verifyToken, courseController.getAllCourses);
+router.use(verifyToken);
 
-router.post('/filter-courses', verifyToken, courseController.getCoursesByCategories);
+router.get('/courses', courseController.getAllCourses);
 
-router.post('/enrolled-courses', verifyToken, courseController.getEnrolledCourses);
+router.post('/filter-courses', courseController.getCoursesByCategories);
 
-router.get('/categories', verifyToken, courseController.getCourseCategory);
+router.post('/enrolled-courses', courseController.getEnrolledCourses);
 
-router.post('/enroll-in-course', verifyToken, courseController.enrollUser);
+router.get('/categories', courseController.getCourseCategory);
 
-router.post('/:id', verifyToken, courseController.getCoursesById);
+router.post('/enroll-in-course', courseController.enrollUser);
 
-// router.post('/create-course', verifyAdminUserToken, adminCourseController.createCourse);
-
-// router.post('/add-course-lesson', verifyAdminUserToken, adminCourseController.addCourseLesson);
-
-// router.post('/delete-course', verifyAdminUserToken, adminCourseController.deleteCourse);
-
-// router.post(
-//   '/delete-course-lesson',
-//   verifyAdminUserToken,
-//   adminCourseController.deleteCourseLesson
-// );
+router.post('/:id', courseController.getCoursesById);
 
 module.exports = router;
