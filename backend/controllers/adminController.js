@@ -139,7 +139,6 @@ class AdminController {
     if (_users.errors) {
       return Helpers.dbError(res, _users);
     }
-    console.log(_users);
     return Helpers.sendResponse(res, 200, 'success', { users: _users.rows });
   }
 }
