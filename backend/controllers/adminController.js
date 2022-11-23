@@ -73,7 +73,7 @@ class AdminController {
       return Helpers.dbError(res, emailCheck);
     }
 
-    if (checkEmail.count > 0) {
+    if (emailCheck.count > 0) {
       return Helpers.sendResponse(res, 400, 'A user with Email address already exists !');
     }
 
