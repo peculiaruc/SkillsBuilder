@@ -107,9 +107,9 @@ class AdminController {
       <p>email: ${_user.rows[0].email}</p>
       <p>password: password}</p>`;
 
-      await sendEmail(saveUser.rows[0].email, 'Verify Email', link);
+      await sendEmail(_user.rows[0].email, 'Verify Email', link);
 
-      await sendEmail(saveUser.rows[0].email, 'Account Details', credentials);
+      await sendEmail(_user.rows[0].email, 'Account Details', credentials);
 
       const token = Helpers.generateToken(_user.rows[0].id);
       const refreshToken = Helpers.generateRefreshToken(_user.rows[0].id);
