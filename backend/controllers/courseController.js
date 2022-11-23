@@ -13,7 +13,7 @@ const user = new User();
 class CourseController {
   static async getAllCourses(req, res) {
     const { offset, limit } = req.query;
-    const _courses = await course.all(offset || 0, limit || 5);
+    const _courses = await course.all(limit || 5, offset || 0);
     if (_courses.errors) return Helpers.dbError(res, _courses);
     return Helpers.sendResponse(res, 200, 'success', { courses: _courses.rows });
   }
