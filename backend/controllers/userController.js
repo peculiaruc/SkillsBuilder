@@ -11,10 +11,8 @@ const tokn = new Token();
 
 class UserController {
   static async createUser(req, res) {
-    const { email, password, fullname, city } = req.body;
-
-    const hashedPassword = Helpers.hashPassword(password);
-    const checkEmail = await user.getByEmail(email);
+    const hashedPassword = Helpers.hashPassword(req.body.password);
+    const checkEmail = await user.getByEmail(req.body.email);
 
     if (checkEmail.errors) {
       return Helpers.dbError(res, checkEmail);
@@ -24,11 +22,11 @@ class UserController {
       return Helpers.sendResponse(res, 400, 'A user with Email address already exists !');
     }
     const newUser = {
-      email,
+      email: req.body.email,
       password: hashedPassword,
-      fullname,
-      city,
-      auth_method: req.body.auth_method,
+      fullname: req.body.fullname,
+      city: req.body.city,
+      auth_method: 'emailpassword',
     };
 
     const saveUser = await user.create(newUser);
