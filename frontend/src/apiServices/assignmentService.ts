@@ -15,7 +15,7 @@ import {
 const assignmentService = api.injectEndpoints({
   endpoints: (builder) => ({
     createAssignment: builder.mutation<GetAssignmentResponse, CreateAssignmentRequest>({
-      query: (assignment) => ({ url: '/create', method: 'POST', data: assignment }),
+      query: (assignment) => ({ url: 'assignment/create', method: 'POST', data: assignment }),
     }),
     updateOneAssignment: builder.mutation<GetAssignmentResponse, UpdateAssignmentRequest>({
       query: (assignment) => ({ url: `/assignment/${assignment.id}`, method: 'PUT', data: assignment }),

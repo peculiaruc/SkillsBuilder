@@ -4,6 +4,7 @@ import Assignments from './admin/Assignments';
 import authroutes from './auth/routes';
 import DashboardView from './dashboard';
 import courseRoutes from './course/index';
+import learnersRoutes from './public';
 
 export default [
   {
@@ -21,6 +22,7 @@ export default [
             path: '/assignments',
             element: <Assignments />,
           },
+          ...learnersRoutes,
           courseRoutes,
         ],
       },

@@ -10,6 +10,10 @@ import {
   assignments,
   assignmentQuestions,
   makePassNullable,
+  addType,
+  addColumns,
+  joinedGroups,
+  groups,
 } from '../migrations';
 
 export default async () => {
@@ -18,6 +22,7 @@ export default async () => {
   try {
     date = await db.queryBuilder('SELECT NOW()');
     if (process.env !== 'production') {
+      console.log(date);
       console.log('Database connected', date.rows[0]);
     }
     await db.queryBuilder(users);
@@ -30,6 +35,10 @@ export default async () => {
     await db.queryBuilder(assignments);
     await db.queryBuilder(assignmentQuestions);
     await db.queryBuilder(makePassNullable);
+    await db.queryBuilder(addType);
+    await db.queryBuilder(addColumns);
+    await db.queryBuilder(groups);
+    await db.queryBuilder(joinedGroups);
     return true;
   } catch (e) {
     console.log('db init err', e);

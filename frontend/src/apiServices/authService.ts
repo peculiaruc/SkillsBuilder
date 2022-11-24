@@ -29,11 +29,11 @@ const authService = api.injectEndpoints({
       query: () => ({ url: '/auth/logout', method: 'POST' }),
     }),
     googleLogin: builder.mutation({
-      query: (user) => ({ url: '/auth/google', method: 'POST', data: user }),
+      query: (user) => ({ url: '/social/google', method: 'POST', data: user }),
     }),
     linkedinLogin: builder.mutation({
       query: (data) => ({
-        url: '/auth/linkedin',
+        url: '/social/linkedin',
         method: 'POST',
         data,
       }),
