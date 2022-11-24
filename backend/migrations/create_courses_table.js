@@ -5,6 +5,7 @@ export const courses = `CREATE TABLE IF NOT EXISTS courses (
     thumbnail VARCHAR,
     summary TEXT,
     category_ids INT[],
+    author_id INT,
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW()
 );`;
