@@ -10,6 +10,10 @@ type RequiredField = Required<{
 const FieldType: Field = {
   text: '',
   textarea: '',
+  question: {
+    isAnswer: false,
+    name: '',
+  },
   email: '',
   url: '',
   tel: '',

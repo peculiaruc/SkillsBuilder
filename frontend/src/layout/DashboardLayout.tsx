@@ -1,5 +1,5 @@
 import {
-  Box, Container, Stack, Toolbar, useTheme,
+  Box, Stack, Toolbar, useTheme,
 } from '@mui/material';
 import axios from 'axios';
 import { Navigate, Outlet } from 'react-router-dom';

@@ -15,4 +15,8 @@ router.post('/password-update', userController.passwordUpdate);
 
 router.get('/verify-email/:id/:token', userController.verifyEmail);
 
+router.post('/refreshToken', userController.refreshToken);
+
+router.post('/verify-email/retry', userController.retryEmailVerification);
+
 module.exports = router;

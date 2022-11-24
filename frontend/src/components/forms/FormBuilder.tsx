@@ -25,9 +25,8 @@ function FormBuilder({
   });
   const handleSubmit = () => formik.submitForm();
 
-  const { errors } = formik;
+  const { errors, getFieldProps, touched } = formik;
   const fieldNames = Object.keys(errors);
-
   const formContent = (
     <>
       <DialogTitle>{title}</DialogTitle>
@@ -38,9 +37,9 @@ function FormBuilder({
               (field) => (
                 <MixedInput
                   {...field}
-                  error={fieldNames.includes(field.name)}
-                  helperText={fieldNames.includes(field.name) ? errors[field.name] as string : ''}
-                  onChange={formik.handleChange}
+                  {...getFieldProps(field.name)}
+                  error={touched[field.name] && fieldNames.includes(field.name)}
+                  helperText={fieldNames.includes(field.name) && touched[field.name] ? errors[field.name] as string : ''}
                   key={field.name}
                 />
               ),

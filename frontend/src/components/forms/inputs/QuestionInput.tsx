@@ -1,37 +1,18 @@
-import {
-  InputAdornment, Switch, TextField, TextFieldProps,
-} from '@mui/material';
+import { TextField, Stack } from '@mui/material';
+// import { useState } from 'react';
+// import { QuestionType } from '../../../interfaces/AssingmentType';
+// props: Omit<QuestionType, 'id' | 'create_at' | 'updated_at'>
+function QuestionInput() {
+  // const { question, choices } = props;
 
-export type QuestionProps = {
-  name:string,
-  isAnswer: boolean,
-};
-
-type QuestionInputProps = {
-  value: QuestionProps;
-} & TextFieldProps;
-
-function QuestionInput(props: QuestionInputProps) {
-  const { value, ...rest } = props;
-  const { isAnswer, name } = value;
-
-  const handleChange = (event:React.ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target);
-  };
-
-  const endAdornment = (
-    <InputAdornment position="end">
-      <Switch value={isAnswer ? 'on' : 'off'} onChange={handleChange} />
-    </InputAdornment>
-  );
+  //  const [answers, setAnswers] = useState(choices);
+  // console.log(question, answers, setAnswers);
 
   return (
-    <TextField
-      {...rest}
-      onChange={handleChange}
-      value={name}
-      InputProps={{ endAdornment }}
-    />
+    <Stack>
+      <TextField label="Question Name" />
+    </Stack>
+
   );
 }
 
