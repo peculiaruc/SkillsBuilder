@@ -22,7 +22,7 @@ const initialState: AuthState = auth ? JSON.parse(auth) : defaultState;
 const login = (state: AuthState, { payload }: { payload: LoginResponseType }) => {
   let currentState = state;
   currentState = payload.data;
-  // currentState.user.role = 1;
+  currentState.user.role = 2;
   Cookies.set(userCookie, JSON.stringify(currentState), {
     expires: defaultCookieExpires,
     domain: window.location.hostname,

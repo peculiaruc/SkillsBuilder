@@ -34,18 +34,16 @@ export default function DashboardLayout() {
         }}
       >
         <Toolbar />
-        <Container>
-          <Stack
-            spacing={2}
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <Outlet />
-          </Stack>
-        </Container>
+        <Stack
+          spacing={2}
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <Outlet />
+        </Stack>
       </Box>
     </Box>
   );

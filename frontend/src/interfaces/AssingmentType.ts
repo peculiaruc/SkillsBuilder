@@ -12,11 +12,11 @@ export interface AssingmentType {
 
 export interface QuestionType {
   id:number;
-  question: number;
+  question: string;
   assignment_id: number;
-  type: string;
   choices: number[];
   answers: number[];
+  mark: number;
   created_at: Date;
   updated_at: Date;
 }

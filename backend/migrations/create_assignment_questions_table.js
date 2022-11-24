@@ -3,7 +3,7 @@ export const assignmentQuestions = `CREATE TABLE IF NOT EXISTS assignment_questi
     assignment_id INT NOT NULL,
     question TEXT NOT NULL,
     choices VARCHAR[] NOT NULL,
-    answer VARCHAR NOT NULL,
+    answers VARCHAR NOT NULL,
     type VARCHAR DEFAULT 'single_choice',
     question_no INT NOT NULL,
     created_at TIMESTAMP DEFAULT NOW(),
