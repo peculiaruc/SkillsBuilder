@@ -55,7 +55,7 @@ function Topbar() {
           transformOrigin={{ horizontal: 'right', vertical: 'top' }}
           anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
         >
-          <MenuItem onClick={logout}>
+          <MenuItem onClick={() => logout(user.id)}>
             <ListItemIcon>
               <Logout fontSize="small" />
             </ListItemIcon>

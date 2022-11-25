@@ -1,11 +1,14 @@
 import { TextField, TextFieldProps } from '@mui/material';
-// import QuestionInput from './QuestionInput';
+import { ChoiceType } from '../../../interfaces/AssingmentType';
+import QuestionChoiceInput from './QuestionChoiceInput';
 
-type Props = TextFieldProps;
+type Props = { name:string } & TextFieldProps;
 
 function MixedInput(props: Props) {
-  const { type } = props;
+  const { type, value } = props;
   switch (type) {
+    case 'question_choices':
+      return <QuestionChoiceInput {...props} value={value as ChoiceType[]} />;
     default:
       return <TextField {...props} fullWidth />;
   }

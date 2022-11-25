@@ -1,5 +1,5 @@
 import {
-  Box, Button, Grid, Paper, Typography,
+  Box, Button, Grid, Paper, Stack, Typography,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { CourseItem } from '../../../interfaces/Course';
@@ -12,8 +12,10 @@ function ListItemCourse({ course }: Props) {
   const {
     name, summary, thumbnail, id,
   } = course;
-  const navigate = useNavigate();
   const style = { display: 'flex', justifyContent: 'center', alignItems: 'center' };
+
+  const navigate = useNavigate();
+
   return (
     <Paper sx={{
       width: '100%',
@@ -42,7 +44,10 @@ function ListItemCourse({ course }: Props) {
           <p>{summary.substring(0, 250)}</p>
         </Grid>
         <Grid item xs={1} sm={1} md={1} sx={style}>
-          <Button onClick={() => navigate(`/course/${id}`)}>View Details</Button>
+          <Stack spacing={2}>
+            <Button onClick={() => navigate(`/admin/courses/${id}`)}>View Details</Button>
+            <Button onClick={() => navigate(`/admin/courses/${id}/assignments`)}>Assignments</Button>
+          </Stack>
         </Grid>
       </Grid>
     </Paper>

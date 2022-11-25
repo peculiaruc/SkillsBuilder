@@ -25,8 +25,8 @@ const authService = api.injectEndpoints({
     register: builder.mutation<LoginResponseType, UserRegisterType>({
       query: (user) => ({ url: '/auth/register', method: 'POST', data: user }),
     }),
-    logout: builder.mutation({
-      query: () => ({ url: '/auth/logout', method: 'POST' }),
+    logout: builder.mutation<void, number>({
+      query: (userId) => ({ url: '/auth/logout', method: 'POST', data: { userId } }),
     }),
     googleLogin: builder.mutation({
       query: (user) => ({ url: '/social/google', method: 'POST', data: user }),

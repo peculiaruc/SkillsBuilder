@@ -3,6 +3,7 @@ export interface AssingmentType {
   course_id: number;
   author_id: number;
   description: string;
+  title: string;
   passing_score: number;
   max_attemps: number;
   deadline: Date;
