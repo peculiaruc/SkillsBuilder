@@ -1,5 +1,5 @@
 import {
-  Box, Container, Stack, Toolbar, useTheme,
+  Box, Stack, Toolbar, useTheme,
 } from '@mui/material';
 import axios from 'axios';
 import { Navigate, Outlet } from 'react-router-dom';
@@ -34,18 +34,16 @@ export default function DashboardLayout() {
         }}
       >
         <Toolbar />
-        <Container>
-          <Stack
-            spacing={2}
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <Outlet />
-          </Stack>
-        </Container>
+        <Stack
+          spacing={2}
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <Outlet />
+        </Stack>
       </Box>
     </Box>
   );

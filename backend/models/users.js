@@ -8,9 +8,13 @@ class User extends Database {
   async getByEmail(email) {
     return await this.first('email', '=', email);
   }
-  
+
   async getById(id) {
     return await this.first('id', '=', id);
+  }
+
+  async all(limit, offset) {
+    return super.allWithOffset(limit, offset);
   }
 }
 

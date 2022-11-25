@@ -34,7 +34,7 @@ function ListItemCourse({ course }: Props) {
             backgroundImage: `url(${thumbnail})`,
           }}
           >
-            <Typography fontWeight="bold">{name}</Typography>
+            <Typography fontWeight="bold" color="common.white">{name}</Typography>
           </Box>
 
         </Grid>

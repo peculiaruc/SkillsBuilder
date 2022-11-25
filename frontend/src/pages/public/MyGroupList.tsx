@@ -24,7 +24,7 @@ function MyGroupList() {
           ),
         },
         {
-          name: 'In Progress',
+          name: 'My Groups',
           component: (
             <Paper sx={{
               height: '300px',
@@ -40,7 +40,7 @@ function MyGroupList() {
           ),
         },
         {
-          name: 'Completed',
+          name: 'Joined groups',
           component: (
             <Paper sx={{
               height: '300px',

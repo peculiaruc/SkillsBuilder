@@ -1,4 +1,4 @@
-import AssignmentList from './AssignmentList';
+import AssignmentList from './AssignmentIndex';
 import CourseDetails from './courses/CourseDetails';
 import CourseView from './courses/CourseView';
 import MyGroupList from './MyGroupList';

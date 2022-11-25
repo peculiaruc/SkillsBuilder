@@ -3,6 +3,7 @@ export type CourseItem = {
   summary: string,
   description: string,
   thumbnail?: string,
+  author_id?: string,
   updated_at?: string,
   id: number,
   created_at?:string;

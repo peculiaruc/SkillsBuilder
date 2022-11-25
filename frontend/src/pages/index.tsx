@@ -1,9 +1,9 @@
 import BackgroundLayout from '../layout/BackgroundLayout';
 import DashboardLayout from '../layout/DashboardLayout';
-import Assignments from './admin/Assignments';
+import adminroutes from './admin';
 import authroutes from './auth/routes';
-import DashboardView from './dashboard';
-import courseRoutes from './course/index';
+import DashboardProvider from './DashboardProvider';
+import learnersRoutes from './public';
 
 export default [
   {
@@ -15,13 +15,10 @@ export default [
         children: [
           {
             index: true,
-            element: <DashboardView />,
+            element: <DashboardProvider />,
           },
-          {
-            path: '/assignments',
-            element: <Assignments />,
-          },
-          courseRoutes,
+          ...learnersRoutes,
+          adminroutes,
         ],
       },
       authroutes,

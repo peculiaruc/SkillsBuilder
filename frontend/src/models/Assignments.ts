@@ -9,15 +9,15 @@ class Assignment extends Model {
       course_id: Yup.string().min(3),
       passing_score: Yup.number().required(),
       max_attemps: Yup.number().min(1).required(),
-      deadline: Yup.object().required(),
+      deadline: Yup.date().required(),
       description: Yup.string().min(3),
     });
     this.fields = [
       {
-        name: 'course_id',
-        type: 'select',
-      },
-      {
+        name: 'title',
+        type: 'text',
+        required: true,
+      }, {
         name: 'description',
         type: 'text',
         multiline: true,
@@ -34,7 +34,7 @@ class Assignment extends Model {
       },
       {
         name: 'deadline',
-        type: 'datetime',
+        type: 'date',
       },
     ];
     this.setInitialValues();
