@@ -3,7 +3,6 @@ import { FormikValues } from 'formik';
 import { useDispatch } from 'react-redux';
 import Toastify from 'toastify-js';
 import { useCreateCourseMutation } from '../../apiServices/courseService';
-// import { useCreateCourseMutation } from '../../apiServices/courseService';
 import FormBuilder from '../../components/forms/FormBuilder';
 import { CourseItem } from '../../interfaces/Course';
 import Course from '../../models/Course';

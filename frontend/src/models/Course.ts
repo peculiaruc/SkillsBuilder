@@ -21,10 +21,6 @@ class Course extends Model {
         type: 'text',
       },
       {
-        name: 'question',
-        type: 'question',
-      },
-      {
         name: 'summary',
         type: 'text',
       },

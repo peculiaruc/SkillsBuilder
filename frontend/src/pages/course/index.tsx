@@ -1,3 +1,4 @@
+import AssignmentList from './assignment/AssignmentList';
 import CourseList from './CourseList';
 
 const courseRoutes = {
@@ -6,6 +7,10 @@ const courseRoutes = {
     {
       index: true,
       element: <CourseList />,
+    },
+    {
+      path: ':id/assignments',
+      element: <AssignmentList />,
     },
   ],
 };

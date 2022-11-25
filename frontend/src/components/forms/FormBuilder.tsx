@@ -1,5 +1,5 @@
 import {
-  Button, Dialog, DialogActions, DialogContent, DialogTitle, Paper, Stack,
+  Button, Dialog, DialogActions, DialogContent, DialogTitle, Paper, Stack
 } from '@mui/material';
 import { FormikValues, useFormik } from 'formik';
 import Model from '../../models/Model';
@@ -26,6 +26,7 @@ function FormBuilder({
   const handleSubmit = () => formik.submitForm();
 
   const { errors, getFieldProps, touched } = formik;
+
   const fieldNames = Object.keys(errors);
   const formContent = (
     <>
