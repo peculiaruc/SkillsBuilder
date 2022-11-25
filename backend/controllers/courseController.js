@@ -4,6 +4,7 @@ import Helpers from '../helpers/helpers';
 import Enrollment from '../models/enrollments';
 import Categories from '../models/categories';
 import User from '../models/users';
+import { orderBy } from 'lodash';
 
 const course = new Course();
 const enrollment = new Enrollment();
@@ -13,7 +14,7 @@ const user = new User();
 class CourseController {
   static async getAllCourses(req, res) {
     const { offset, limit } = req.query;
-    const _courses = await course.all(limit || 5, offset || 0);
+    const _courses = await course.all(limit || 5, offset || 0, 'id DESC');
     if (_courses.errors) return Helpers.dbError(res, _courses);
     return Helpers.sendResponse(res, 200, 'success', { courses: _courses.rows });
   }
@@ -71,7 +72,7 @@ class CourseController {
     await sendEmail(
       _user.row.email,
       'Enrollment Confirmation',
-      `You have successfully enrolled in ${courseName}`,
+      `You have successfully enrolled in ${courseName}`
     );
     return Helpers.sendResponse(res, 200, 'success', {});
   }
