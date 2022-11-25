@@ -31,7 +31,7 @@ class CourseController {
 
   static async getCoursesById(req, res) {
     const { id } = req.params;
-    const _courses = await course.getById(id);
+    const _courses = await course.first('id', '=', id);
     if (_courses.errors) return Helpers.dbError(res, _courses);
     return Helpers.sendResponse(res, 200, 'success', {
       course: _courses.rows[0],
