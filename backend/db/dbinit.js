@@ -14,6 +14,7 @@ import {
   addColumns,
   joinedGroups,
   groups,
+  choiceType,
 } from '../migrations';
 
 export default async () => {
@@ -38,6 +39,7 @@ export default async () => {
     await db.queryBuilder(addColumns);
     await db.queryBuilder(groups);
     await db.queryBuilder(joinedGroups);
+    await db.queryBuilder(choiceType);
     return true;
   } catch (e) {
     console.log('db init err', e);

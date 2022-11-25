@@ -13,6 +13,7 @@ import { addColumns } from './add_column_assignments_table';
 import { addTypeC } from './add_type_column_tokens_table';
 import { groups } from './create_groups_table';
 import { joinedGroups } from './create_joined_groups_table';
+import { choiceType } from './create_table_choice_type';
 
 export {
   users,
@@ -30,4 +31,5 @@ export {
   addTypeC,
   groups,
   joinedGroups,
+  choiceType,
 };
