@@ -1,14 +1,14 @@
-import { Button, Stack } from '@mui/material';
+import { Button, CircularProgress, Stack } from '@mui/material';
 import { FormikValues } from 'formik';
 import { useDispatch } from 'react-redux';
-import Toastify from 'toastify-js';
-import { useCreateCourseMutation } from '../../apiServices/courseService';
-import FormBuilder from '../../components/forms/FormBuilder';
-import { CourseItem } from '../../interfaces/Course';
-import Course from '../../models/Course';
-import { useAuth } from '../../store/authReducer';
-import { useCourses } from '../../store/courseReducer';
-import { closeDialog, openDialog } from '../../store/dialogFormReducer';
+import { toast } from 'react-toastify';
+import { useCreateCourseMutation, useGetAllCoursesQuery } from '../../../apiServices/courseService';
+import FormBuilder from '../../../components/forms/FormBuilder';
+import { CourseItem } from '../../../interfaces/Course';
+import Course from '../../../models/Course';
+import { useAuth } from '../../../store/authReducer';
+import { useCourses } from '../../../store/courseReducer';
+import { closeDialog, openDialog } from '../../../store/dialogFormReducer';
 import ListItemCourse from './ListItemCourse';
 
 function CourseList() {
@@ -21,13 +21,15 @@ function CourseList() {
   const handleOpen = () => dispatch(openDialog());
   const onCancel = () => dispatch(closeDialog());
   const [createCourse] = useCreateCourseMutation();
+  const { isLoading } = useGetAllCoursesQuery();
+
+  if (isLoading) { return <CircularProgress />; }
 
   const onSubmit = async (values: FormikValues) => {
-    const data = values as CourseItem;
-    await createCourse(data).unwrap();
-    Toastify({
-      text: 'Course created successfully',
-    });
+    const data = { ...values, author_id: auth.user.id } as unknown;
+    await createCourse(data as CourseItem).unwrap();
+    onCancel();
+    toast('Course created successfully');
   };
   /*
   const onSubmit = async (values: FormikValues) => {

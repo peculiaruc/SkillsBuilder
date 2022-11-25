@@ -2,29 +2,30 @@ import { Button, CircularProgress, Stack } from '@mui/material';
 import { FormikValues } from 'formik';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { useGetCourseAssignmentsQuery } from '../../../apiServices/assignmentService';
+import { useCreateAssignmentMutation, useGetCourseAssignmentsQuery } from '../../../apiServices/assignmentService';
 import FormBuilder from '../../../components/forms/FormBuilder';
-import Question from '../../../models/Question';
+import { AssingmentType } from '../../../interfaces/AssingmentType';
+import Assignment from '../../../models/Assignments';
 import { useAuth } from '../../../store/authReducer';
 import { closeDialog, openDialog } from '../../../store/dialogFormReducer';
+import ListAssignment from '../../public/assignments/ListAssignment';
 
 function AssignmentList() {
   const params = useParams();
   const auth = useAuth();
   const dispatch = useDispatch();
   const courseId = Number(params.id);
-  const model = new Question();
+  const model = new Assignment();
   const handleOpen = () => dispatch(openDialog());
   const onCancel = () => dispatch(closeDialog());
-  const { data, isLoading } = useGetCourseAssignmentsQuery({ course_id: courseId });
+  const [createAssignment] = useCreateAssignmentMutation();
+  const { isLoading } = useGetCourseAssignmentsQuery({ course_id: courseId });
   if (isLoading) return <CircularProgress />;
 
-  const assignments = data?.data.assignments;
-
-  console.log(assignments);
-
   const onSubmit = async (values: FormikValues) => {
-    console.log(values);
+    const assignment = { ...values, course_id: courseId } as AssingmentType;
+    await createAssignment(assignment).unwrap();
+  //  console.log(values, response);
   };
     /*
     const onSubmit = async (values: FormikValues) => {
@@ -47,26 +48,13 @@ function AssignmentList() {
         <>
           <Button sx={{ alignSelf: 'flex-end' }} onClick={handleOpen}>Create Assigment</Button>
           <FormBuilder
-            dialog={false}
-            title="Add a question"
+            dialog
+            title="Create Assignment"
             onSubmit={onSubmit}
             onCancel={onCancel}
             model={model}
           />
-          <FormBuilder
-            dialog={false}
-            title="Add a question"
-            onSubmit={onSubmit}
-            onCancel={onCancel}
-            model={model}
-          />
-          <FormBuilder
-            dialog={false}
-            title="Add a question"
-            onSubmit={onSubmit}
-            onCancel={onCancel}
-            model={model}
-          />
+          <ListAssignment />
         </>
       )}
     </Stack>

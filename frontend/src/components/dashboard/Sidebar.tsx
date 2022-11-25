@@ -45,12 +45,12 @@ function Sidebar() {
           <>
             <Divider />
             <MenuItem path="" name="Creation Center" icon={<EmojiObjects fontSize="large" sx={{ color: 'common.white' }} />} />
-            <MenuItem path="/overview" name="Overview" active={location.pathname === '/overview'} />
-            <MenuItem path="/courses" name="Cources" active={location.pathname === '/courses'} />
-            <MenuItem path="/assignments" name="Assignments" active={location.pathname === '/assignments'} />
-            <MenuItem path="/groups" name="Groups" active={location.pathname === '/groups'} />
+            <MenuItem path="/admin/overview" name="Overview" active={location.pathname === '/admin/overview'} />
+            <MenuItem path="/admin/courses" name="Cources" active={location.pathname === '/admin/courses'} />
+            <MenuItem path="/admin/assignments" name="Assignments" active={location.pathname === '/admin/assignments'} />
+            <MenuItem path="/admin/groups" name="Groups" active={location.pathname === '/admin/groups'} />
             {auth.user.role === 2 && (
-              <MenuItem path="/users" name="Users" active={location.pathname === '/users'} />
+              <MenuItem path="/admin/users" name="Users" active={location.pathname === '/admin/users'} />
             )}
           </>
           )}

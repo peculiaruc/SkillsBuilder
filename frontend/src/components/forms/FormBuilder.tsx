@@ -1,25 +1,26 @@
 import {
-  Button, Dialog, DialogActions, DialogContent, DialogTitle, Paper, Stack
+  Button, Dialog, DialogActions, DialogContent, DialogTitle, Paper, Stack,
 } from '@mui/material';
 import { FormikValues, useFormik } from 'formik';
+import React from 'react';
 import Model from '../../models/Model';
 import { useFormState } from '../../store/dialogFormReducer';
 import MixedInput from './inputs/MixedInput';
 
 interface FormProps {
-  title: string,
+  title: string | React.ReactNode,
   dialog: boolean,
   model: Model,
+  data?: unknown,
   onSubmit: (values: FormikValues) => void,
   onCancel: () => void,
 }
-
 function FormBuilder({
-  onSubmit, model, onCancel, title, dialog,
+  onSubmit, model, title, dialog, data, onCancel,
 } : Required<FormProps>) {
   const open = useFormState();
   const formik = useFormik({
-    initialValues: model.initialValues,
+    initialValues: data ?? model.initialValues,
     validationSchema: model.validationSchema,
     onSubmit,
   });
@@ -33,7 +34,7 @@ function FormBuilder({
       <DialogTitle>{title}</DialogTitle>
       <DialogContent>
         <form onSubmit={formik.handleSubmit} autoComplete="off">
-          <Stack spacing={2} pt={dialog ? 1.5 : 0}>
+          <Stack spacing={2} pt={1.5}>
             {model.fields.map(
               (field) => (
                 <MixedInput
@@ -69,5 +70,9 @@ function FormBuilder({
 
   return dialog ? DialogForm : NoDialogForm;
 }
+FormBuilder.defaultProps = {
+  data: undefined,
+  onCancel: () => {},
+};
 
 export default FormBuilder;

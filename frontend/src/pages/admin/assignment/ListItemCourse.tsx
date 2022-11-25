@@ -45,8 +45,8 @@ function ListItemCourse({ course }: Props) {
         </Grid>
         <Grid item xs={1} sm={1} md={1} sx={style}>
           <Stack spacing={2}>
-            <Button onClick={() => navigate(`/courses/${id}`)}>View Details</Button>
-            <Button onClick={() => navigate(`/courses/${id}/assignments`)}>Assignments</Button>
+            <Button onClick={() => navigate(`/admin/courses/${id}`)}>View Details</Button>
+            <Button onClick={() => navigate(`/admin/courses/${id}/assignments`)}>Assignments</Button>
           </Stack>
         </Grid>
       </Grid>
