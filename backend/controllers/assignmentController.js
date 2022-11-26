@@ -52,19 +52,17 @@ class AssignmentController {
   }
 
   static async createAssignmentQuestions(req, res) {
-    const { questions } = req.body;
-    await questions.map(async (q) => {
-      const { assignment_id, question, choices, answer, question_no } = q;
-      const newQuestion = {
-        assignment_id,
-        question,
-        choices,
-        question_no,
-      };
-      const saveQs = await assQuestions.create(newQuestion);
-      if (saveQs.errors) return Helpers.dbError(res, saveQs);
-    });
-    return Helpers.sendResponse(res, 200, 'success', {});
+    const { assignment_id, question, choices, question_no } = req.body;
+    const newQuestion = {
+      assignment_id,
+      question,
+      choices,
+      question_no,
+    };
+    const saveQs = await assQuestions.create(newQuestion);
+    if (saveQs.errors) return Helpers.dbError(res, saveQs);
+
+    return Helpers.sendResponse(res, 200, 'success', { question: saveQs.rows[0] });
   }
 
   static async getUsersInMyCourse(req, res) {
