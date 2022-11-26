@@ -1,9 +1,9 @@
-import { Button, Paper, useTheme } from '@mui/material';
 import TabView from '../../components/TabView';
 import ListAssignment from './assignments/ListAssignment';
+import ListAssignmentFailed from './assignments/ListAssignmentFailed';
+import ListAssignmentPassed from './assignments/ListAssignmentPassed';
 
 function AssignmentIndex() {
-  const theme = useTheme();
   return (
     <TabView
       title="My Assignments"
@@ -15,38 +15,11 @@ function AssignmentIndex() {
         },
         {
           name: 'Not Passed',
-          component: (
-            <Paper sx={{
-              height: '300px',
-              width: '100%',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              borderRadius: 2,
-              [theme.breakpoints.down('md')]: {
-                maxHeight: 500,
-              },
-            }}
-            >
-              <Button size="large">All Assignments in progress</Button>
-            </Paper>
-          ),
+          component: <ListAssignmentFailed />,
         },
         {
           name: 'Passed',
-          component: (
-            <Paper sx={{
-              height: '300px',
-              width: '100%',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              borderRadius: 2,
-            }}
-            >
-              <Button size="large">All Assignments completed</Button>
-            </Paper>
-          ),
+          component: <ListAssignmentPassed />,
         },
       ]
      }

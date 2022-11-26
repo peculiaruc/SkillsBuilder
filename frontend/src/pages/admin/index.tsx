@@ -1,6 +1,7 @@
 import Dashboard from './dashboard';
 import course from './course';
 import assignment from './assignment';
+import MyGroupList from '../public/groups/MyGroupList';
 
 const assignmentRoutes = {
   path: 'admin',
@@ -11,7 +12,10 @@ const assignmentRoutes = {
     },
     course,
     assignment,
-
+    {
+      path: 'groups',
+      element: <MyGroupList />,
+    },
   ],
 };
 
