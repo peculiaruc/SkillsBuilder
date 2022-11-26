@@ -4,6 +4,7 @@ import assignment from './assignment';
 import MyGroupList from '../public/groups/MyGroupList';
 import Overview from './overview/Overview';
 import PreloadData from './dashboard/PreloadData';
+import UserList from './UserList';
 
 const assignmentRoutes = {
   path: 'admin',
@@ -25,7 +26,7 @@ const assignmentRoutes = {
     },
     {
       path: 'users',
-      element: <MyGroupList />,
+      element: <UserList />,
     },
   ],
 };
