@@ -26,28 +26,28 @@ export default function Overview() {
       <Grid item xs={1}>
         <OverviewItem
           title="Lessons"
-          value="150"
+          value="10"
           icon={<School fontSize="large" />}
         />
       </Grid>
       <Grid item xs={1}>
         <OverviewItem
           title="Authors"
-          value="500"
+          value="15"
           icon={<Person fontSize="large" />}
         />
       </Grid>
       <Grid item xs={1}>
         <OverviewItem
           title="Learners"
-          value="200"
+          value="20"
           icon={<School fontSize="large" />}
         />
       </Grid>
       <Grid item xs={1}>
         <OverviewItem
           title="Assignments"
-          value="300"
+          value="17"
           icon={<School fontSize="large" />}
         />
       </Grid>
