@@ -5,4 +5,6 @@ import assignmentRoute from './assignmentRoute';
 import groupRoute from './groupRoute';
 import adminRoute from './adminRoute';
 
-export { userRoute, courseRoute, socialLoginRoute, assignmentRoute, groupRoute, adminRoute };
+export {
+  userRoute, courseRoute, socialLoginRoute, assignmentRoute, groupRoute, adminRoute,
+};

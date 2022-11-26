@@ -22,6 +22,8 @@ module.exports = {
   rules: {
     'react/react-in-jsx-scope': 0,
     'react/jsx-props-no-spreading': 'off',
+    'react/no-array-index-key': 'off',
     'react/require-default-props': 'off',
+    'no-param-reassign': 'off',
   },
 };

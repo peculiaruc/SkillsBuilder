@@ -15,7 +15,7 @@ import {
 const assignmentService = api.injectEndpoints({
   endpoints: (builder) => ({
     createAssignment: builder.mutation<GetAssignmentResponse, CreateAssignmentRequest>({
-      query: (assignment) => ({ url: '/create', method: 'POST', data: assignment }),
+      query: (assignment) => ({ url: '/assignment/create', method: 'POST', data: assignment }),
     }),
     updateOneAssignment: builder.mutation<GetAssignmentResponse, UpdateAssignmentRequest>({
       query: (assignment) => ({ url: `/assignment/${assignment.id}`, method: 'PUT', data: assignment }),
@@ -32,6 +32,9 @@ const assignmentService = api.injectEndpoints({
     }),
     deleteOneAssignment: builder.mutation<void, DeleteAssignmentRequest>({
       query: (data) => ({ url: '/assignment/delete', method: 'POST', data }),
+    }),
+    deleteOneQuestion: builder.mutation<void, number>({
+      query: (question_id) => ({ url: `/questions/${question_id}`, method: 'DELETE' }),
     }),
     submitAssignment: builder.mutation<void, SubmitAssignmentRequest>({
       query: (data) => ({ url: '/assignment/submit', method: 'POST', data }),
@@ -52,6 +55,7 @@ export const {
   useGetAssignmentQuestionsQuery,
   useSubmitAssignmentMutation,
   useGetAssignmentSubmissionsQuery,
+  useDeleteOneQuestionMutation,
 } = assignmentService;
 
 export default assignmentService;

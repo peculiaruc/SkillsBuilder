@@ -2,45 +2,46 @@ import {
   Button, Dialog, DialogActions, DialogContent, DialogTitle, Paper, Stack,
 } from '@mui/material';
 import { FormikValues, useFormik } from 'formik';
+import React from 'react';
 import Model from '../../models/Model';
 import { useFormState } from '../../store/dialogFormReducer';
 import MixedInput from './inputs/MixedInput';
 
 interface FormProps {
-  title: string,
+  title: string | React.ReactNode,
   dialog: boolean,
   model: Model,
+  data?: unknown,
   onSubmit: (values: FormikValues) => void,
   onCancel: () => void,
 }
-
 function FormBuilder({
-  onSubmit, model, onCancel, title, dialog,
+  onSubmit, model, title, dialog, data, onCancel,
 } : Required<FormProps>) {
   const open = useFormState();
   const formik = useFormik({
-    initialValues: model.initialValues,
+    initialValues: data ?? model.initialValues,
     validationSchema: model.validationSchema,
     onSubmit,
   });
   const handleSubmit = () => formik.submitForm();
 
-  const { errors } = formik;
-  const fieldNames = Object.keys(errors);
+  const { errors, getFieldProps, touched } = formik;
 
+  const fieldNames = Object.keys(errors);
   const formContent = (
     <>
       <DialogTitle>{title}</DialogTitle>
       <DialogContent>
         <form onSubmit={formik.handleSubmit} autoComplete="off">
-          <Stack spacing={2} pt={dialog ? 1.5 : 0}>
+          <Stack spacing={2} pt={1.5}>
             {model.fields.map(
               (field) => (
                 <MixedInput
                   {...field}
-                  error={fieldNames.includes(field.name)}
-                  helperText={fieldNames.includes(field.name) ? errors[field.name] as string : ''}
-                  onChange={formik.handleChange}
+                  {...getFieldProps(field.name)}
+                  error={touched[field.name] && fieldNames.includes(field.name)}
+                  helperText={fieldNames.includes(field.name) && touched[field.name] ? errors[field.name] as string : ''}
                   key={field.name}
                 />
               ),
@@ -69,5 +70,9 @@ function FormBuilder({
 
   return dialog ? DialogForm : NoDialogForm;
 }
+FormBuilder.defaultProps = {
+  data: undefined,
+  onCancel: () => {},
+};
 
 export default FormBuilder;

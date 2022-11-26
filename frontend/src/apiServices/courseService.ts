@@ -27,17 +27,18 @@ type UserId = {
 const courseService = api.injectEndpoints({
   endpoints: (builder) => ({
     createCourse: builder.mutation<GetCourseResponse, GetCourseRequest>({
-      query: (course) => ({ url: '/create-course', method: 'POST', data: course }),
+      query: (course) => ({ url: '/admin/create-course', method: 'POST', data: course }),
+      invalidatesTags: ['LIST_ALL_COURSES'],
     }),
     updateOneCourse: builder.mutation<GetCourseResponse, GetCourseRequest>({
       query: (course) => ({ url: `/course/${course.id}`, method: 'PUT', data: course }),
     }),
     getCourseById: builder.query<GetCourseResponse, number>({
-      query: (id) => ({ url: `/course/${id}`, method: 'GET' }),
-      providesTags: ['LIST_ALL_COURSES'],
+      query: (id) => ({ url: `/course/${id}`, method: 'POST' }),
     }),
     getAllCourses: builder.query<GetAllCoursesResponse, void>({
       query: () => ({ url: '/course/courses', method: 'GET' }),
+      providesTags: ['LIST_ALL_COURSES'],
     }),
     deleteOneCourse: builder.mutation({
       query: (course_id) => ({ url: '/course/delete-course', method: 'POST', data: { course_id } }),

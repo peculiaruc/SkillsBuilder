@@ -22,6 +22,7 @@ export default async () => {
   try {
     date = await db.queryBuilder('SELECT NOW()');
     if (process.env !== 'production') {
+      console.log(date);
       console.log('Database connected', date.rows[0]);
     }
     await db.queryBuilder(users);

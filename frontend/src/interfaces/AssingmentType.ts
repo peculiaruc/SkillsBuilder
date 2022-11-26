@@ -3,6 +3,7 @@ export interface AssingmentType {
   course_id: number;
   author_id: number;
   description: string;
+  title: string;
   passing_score: number;
   max_attemps: number;
   deadline: Date;
@@ -10,16 +11,40 @@ export interface AssingmentType {
   updated_at: Date;
 }
 
-export interface QuestionType {
+export interface ChoiceType {
   id:number;
-  question: number;
-  assignment_id: number;
-  type: string;
-  choices: number[];
-  answers: number[];
+  name: string;
+  isAnswer: boolean;
   created_at: Date;
   updated_at: Date;
 }
+/*
+
+export interface QuestionType {
+  id:number;
+  question: string;
+  assignment_id: number;
+  choices: number[];
+  answers: number[];
+  mark: number;
+  created_at: Date;
+  updated_at: Date;
+} 7
+
+*/
+export interface QuestionType {
+  id:number;
+  question: string;
+  assignment_id: number;
+  choices: ChoiceType[];
+  mark: number;
+  created_at: Date;
+  updated_at: Date;
+}
+
+/**
+ * When a user submit an answer
+ */
 export interface AnswerType {
   id:number;
   question_id: number;
