@@ -59,7 +59,6 @@ class AssignmentController {
         assignment_id,
         question,
         choices,
-        answer,
         question_no,
       };
       const saveQs = await assQuestions.create(newQuestion);
