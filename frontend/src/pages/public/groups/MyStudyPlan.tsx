@@ -1,10 +1,10 @@
 import { Button, Paper } from '@mui/material';
-import TabView from '../../components/TabView';
+import TabView from '../../../components/TabView';
 
-function MyGroupList() {
+function MyStudyPlan() {
   return (
     <TabView
-      title="My Groups"
+      title="Study Plan"
       tabs={
       [
         {
@@ -19,12 +19,12 @@ function MyGroupList() {
               borderRadius: 2,
             }}
             >
-              <Button size="large">All Groups</Button>
+              <Button size="large">All Study Plan</Button>
             </Paper>
           ),
         },
         {
-          name: 'My Groups',
+          name: 'In Progress',
           component: (
             <Paper sx={{
               height: '300px',
@@ -35,12 +35,12 @@ function MyGroupList() {
               borderRadius: 2,
             }}
             >
-              <Button size="large">All Groups in progress</Button>
+              <Button size="large">All Study Plan in progress</Button>
             </Paper>
           ),
         },
         {
-          name: 'Joined groups',
+          name: 'Completed',
           component: (
             <Paper sx={{
               height: '300px',
@@ -51,7 +51,7 @@ function MyGroupList() {
               borderRadius: 2,
             }}
             >
-              <Button size="large">All Groups completed</Button>
+              <Button size="large">All Study Plan completed</Button>
             </Paper>
           ),
         },
@@ -63,4 +63,4 @@ function MyGroupList() {
   );
 }
 
-export default MyGroupList;
+export default MyStudyPlan;

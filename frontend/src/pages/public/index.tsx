@@ -1,8 +1,8 @@
 import AssignmentList from './AssignmentIndex';
 import CourseDetails from './courses/CourseDetails';
 import CourseView from './courses/CourseView';
-import MyGroupList from './MyGroupList';
-import MyStudyPlan from './MyStudyPlan';
+import MyGroupList from './groups/MyGroupList';
+import MyStudyPlan from './groups/MyStudyPlan';
 
 export default [
   {
