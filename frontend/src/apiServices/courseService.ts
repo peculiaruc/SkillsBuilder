@@ -18,6 +18,14 @@ type GetCourseResponse = {
   data: CourseItem
 };
 
+type GetCourseByIdResponse = {
+  status: string,
+  error: string,
+  data: {
+    course: CourseItem
+  }
+};
+
 type GetCourseRequest = Partial<CourseItem>;
 
 type UserId = {
@@ -33,7 +41,7 @@ const courseService = api.injectEndpoints({
     updateOneCourse: builder.mutation<GetCourseResponse, GetCourseRequest>({
       query: (course) => ({ url: `/course/${course.id}`, method: 'PUT', data: course }),
     }),
-    getCourseById: builder.query<GetCourseResponse, number>({
+    getCourseById: builder.query<GetCourseByIdResponse, number>({
       query: (id) => ({ url: `/course/${id}`, method: 'POST' }),
     }),
     getAllCourses: builder.query<GetAllCoursesResponse, void>({

@@ -1,5 +1,5 @@
 import { Button, Paper } from '@mui/material';
-import TabView from '../../components/TabView';
+import TabView from '../../../components/TabView';
 
 function MyStudyPlan() {
   return (

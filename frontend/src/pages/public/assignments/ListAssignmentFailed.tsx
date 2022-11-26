@@ -3,7 +3,7 @@ import React from 'react';
 import { useAssignments } from '../../../store/assignmentReducer';
 import AssignmentItem from './AssignmentItem';
 
-export default function ListAssignment() {
+export default function ListAssignmentFailed() {
   const assignments = useAssignments();
 
   return (
@@ -11,13 +11,8 @@ export default function ListAssignment() {
       {assignments && assignments.map(
         (assignment) => <AssignmentItem key={assignment.id} {...assignment} status="passed" />,
       )}
-
-      <AssignmentItem status="passed" />
       <AssignmentItem status="failed" />
       <AssignmentItem status="failed" />
-      <AssignmentItem status="passed" />
-      <AssignmentItem status="passed" />
-      <AssignmentItem status="passed" />
     </Stack>
   );
 }

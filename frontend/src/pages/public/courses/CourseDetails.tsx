@@ -24,7 +24,7 @@ function CourseDetails() {
 
   if (isLoading || CourseLoading) return <CircularProgress />;
 
-  const course = data?.data as CourseItem;
+  const course = data?.data.course as CourseItem;
 
   const isEnrolled = !((enrolled
        // eslint-disable-next-line max-len
