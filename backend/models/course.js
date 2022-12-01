@@ -1,4 +1,3 @@
-import { orderBy } from 'lodash';
 import Database from '../db/db';
 
 class Course extends Database {
@@ -18,8 +17,8 @@ class Course extends Database {
     return await this.where('category_ids', '@>', categories);
   }
 
-  async all(limit, offset, orderBy) {
-    return super.allWithOffset(limit, offset, orderBy);
+  async all(limit, offset, orderBy, condition) {
+    return super.allWithOffset(limit, offset, orderBy, condition);
   }
 }
 

@@ -7,20 +7,6 @@ const pool = new Pool({
   connectionString: process.env.DEV_DATABASE_URL,
 });
 
-// export default {
-//   query: async (text, params) => {
-//     try {
-//       const res = await pool.query(text, params);
-//       return res;
-//     } catch (e) {
-//       console.log(e);
-//     }
-//   },
-//   clearDb: async () => {
-//     await pool.query('DROP TABLE IF EXISTS ffff CASCADE');
-//   },
-// };
-
 class Database {
   constructor(table) {
     this.table = table;
@@ -28,9 +14,7 @@ class Database {
 
   async queryBuilder(query, params) {
     try {
-      // const client = await pool.connect();
       const res = await pool.query(query, params);
-      // client.end();
       const { rows, rowCount } = res;
       return {
         rows,
@@ -99,6 +83,7 @@ class Database {
         }
       : query;
   }
+
   async allWhere(where) {
     const conditions = this.prepareObject(where, ' AND ');
     const sql = `SELECT * FROM ${this.table} WHERE ${conditions}`;
@@ -111,8 +96,9 @@ class Database {
       : query;
   }
 
-  async allWithOffset(limit = 5, offset = 0, orderBy = 'id DESC') {
-    const sql = `SELECT * FROM ${this.table} ORDER BY ${orderBy} LIMIT ${limit} OFFSET ${offset} `;
+  async allWithOffset(limit = 5, offset = 0, orderBy = 'id DESC', where) {
+    const conditions = this.prepareObject(where, ' AND ');
+    const sql = `SELECT * FROM ${this.table} WHERE ${conditions} ORDER BY ${orderBy} LIMIT ${limit} OFFSET ${offset} `;
     const query = await this.queryBuilder(sql, []);
     return !query.errors
       ? {

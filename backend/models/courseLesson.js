@@ -9,6 +9,10 @@ class CourseLesson extends Database {
     return await this.first('id', '=', id);
   }
 
+  async getByCourse(id) {
+    return await this.first('course_id', '=', id);
+  }
+
   async all(limit, offset) {
     return super.allWithOffset(limit, offset);
   }

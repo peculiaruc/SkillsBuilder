@@ -69,6 +69,26 @@ class Helpers {
       return Helpers.sendResponse(response, 500, errors.message);
     }
   }
+
+  static async getUserRole(req, res) {
+    const token = req.headers.authorization.split(' ')[1];
+    if (!token) {
+      return res.status(404).json({
+        status: 'error',
+        error: 'User is not Authenticated',
+      });
+    }
+    const verified = await jwt.verify(token, secretKey);
+    const userId = verified.id;
+
+    const response = await db.queryBuilder('SELECT * FROM users WHERE id = $1', [userId]);
+    // console.log('response', response.rows);
+    if (response.errors) {
+      return Helpers.dbError(res, response);
+    }
+    const user = response.rows[0];
+    return user;
+  }
 }
 
 export default Helpers;
