@@ -154,12 +154,26 @@ class CourseController {
   }
 
   static async updateCourse(req, res) {
-    const _course = await course.update({ ...req.body }, { id: req.params.id });
+    const _course = await course.getById(req.params.id);
     if (_course.errors) return Helpers.dbError(res, _course);
-    return Helpers.sendResponse(res, 200, 'success', { course: _course.rows[0] });
+
+    const currentuser = await Helpers.getLoggedInUser(req, res);
+
+    if (currentuser.role === 2 || _course.row.author_id === currentuser.id) {
+      const _course = await course.update({ ...req.body }, { id: req.params.id });
+      if (_course.errors) return Helpers.dbError(res, _course);
+      return Helpers.sendResponse(res, 200, 'success', { course: _course.rows[0] });
+    }
+    return Helpers.sendResponse(res, 404, 'User not authorised to perform this task');
   }
 
   static async createCourse(req, res) {
+    const currentuser = await Helpers.getLoggedInUser(req, res);
+
+    if (currentuser.role === 0) {
+      return Helpers.sendResponse(res, 404, 'User not authorised to perform this task');
+    }
+
     const newCourse = {
       ...req.body,
     };
@@ -173,11 +187,18 @@ class CourseController {
   }
 
   static async deleteCourse(req, res) {
-    const _del = await course.delete({ id: req.params.id });
-    if (_del.errors) {
-      return Helpers.dbError(res, _del);
+    const _course = await course.getById(req.params.id);
+    if (_course.errors) return Helpers.dbError(res, _course);
+
+    const currentuser = await Helpers.getLoggedInUser(req, res);
+    if (currentuser.role === 2 || _course.row.author_id === currentuser.id) {
+      const _del = await course.delete({ id: req.params.id });
+      if (_del.errors) {
+        return Helpers.dbError(res, _del);
+      }
+      return Helpers.sendResponse(res, 200, 'Course deleted successfully');
     }
-    return Helpers.sendResponse(res, 200, 'Course deleted successfully');
+    return Helpers.sendResponse(res, 404, 'User not authorised to perform this task');
   }
 
   static async courseStatus(req, res) {

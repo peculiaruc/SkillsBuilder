@@ -1,6 +1,9 @@
 import bcryptjs from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
+import Database from '../db/db';
+
+const db = new Database();
 class Helpers {
   static hashPassword(password) {
     return bcryptjs.hashSync(password, bcryptjs.genSaltSync(10));
@@ -70,7 +73,7 @@ class Helpers {
     }
   }
 
-  static async getUserRole(req, res) {
+  static async getLoggedInUser(req, res) {
     const token = req.headers.authorization.split(' ')[1];
     if (!token) {
       return res.status(404).json({
@@ -78,7 +81,7 @@ class Helpers {
         error: 'User is not Authenticated',
       });
     }
-    const verified = await jwt.verify(token, secretKey);
+    const verified = await jwt.verify(token, process.env.JWT_PRIVATE_KEY);
     const userId = verified.id;
 
     const response = await db.queryBuilder('SELECT * FROM users WHERE id = $1', [userId]);
