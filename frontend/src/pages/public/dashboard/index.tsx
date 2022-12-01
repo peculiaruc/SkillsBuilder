@@ -1,7 +1,7 @@
 import { Button, CircularProgress, Paper } from '@mui/material';
-import { useGetAllCoursesQuery } from '../../apiServices/courseService';
-import TabView from '../../components/TabView';
-import CourseList from '../course/CourseList';
+import { useGetAllCoursesQuery } from '../../../apiServices/courseService';
+import TabView from '../../../components/TabView';
+import PublicCoursesList from '../courses/PublicCourseList';
 
 function Dashboard() {
   const { isLoading } = useGetAllCoursesQuery();
@@ -15,7 +15,7 @@ function Dashboard() {
       [
         {
           name: 'All Courses',
-          component: <CourseList />,
+          component: <PublicCoursesList />,
         },
         {
           name: 'Courses Categories',

@@ -1,13 +1,13 @@
 import AssignmentList from './AssignmentIndex';
 import CourseDetails from './courses/CourseDetails';
-import CourseList from './courses/CourseList';
-import MyGroupList from './MyGroupList';
-import MyStudyPlan from './MyStudyPlan';
+import CourseView from './courses/CourseView';
+import MyGroupList from './groups/MyGroupList';
+import MyStudyPlan from './groups/MyStudyPlan';
 
 export default [
   {
     path: '/my-courses',
-    element: <CourseList />,
+    element: <CourseView />,
   },
   {
     path: '/my-assignments',

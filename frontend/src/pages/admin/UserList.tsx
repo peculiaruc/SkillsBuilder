@@ -1,10 +1,10 @@
 import { Button, Paper } from '@mui/material';
 import TabView from '../../components/TabView';
 
-function MyStudyPlan() {
+function UserList() {
   return (
     <TabView
-      title="Study Plan"
+      title="Users"
       tabs={
       [
         {
@@ -19,12 +19,12 @@ function MyStudyPlan() {
               borderRadius: 2,
             }}
             >
-              <Button size="large">All Study Plan</Button>
+              <Button size="large">Add tutor or learner</Button>
             </Paper>
           ),
         },
         {
-          name: 'In Progress',
+          name: 'Learners',
           component: (
             <Paper sx={{
               height: '300px',
@@ -35,12 +35,12 @@ function MyStudyPlan() {
               borderRadius: 2,
             }}
             >
-              <Button size="large">All Study Plan in progress</Button>
+              <Button size="large">Add learner</Button>
             </Paper>
           ),
         },
         {
-          name: 'Completed',
+          name: 'Tutors',
           component: (
             <Paper sx={{
               height: '300px',
@@ -51,7 +51,7 @@ function MyStudyPlan() {
               borderRadius: 2,
             }}
             >
-              <Button size="large">All Study Plan completed</Button>
+              <Button size="large">Add tutor</Button>
             </Paper>
           ),
         },
@@ -63,4 +63,4 @@ function MyStudyPlan() {
   );
 }
 
-export default MyStudyPlan;
+export default UserList;

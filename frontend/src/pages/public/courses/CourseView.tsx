@@ -1,4 +1,6 @@
-import { Button, CircularProgress, Paper } from '@mui/material';
+import {
+  Button, CircularProgress, Paper, Stack,
+} from '@mui/material';
 import { useGetAllCoursesQuery, useGetEnrolledCoursesQuery } from '../../../apiServices/courseService';
 import TabView from '../../../components/TabView';
 import { useAuth } from '../../../store/authReducer';
@@ -16,9 +18,10 @@ function CourseView() {
   if (isLoading || isLoadingEnroll) { return <CircularProgress />; }
 
   return (
-    <TabView
-      title="My Courses"
-      tabs={
+    <Stack spacing={2} width="100%">
+      <TabView
+        title="My Courses"
+        tabs={
       [
         {
           name: 'All',
@@ -58,8 +61,8 @@ function CourseView() {
         },
       ]
      }
-
-    />
+      />
+    </Stack>
 
   );
 }

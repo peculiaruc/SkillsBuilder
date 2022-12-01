@@ -24,7 +24,7 @@ function CourseDetails() {
 
   if (isLoading || CourseLoading) return <CircularProgress />;
 
-  const course = data?.data as CourseItem;
+  const course = data?.data.course as CourseItem;
 
   const isEnrolled = !((enrolled
        // eslint-disable-next-line max-len
@@ -45,7 +45,7 @@ function CourseDetails() {
 
   const style = { display: 'flex', justifyContent: 'center', alignItems: 'center' };
   return (
-    <Stack spacing={2}>
+    <Stack spacing={2} width="100%">
       <Paper sx={{
         width: '100%',
         height: '100%',
@@ -64,7 +64,7 @@ function CourseDetails() {
               backgroundImage: `url(${thumbnail})`,
             }}
             >
-              <Typography fontWeight="bold">{name}</Typography>
+              <Typography fontWeight="bold" color="common.white">{name}</Typography>
             </Box>
 
           </Grid>
