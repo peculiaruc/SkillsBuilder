@@ -6,6 +6,8 @@ import Helpers from '../helpers/helpers';
 import Enrollment from '../models/enrollments';
 import Course from '../models/course';
 import Database from '../db/db';
+import Group from '../models/groups';
+import JoinedGroup from '../models/joinedGroups';
 
 dotenv.config();
 
@@ -14,6 +16,8 @@ const tokn = new Token();
 const enroll = new Enrollment();
 const course = new Course();
 const db = new Database();
+const group = new Group();
+const joinedG = new JoinedGroup();
 class UserController {
   static async getAllUsers(req, res) {
     const currentuser = await Helpers.getLoggedInUser(req, res);
@@ -138,6 +142,14 @@ class UserController {
     // const _course = await enroll.allWhere({ user_id: req.params.id });
     if (_course.errors) return Helpers.dbError(res, _course);
     return Helpers.sendResponse(res, 200, 'success', { courses: _course.rows });
+  }
+
+  static async getUserGroups(req, res) {
+    const _group = await joinedG.allWhere({ user_id: req.params.id });
+    if (_group.errors) {
+      return Helpers.dbError(res, _group);
+    }
+    return Helpers.sendResponse(res, 200, 'success', { groups: _group.rows });
   }
 
   static async getAuthorsLearners(req, res) {

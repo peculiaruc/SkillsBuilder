@@ -1,25 +1,27 @@
 import Helpers from '../helpers/helpers';
 import Group from '../models/groups';
 import JoinedGroup from '../models/joinedGroups';
+import moment from 'moment';
 
 const group = new Group();
 const joinedG = new JoinedGroup();
 
 class GroupController {
   static async createGroup(req, res) {
+    const currentuser = await Helpers.getLoggedInUser(req, res);
     const newGroup = {
-      name: req.body.name,
-      creator_id: req.body.userId,
-      course_id: req.body.courseId,
+      ...req.body,
+      owner_id: currentuser.id,
     };
     const _group = await group.create(newGroup);
     if (_group.errors) {
       return Helpers.dbError(res, _group);
     }
+    const date = moment(new Date()).format('YYYY-MM-DD');
     const newJoin = {
-      user_id: req.body.userId,
+      user_id: currentuser.id,
       group_id: _group.rows[0].id,
-      join_date: new Date(),
+      join_date: date,
     };
     const _join = await joinedG.create(newJoin);
     if (_join.errors) {
@@ -29,10 +31,12 @@ class GroupController {
   }
 
   static async joinGroup(req, res) {
+    const date = moment(new Date()).format('YYYY-MM-DD');
+
     const newJoin = {
       user_id: req.body.userId,
-      group_id: req.body.groupId,
-      join_date: new Date(),
+      group_id: req.params.id,
+      join_date: date,
     };
     const _join = await joinedG.create(newJoin);
     if (_join.errors) {
@@ -51,9 +55,22 @@ class GroupController {
     return Helpers.sendResponse(res, 200, 'Group deleted successfully');
   }
 
+  static async updateGroup(req, res) {
+    const newupdate = {
+      ...req.body,
+    };
+    const _group = await group.update(newupdate, { id: req.params.id });
+    if (_group.errors) {
+      return Helpers.dbError(res, _group);
+    }
+    return Helpers.sendResponse(res, 200, 'Group updated successfully', { group: _group.rows[0] });
+  }
+
   static async leaveGroup(req, res) {
-    const data = { leave_date: new Date() };
-    const where = { id: req.body.groupId };
+    const date = moment(new Date()).format('YYYY-MM-DD');
+
+    const data = { leave_date: date };
+    const where = { id: req.params.id };
     const _group = await joinedG.update(data, where);
     if (_group.errors) {
       return Helpers.dbError(res, _group);
@@ -61,25 +78,8 @@ class GroupController {
     return Helpers.sendResponse(res, 200, 'Group left successfully');
   }
 
-  static async myGroups(req, res) {
-    const _group = await joinedG.allWhere({ user_id: req.body.userId });
-    if (_group.errors) {
-      return Helpers.dbError(res, _group);
-    }
-    console.log('resp', _group);
-    return Helpers.sendResponse(res, 200, 'success', { myGroups: _group.rows });
-  }
-
   static async groupById(req, res) {
     const _group = await group.getById(req.params.id);
-    if (_group.errors) {
-      return Helpers.dbError(res, _group);
-    }
-    return Helpers.sendResponse(res, 200, 'success', { groups: _group.row });
-  }
-
-  static async groupByCourse(req, res) {
-    const _group = await group.getByCourse(req.params.courseId);
     if (_group.errors) {
       return Helpers.dbError(res, _group);
     }

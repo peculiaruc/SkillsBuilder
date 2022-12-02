@@ -18,7 +18,7 @@ router.delete('/:id', UserController.deleteUser);
 
 router.get('/:id/mycourses', UserController.getUserCourses);
 
-// router.get('/:id/mygroups', UserController.getUserGroups);
+router.get('/:id/mygroups', UserController.getUserGroups);
 
 // router.get('/:id/myassignments', userController.getUserAssignments);
 

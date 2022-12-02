@@ -10,14 +10,12 @@ router.post('/create', GroupController.createGroup);
 
 router.get('/:id', GroupController.groupById);
 
+router.put('/:id', GroupController.updateGroup);
+
 router.delete('/:id', GroupController.deleteGroup);
 
-router.post('/join', GroupController.joinGroup);
+router.post('/:id/join', GroupController.joinGroup);
 
-router.post('/leave', GroupController.leaveGroup);
-
-router.post('/mygroups', GroupController.myGroups);
-
-router.post('/:courseId', GroupController.groupByCourse);
+router.post('/:id/leave', GroupController.leaveGroup);
 
 module.exports = router;
