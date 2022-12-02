@@ -140,10 +140,14 @@ class UserController {
     return Helpers.sendResponse(res, 200, 'success', { courses: _course.rows });
   }
 
-  // static async  getAuthorsLearners(req, res){
-  //   const _courses = await course.allWhere({author_id: req.params.id})
-  //   const _enrollments = await enroll.all()
-  // }
+  static async getAuthorsLearners(req, res) {
+    const _enrollments = await db.queryBuilder(
+      `SELECT users.fullname, users.email, users.phone, users.city, enrollments.enroll_date, enrollments.unenroll_date FROM users JOIN enrollments ON enrollments.user_id = users.id WHERE enrollments.author_id = ${req.params.id};`
+    );
+
+    if (_enrollments.errors) return Helpers.dbError(res, _enrollments);
+    return Helpers.sendResponse(res, 200, 'success', { learners: _enrollments.rows });
+  }
 }
 
 export default UserController;

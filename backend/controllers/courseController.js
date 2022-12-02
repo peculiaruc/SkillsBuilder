@@ -81,10 +81,11 @@ class CourseController {
     if (_course.errors) return Helpers.dbError(res, _course);
 
     const date = moment(new Date()).format('YYYY-MM-DD');
-
+    console.log(_course.row);
     const newEnroll = {
       user_id: req.body.userId,
       course_id: req.params.id,
+      author_id: _course.row.author_id,
       enroll_date: date,
     };
     const _enroll = await enrollment.create(newEnroll);
@@ -125,7 +126,6 @@ class CourseController {
   }
 
   static async courseLearners(req, res) {
-    // `SELECT * FROM enrollments JOIN users ON users.id = enrollments.user_id  WHERE course_id = ${req.params.id};`
     const _learners = await db.queryBuilder(
       `SELECT users.fullname, users.email, users.phone, users.city, enrollments.enroll_date, enrollments.unenroll_date FROM users JOIN enrollments ON enrollments.user_id = users.id WHERE enrollments.course_id = ${req.params.id};`
     );
