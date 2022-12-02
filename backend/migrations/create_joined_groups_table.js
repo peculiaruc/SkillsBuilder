@@ -4,7 +4,9 @@ export const joinedGroups = `CREATE TABLE IF NOT EXISTS joined_groups(
     group_id INT NOT NULL,
     join_date VARCHAR NOT NULL,
     leave_date VARCHAR,
+    status: VARCHAR DEFAULT 'Accepted',
     created_at TIMESTAMP DEFAULT NOW(),
-    updated_at TIMESTAMP DEFAULT NOW()
-);
-`;
+    updated_at TIMESTAMP DEFAULT NOW(),
+    FOREIGN KEY ("user_id") REFERENCES "users" ("id"),
+    FOREIGN KEY ("group_id") REFERENCES "groups" ("id")
+);`;

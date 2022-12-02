@@ -13,8 +13,8 @@ class User extends Database {
     return await this.first('id', '=', id);
   }
 
-  async all(limit, offset) {
-    return super.allWithOffset(limit, offset);
+  async all() {
+    return super.all();
   }
 }
 

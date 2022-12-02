@@ -1,7 +1,6 @@
 import express from 'express';
-import { verifyToken, verifyAuthorUserToken, verifyAdminUserToken } from '../middlewares/authCheck';
+import { verifyToken } from '../middlewares/authCheck';
 import courseController from '../controllers/courseController';
-import adminController from '../controllers/adminController';
 
 const router = express.Router();
 
