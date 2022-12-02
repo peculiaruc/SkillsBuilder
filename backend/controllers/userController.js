@@ -148,6 +148,36 @@ class UserController {
     if (_enrollments.errors) return Helpers.dbError(res, _enrollments);
     return Helpers.sendResponse(res, 200, 'success', { learners: _enrollments.rows });
   }
+
+  static async getAllAuthors(req, res) {
+    const currentuser = await Helpers.getLoggedInUser(req, res);
+    if (currentuser.role !== 2) {
+      return Helpers.sendResponse(res, 401, 'User not authorised to perform this task');
+    }
+    const _users = await user.allWhere({ role: 1 });
+    if (_users.errors) return Helpers.dbError(res, _users);
+    return Helpers.sendResponse(res, 200, 'success', { authors: _users.rows });
+  }
+
+  static async getAllLearners(req, res) {
+    const currentuser = await Helpers.getLoggedInUser(req, res);
+    if (currentuser.role !== 2) {
+      return Helpers.sendResponse(res, 401, 'User not authorised to perform this task');
+    }
+    const _users = await user.allWhere({ role: 0 });
+    if (_users.errors) return Helpers.dbError(res, _users);
+    return Helpers.sendResponse(res, 200, 'success', { authors: _users.rows });
+  }
+
+  static async getAllAdmins(req, res) {
+    const currentuser = await Helpers.getLoggedInUser(req, res);
+    if (currentuser.role !== 2) {
+      return Helpers.sendResponse(res, 401, 'User not authorised to perform this task');
+    }
+    const _users = await user.allWhere({ role: 2 });
+    if (_users.errors) return Helpers.dbError(res, _users);
+    return Helpers.sendResponse(res, 200, 'success', { authors: _users.rows });
+  }
 }
 
 export default UserController;
