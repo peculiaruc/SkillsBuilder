@@ -16,6 +16,6 @@ router.delete('/:id', assignmentController.deleteAssignment);
 
 router.get('/:id/questions', assignmentController.getAssignmentQuestions);
 
-router.get(':id/submissions', assignmentController.getAssignmentSubmissions);
+router.get('/:id/submissions', assignmentController.getAssignmentSubmissions);
 
 module.exports = router;
