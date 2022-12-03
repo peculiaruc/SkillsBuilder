@@ -10,6 +10,12 @@ const db = new Database();
 const date = moment(new Date()).format('YYYY-MM-DD');
 
 class GroupController {
+  static async getAllGroups(req, res) {
+    const _group = await group.allWhere({ status: 'active' });
+    if (_group.errors) return Helpers.dbError(res, _group);
+    return Helpers.sendResponse(res, 200, 'success', { groups: _group.rows });
+  }
+
   static async createGroup(req, res) {
     const currentuser = await Helpers.getLoggedInUser(req, res);
     const newGroup = {
@@ -35,7 +41,7 @@ class GroupController {
   }
 
   static async joinGroup(req, res) {
-    const currentuser = await Helpers.getLoggedInUser();
+    const currentuser = await Helpers.getLoggedInUser(req, res);
 
     const _group = await group.getById(req.params.id);
     if (_group.errors) {
@@ -62,28 +68,48 @@ class GroupController {
     if (_newjoin.errors) {
       return Helpers.dbError(res, _newjoin);
     }
-    return Helpers.sendResponse(res, 200, 'Group joined successfully', {
+    return Helpers.sendResponse(res, 200, 'success', {
       group: _newjoin.rows,
     });
   }
 
   static async deleteGroup(req, res) {
-    const _group = await group.delete({ id: req.params.id });
+    const currentuser = await Helpers.getLoggedInUser(req, res);
+    const _group = await group.getById(req.params.id);
     if (_group.errors) {
       return Helpers.dbError(res, _group);
+    }
+    if (currentuser.id !== _group.row.owner_id) {
+      return Helpers.sendResponse(res, 401, 'You are not authorised to perform this task');
+    }
+
+    const _deletegroup = await group.update({ status: 'inactive' }, { id: req.params.id });
+    if (_deletegroup.errors) {
+      return Helpers.dbError(res, _deletegroup);
     }
     return Helpers.sendResponse(res, 200, 'Group deleted successfully');
   }
 
   static async updateGroup(req, res) {
-    const newupdate = {
-      ...req.body,
-    };
-    const _group = await group.update(newupdate, { id: req.params.id });
+    const currentuser = await Helpers.getLoggedInUser(req, res);
+    const _group = await group.getById(req.params.id);
     if (_group.errors) {
       return Helpers.dbError(res, _group);
     }
-    return Helpers.sendResponse(res, 200, 'Group updated successfully', { group: _group.rows[0] });
+    if (currentuser.id !== _group.row.owner_id) {
+      return Helpers.sendResponse(res, 401, 'You are not authorised to perform this task');
+    }
+
+    const newupdate = {
+      ...req.body,
+    };
+    const _updategroup = await group.update(newupdate, { id: req.params.id });
+    if (_updategroup.errors) {
+      return Helpers.dbError(res, _updategroup);
+    }
+    return Helpers.sendResponse(res, 200, 'Group updated successfully', {
+      group: _updategroup.rows[0],
+    });
   }
 
   static async leaveGroup(req, res) {
@@ -169,7 +195,7 @@ class GroupController {
 
   static async groupMembers(req, res) {
     const _members = await db.queryBuilder(
-      `SELECT users.fullname, users.email, users.phone, users.city, joined_groups.join_date FROM users JOIN joined_groups ON joined_groups.user_id = users.id WHERE joined_groups.id = ${req.params.id};`
+      `SELECT users.fullname, users.email, users.phone, users.city, joined_groups.join_date FROM users JOIN joined_groups ON joined_groups.user_id = users.id WHERE joined_groups.group_id = ${req.params.id};`
     );
     if (_members.errors) return Helpers.dbError(res, _members);
 
