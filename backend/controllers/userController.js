@@ -140,6 +140,17 @@ class UserController {
     return Helpers.sendResponse(res, 200, 'success', { courses: _course.rows });
   }
 
+  static async getUserGroups(req, res) {
+    const _group = await db.queryBuilder(
+      `SELECT groups.name, groups.description, joined_groups.id, joined_groups.group_id, joined_groups.join_date, joined_groups.leave_date FROM groups JOIN joined_groups ON joined_groups.group_id = groups.id WHERE joined_groups.user_id = ${req.params.id} AND joined_groups.leave_date IS NULL;`
+    );
+    // const _group = await joinedG.allWhere({ user_id: req.params.id, leave_date: IS NULL });
+    if (_group.errors) {
+      return Helpers.dbError(res, _group);
+    }
+    return Helpers.sendResponse(res, 200, 'success', { groups: _group.rows });
+  }
+
   static async getAuthorsLearners(req, res) {
     const _enrollments = await db.queryBuilder(
       `SELECT users.fullname, users.email, users.phone, users.city, enrollments.enroll_date, enrollments.unenroll_date FROM users JOIN enrollments ON enrollments.user_id = users.id WHERE enrollments.author_id = ${req.params.id};`
