@@ -40,18 +40,15 @@ export type CreateUserResponse = ResponseType & {
 };
 export type GetUserRequest = UserId;
 export type GetUserResponse = CreateUserResponse;
-export type GetAllUsersRequest = void;
 export type GetAllUsersResponse = ResponseType & {
   data: {
     users: UserType[]
   }
 };
-export type DeleteUserRequest = UserId;
 export type DeleteUserResponse = ResponseType;
-export type UpdateUserRequest = UserType;
 export type UpdateUserResponse = CreateUserResponse;
 
-export type GetMyPostsResponse = ResponseType & {
+export type GetUserPostsResponse = ResponseType & {
   data: {
     posts: PostType[]
   }
