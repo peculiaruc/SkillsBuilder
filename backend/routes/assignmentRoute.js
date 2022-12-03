@@ -1,27 +1,29 @@
 import express from 'express';
-import { verifyToken, verifyAdminUserToken, verifyAuthorUserToken } from '../middlewares/authCheck';
+import { verifyToken } from '../middlewares/authCheck';
 import assignmentController from '../controllers/assignmentController';
 
 const router = express.Router();
 
-router.post('/assignments', verifyToken, assignmentController.getCourseAssignments);
+// router.post('/assignments', verifyToken, assignmentController.getCourseAssignments);
 
-router.post('/submissions', verifyToken, assignmentController.getAssignmentSubmissions);
+// router.post('/submissions', verifyToken, assignmentController.getAssignmentSubmissions);
 
-router.post('/submit', verifyToken, assignmentController.createAssignmentSubmissions);
+// router.post('/submit', verifyToken, assignmentController.createAssignmentSubmissions);
 
-router.get('/:id', verifyToken, assignmentController.getAssignmentById);
+// router.get('/:id', verifyToken, assignmentController.getAssignmentById);
 
-router.post('/questions', verifyToken, assignmentController.getAssignmentQuestions);
+// router.post('/questions', verifyToken, assignmentController.getAssignmentQuestions);
 
-router.post('/create', verifyAuthorUserToken, assignmentController.createAssignment);
+// router.post('/enrolledusers', verifyAuthorUserToken, assignmentController.getUsersInMyCourse);
 
-router.post('/enrolledusers', verifyAuthorUserToken, assignmentController.getUsersInMyCourse);
+// router.post(
+//   '/create-question',
+//   verifyAdminUserToken,
+//   assignmentController.createAssignmentQuestions
+// );
 
-router.post(
-  '/create-question',
-  verifyAdminUserToken,
-  assignmentController.createAssignmentQuestions
-);
+router.use(verifyToken);
+
+router.post('/create', assignmentController.createAssignment);
 
 module.exports = router;
