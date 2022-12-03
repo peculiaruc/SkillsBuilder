@@ -6,7 +6,7 @@ import theme from '../../../theme/theme';
 import CourseTitle from './CourseTitle';
 import courseImage from '../../../assets/images/Group.png';
 import AssignmentDescription from './AssignmentDescription';
-import { AssingmentType } from '../../../interfaces/AssingmentType';
+import { AssingmentType } from '../../../interfaces/AssignmentType';
 
 const SlyledPaper = styled(Paper)({
   width: '100%',

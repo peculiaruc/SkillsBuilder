@@ -19,7 +19,7 @@ function UserList() {
               borderRadius: 2,
             }}
             >
-              <Button size="large">Add tutor or learner</Button>
+              <Button size="large">Add course author or learner</Button>
             </Paper>
           ),
         },
@@ -40,7 +40,7 @@ function UserList() {
           ),
         },
         {
-          name: 'Tutors',
+          name: 'Course authors',
           component: (
             <Paper sx={{
               height: '300px',
@@ -51,7 +51,7 @@ function UserList() {
               borderRadius: 2,
             }}
             >
-              <Button size="large">Add tutor</Button>
+              <Button size="large">Add course author</Button>
             </Paper>
           ),
         },

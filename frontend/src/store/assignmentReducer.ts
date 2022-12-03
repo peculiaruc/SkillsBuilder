@@ -5,7 +5,7 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import assignmentService from '../apiServices/assignmentService';
 import {
   AssingmentType, GetAssignmentQuestionsResponse, GetAssignmentsResponse, QuestionType,
-} from '../interfaces/AssingmentType';
+} from '../interfaces/AssignmentType';
 
 type InitialStateType = {
   assignments: AssingmentType[],

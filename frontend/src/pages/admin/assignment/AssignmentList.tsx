@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { useCreateAssignmentMutation, useGetCourseAssignmentsQuery } from '../../../apiServices/assignmentService';
 import FormBuilder from '../../../components/forms/FormBuilder';
-import { AssingmentType } from '../../../interfaces/AssingmentType';
+import { AssingmentType } from '../../../interfaces/AssignmentType';
 import Assignment from '../../../models/Assignments';
 import { useAuth } from '../../../store/authReducer';
 import { closeDialog, openDialog } from '../../../store/dialogFormReducer';
@@ -29,7 +29,7 @@ function AssignmentList() {
   };
     /*
     const onSubmit = async (values: FormikValues) => {
-      const course = values as CourseItem;
+      const course = values as CourseType;
       course.id = Math.round(Math.random() * 100);
       batch(
         () => {

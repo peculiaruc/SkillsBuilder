@@ -39,7 +39,7 @@ class Model {
     this.fields.forEach((field: FieldProps) => {
       values[field.name] = FieldType[field.type || 'text'];
       // eslint-disable-next-line no-param-reassign
-      field.label = field.name.charAt(0).toUpperCase().concat(field.name.slice(1));
+      field.label = field.label ?? field.name.charAt(0).toUpperCase().concat(field.name.slice(1));
     });
     this.initialValues = values;
   }

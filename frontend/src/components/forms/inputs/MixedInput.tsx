@@ -1,5 +1,5 @@
 import { TextField, TextFieldProps } from '@mui/material';
-import { ChoiceType } from '../../../interfaces/AssingmentType';
+import { ChoiceType } from '../../../interfaces/AssignmentType';
 import QuestionChoiceInput from './QuestionChoiceInput';
 
 type Props = { name:string } & TextFieldProps;

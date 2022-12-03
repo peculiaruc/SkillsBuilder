@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useEnrolleInOneCourseMutation, useGetCourseByIdQuery, useGetEnrolledCoursesQuery } from '../../../apiServices/courseService';
 import TabView from '../../../components/TabView';
-import { CourseItem, EnrolledCourseType } from '../../../interfaces/Course';
+import { CourseType, EnrolledCourseType } from '../../../interfaces/Course';
 import { useAuth } from '../../../store/authReducer';
 import EmptyView from '../../errors/EmptyView';
 
@@ -24,7 +24,7 @@ function CourseDetails() {
 
   if (isLoading || CourseLoading) return <CircularProgress />;
 
-  const course = data?.data.course as CourseItem;
+  const course = data?.data.course as CourseType;
 
   const isEnrolled = !((enrolled
        // eslint-disable-next-line max-len
@@ -34,7 +34,7 @@ function CourseDetails() {
 
   const { name, summary, thumbnail } = course;
 
-  const handdleEnroll = async (cours: CourseItem) => {
+  const handdleEnroll = async (cours: CourseType) => {
     await enroleInCourse({
       user_id: auth.user.id,
       course_id: cours.id,
@@ -74,7 +74,7 @@ function CourseDetails() {
               <p>{summary}</p>
               {!isEnrolled ? (
                 <Button onClick={() => handdleEnroll(course)}>
-                  Enrole now
+                  Enroll now
                 </Button>
               ) : <Button>Start Course</Button>}
             </Stack>

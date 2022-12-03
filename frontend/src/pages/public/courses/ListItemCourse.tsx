@@ -2,10 +2,10 @@ import {
   Box, Button, Grid, Paper, Typography,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { CourseItem } from '../../../interfaces/Course';
+import { CourseType } from '../../../interfaces/Course';
 
 type Props = {
-  course: CourseItem
+  course: CourseType
 };
 
 function ListItemCourse({ course }: Props) {

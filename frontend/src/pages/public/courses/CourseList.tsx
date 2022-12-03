@@ -1,5 +1,5 @@
 import { Stack } from '@mui/material';
-import { CourseItem } from '../../../interfaces/Course';
+import { CourseType } from '../../../interfaces/Course';
 import { useCourses, useEnrolledCourses } from '../../../store/courseReducer';
 import ListItemCourse from './ListItemCourse';
 
@@ -8,7 +8,7 @@ function CourseList() {
   const courseIds = enrolled.map((e) => e.id);
   const allCourses = useCourses() ?? [];
 
-  const courses = allCourses.filter((c:CourseItem) => courseIds.includes(c.id));
+  const courses = allCourses.filter((c:CourseType) => courseIds.includes(c.id));
 
   return (
 

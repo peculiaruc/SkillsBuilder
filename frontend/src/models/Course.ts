@@ -13,23 +13,31 @@ class Course extends Model {
     });
     this.fields = [
       {
-        name: 'name',
+        name: 'title',
         type: 'text',
-      },
-      {
-        name: 'thumbnail',
-        type: 'text',
-      },
-      {
-        name: 'summary',
-        type: 'text',
+        label: 'Course Title',
       },
       {
         name: 'description',
+        label: 'Course Description',
         type: 'textarea',
         multiline: true,
         rows: 4,
         required: true,
+      },
+      {
+        name: 'content',
+        label: 'Course Content',
+        type: 'textarea',
+        multiline: true,
+        rows: 4,
+        required: true,
+      },
+      {
+        name: 'matetial',
+        label: 'Course Materials',
+        type: 'file',
+        multiple: true,
       },
     ];
     this.setInitialValues();

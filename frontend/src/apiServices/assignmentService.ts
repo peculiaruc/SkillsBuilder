@@ -10,7 +10,7 @@ import {
   GetAssignmentQuestionsRequest,
   GetAssignmentQuestionsResponse,
   GetAssignmentSubmissionsRequest,
-} from '../interfaces/AssingmentType';
+} from '../interfaces/AssignmentType';
 
 const assignmentService = api.injectEndpoints({
   endpoints: (builder) => ({

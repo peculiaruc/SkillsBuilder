@@ -1,11 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { useSelector } from 'react-redux';
 import courseService, { GetAllCoursesResponse } from '../apiServices/courseService';
-import { CourseItem, EnrolledCourseResponseType, EnrolledCourseType } from '../interfaces/Course';
+import { CourseType, EnrolledCourseResponseType, EnrolledCourseType } from '../interfaces/Course';
 
 type InitialStateType = {
   enrolled:EnrolledCourseType[],
-  courses:CourseItem[]
+  courses:CourseType[]
 };
 
 type ReducerState = {
@@ -19,7 +19,7 @@ const courseReducer = createSlice({
     courses: [],
   },
   reducers: {
-    addCourse: (state:InitialStateType, { payload }:{ payload:CourseItem }) => {
+    addCourse: (state:InitialStateType, { payload }:{ payload:CourseType }) => {
       const currentState = state;
       currentState.courses.push(payload);
     },

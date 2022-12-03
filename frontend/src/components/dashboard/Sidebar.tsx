@@ -31,7 +31,7 @@ function Sidebar() {
       >
         <Toolbar />
         <Stack>
-          {auth.user.role === 0 && (
+          {auth.user.role < 1 && (
           <>
             <MenuItem path="" name="Learning Center" icon={<School fontSize="large" sx={{ color: 'common.white' }} />} />
             <MenuItem path="/" name="Home" active={location.pathname === '/'} />
@@ -41,15 +41,15 @@ function Sidebar() {
             <MenuItem path="/my-groups" name="My Groups" active={location.pathname === '/my-groups'} />
           </>
           )}
-          {auth.user.role !== 0 && (
+          {auth.user.role > 0 && (
           <>
             <Divider />
             <MenuItem path="" name="Creation Center" icon={<EmojiObjects fontSize="large" sx={{ color: 'common.white' }} />} />
             <MenuItem path="/admin/overview" name="Overview" active={location.pathname === '/admin/overview'} />
-            <MenuItem path="/admin/courses" name="Cources" active={location.pathname === '/admin/courses'} />
+            <MenuItem path="/admin/courses" name="Courses" active={location.pathname === '/admin/courses'} />
             <MenuItem path="/admin/assignments" name="Assignments" active={location.pathname === '/admin/assignments'} />
             <MenuItem path="/admin/groups" name="Groups" active={location.pathname === '/admin/groups'} />
-            {auth.user.role === 2 && (
+            {auth.user.role > 1 && (
               <MenuItem path="/admin/users" name="Users" active={location.pathname === '/admin/users'} />
             )}
           </>
