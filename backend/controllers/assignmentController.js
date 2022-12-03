@@ -1,15 +1,11 @@
 import Helpers from '../helpers/helpers';
-import Enrollment from '../models/enrollments';
 import Assignment from '../models/assignment';
 import AssignmentSubmissions from '../models/assignmentSubmissions';
 import AssignmentQuestions from '../models/assignmentQuestions';
-import moment from 'moment';
 
-const enrollment = new Enrollment();
 const assignment = new Assignment();
 const submission = new AssignmentSubmissions();
 const assQuestions = new AssignmentQuestions();
-const date = moment(new Date()).format('YYYY-MM-DD');
 
 class AssignmentController {
   static async createAssignment(req, res) {
