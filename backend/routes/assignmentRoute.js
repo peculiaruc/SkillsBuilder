@@ -26,4 +26,12 @@ router.use(verifyToken);
 
 router.post('/create', assignmentController.createAssignment);
 
+router.get('/:id', assignmentController.getAssignmentById);
+
+router.put('/:id', assignmentController.updateAssignment);
+
+router.delete('/:id', assignmentController.deleteAssignment);
+
+router.get('/:id/questions', assignmentController.getAssignmentQuestions);
+
 module.exports = router;
