@@ -18,4 +18,10 @@ router.post('/:id/join', GroupController.joinGroup);
 
 router.post('/:id/leave', GroupController.leaveGroup);
 
+router.get('/:id/requests', GroupController.getGroupRequests);
+
+router.put('/requests/:id', GroupController.updateGroupRequest);
+
+router.delete('/requests/:id', GroupController.deleteGroupRequest);
+
 module.exports = router;
