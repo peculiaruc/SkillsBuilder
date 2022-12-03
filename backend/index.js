@@ -9,8 +9,8 @@ import {
   socialLoginRoute,
   assignmentRoute,
   groupRoute,
-  adminRoute,
   userRoute,
+  questionRoute,
 } from './routes';
 
 dotenv.config();
@@ -30,8 +30,8 @@ app.use('/api/v1/auth', authRoute);
 app.use('/api/v1/social', socialLoginRoute);
 app.use('/api/v1/course', courseRoute);
 app.use('/api/v1/assignment', assignmentRoute);
+app.use('/api/v1/question', questionRoute);
 app.use('/api/v1/group', groupRoute);
-app.use('/api/v1/admin', adminRoute);
 app.use('/api/v1/user', userRoute);
 
 app.use((req, res) => {
