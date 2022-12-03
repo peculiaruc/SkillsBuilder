@@ -12,57 +12,6 @@ const assQuestions = new AssignmentQuestions();
 const date = moment(new Date()).format('YYYY-MM-DD');
 
 class AssignmentController {
-  // static async getCourseAssignments(req, res) {
-  //   const { course_id } = req.body;
-  //   const ass = await assignment.getByCourse(course_id);
-  //   if (ass.errors) return Helpers.dbError(res, ass);
-  //   return Helpers.sendResponse(res, 200, 'success', { assignments: ass.rows });
-  // }
-
-  // static async getAssignmentSubmissions(req, res) {
-  //   const { assignment_id, user_id } = req.body;
-  //   const sub = await submission.allWhere({ assignment_id, user_id });
-  //   if (sub.errors) return Helpers.dbError(res, sub);
-  //   return Helpers.sendResponse(res, 200, 'success', { assignments: sub.rows });
-  // }
-
-  // static async createAssignmentSubmissions(req, res) {
-  //   const { course_id, user_id, assignment_id, grade, status } = req.body;
-  //   const newSubmission = {
-  //     course_id,
-  //     user_id,
-  //     assignment_id,
-  //     grade,
-  //     status,
-  //   };
-  //   const _newSubmission = await submission.create(newSubmission);
-  //   if (_newSubmission.errors) return Helpers.dbError(res, _newSubmission);
-  //   return Helpers.sendResponse(res, 200, 'success', { assignments: _newSubmission.rows });
-  // }
-
-  // static async createAssignmentQuestions(req, res) {
-  //   const { assignment_id, question, question_no } = req.body;
-  //   const newQuestion = {
-  //     assignment_id,
-  //     question,
-  //     choices: JSON.stringify(req.body.choices),
-  //     question_no,
-  //   };
-  //   const saveQs = await assQuestions.create(newQuestion);
-  //   if (saveQs.errors) return Helpers.dbError(res, saveQs);
-
-  //   return Helpers.sendResponse(res, 200, 'success creating question', {
-  //     question: saveQs.rows[0],
-  //   });
-  // }
-
-  // static async getUsersInMyCourse(req, res) {
-  //   const { course_id } = req.body;
-  //   const enrolledUsers = enrollment.where(course_id, course_id);
-  //   if (enrolledUsers.errors) return Helpers.dbError(res, enrolledUsers);
-  //   return Helpers.sendResponse(res, 200, 'success', { assignments: enrolledUsers.rows });
-  // }
-
   static async createAssignment(req, res) {
     const currentuser = await Helpers.getLoggedInUser(req, res);
     if (currentuser.role === 0)
@@ -114,6 +63,15 @@ class AssignmentController {
     const qs = await assQuestions.getByAssignment(req.params.id);
     if (qs.error) return Helpers.dbError(res, qs);
     return Helpers.sendResponse(res, 200, 'success', { assignments: qs.rows });
+  }
+  static async getAssignmentSubmissions(req, res) {
+    const currentuser = await Helpers.getLoggedInUser(req, res);
+    const sub = await submission.allWhere({
+      assignment_id: req.params.id,
+      user_id: currentuser.id,
+    });
+    if (sub.errors) return Helpers.dbError(res, sub);
+    return Helpers.sendResponse(res, 200, 'success', { submissions: sub.rows });
   }
 }
 

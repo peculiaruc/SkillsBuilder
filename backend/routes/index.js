@@ -6,6 +6,7 @@ import groupRoute from './groupRoute';
 import adminRoute from './adminRoute';
 import userRoute from './userRoute';
 import questionRoute from './questionRoute';
+import submissionRoute from './submissionRoute';
 
 export {
   authRoute,
@@ -16,4 +17,5 @@ export {
   adminRoute,
   userRoute,
   questionRoute,
+  submissionRoute,
 };

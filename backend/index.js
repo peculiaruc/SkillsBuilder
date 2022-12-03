@@ -11,6 +11,7 @@ import {
   groupRoute,
   userRoute,
   questionRoute,
+  submissionRoute,
 } from './routes';
 
 dotenv.config();
@@ -30,6 +31,7 @@ app.use('/api/v1/auth', authRoute);
 app.use('/api/v1/social', socialLoginRoute);
 app.use('/api/v1/course', courseRoute);
 app.use('/api/v1/assignment', assignmentRoute);
+app.use('/api/v1/submission', submissionRoute);
 app.use('/api/v1/question', questionRoute);
 app.use('/api/v1/group', groupRoute);
 app.use('/api/v1/user', userRoute);
