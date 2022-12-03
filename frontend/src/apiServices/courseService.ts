@@ -8,8 +8,6 @@ import {
   EnrollInCourseRequest,
   EnrollInCourseResponse,
   GetAllCoursesResponse,
-  GetCourseAuthorResponse,
-  GetCourseLearnersResponse,
   GetCourseMaterialsResponse,
   GetCourseResponse,
   UnEnrollInCourseRequest,
@@ -17,6 +15,7 @@ import {
   UpdateCourseRequest,
   UpdateCourseResponse,
 } from '../interfaces/CourseType';
+import { GetCourseAuthorResponse, GetCourseLearnersResponse } from '../interfaces/UserType';
 
 const courseService = api.injectEndpoints({
   endpoints: (builder) => ({

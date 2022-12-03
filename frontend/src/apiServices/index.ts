@@ -11,6 +11,10 @@ const api = createApi({
     'COURSE_LEARNERS',
     'COURSE_MATERIALS',
     'COURSE_ASSIGNMENTS',
+    'GROUP_POSTS',
+    'GROUP_MEMBERS',
+    'MY_GROUPS',
+    'GROUP_ACCESS_REQUESTS',
   ],
   baseQuery: axiosBaseQuery({ baseUrl: appConfig.apiPath }),
   endpoints: (builder) => ({

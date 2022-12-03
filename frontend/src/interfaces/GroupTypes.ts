@@ -1,5 +1,11 @@
+import { PostType } from './PostType';
+import { UserType } from './UserType';
+
+export type GroupId = number;
+export type GroupAccessRequestId = number;
+
 export type GroupType = {
-  id: number,
+  id: GroupId,
   name:string,
   owner_id:number,
   type:string,
@@ -9,7 +15,7 @@ export type GroupType = {
 };
 
 export type JoinGroupType = {
-  id: number,
+  id: GroupAccessRequestId,
   status:string,
   group_id: number,
   user_id:number,
@@ -17,31 +23,45 @@ export type JoinGroupType = {
   leave_date: Date,
 };
 
-export type GroupId = {
-  group_id: number,
-};
-export type CreateGroupRequest = Omit<GroupType, 'id' | ' created_at' | 'updated_at'>;
+export type CreateGroupRequest = Omit<GroupType, 'id' | 'created_at' | 'updated_at'>;
 
-export type CreateGroupResponse = {
-  error: string,
-  status: string,
+export type CreateGroupResponse = ResponseType & {
+  data: {
+    post: GroupType
+  }
+};
+export type GetGroupResponse = CreateGroupResponse;
+export type DeleteGroupResponse = ResponseType;
+export type UpdateGroupRequest = GroupType;
+export type UpdateGroupResponse = CreateGroupResponse;
+
+export type GetGroupMembersResponse = ResponseType & {
   data:{
-    group: GroupType
+    members: UserType[]
+  }
+};
+
+export type GetGroupPostsResponse = ResponseType & {
+  data:{
+    posts: PostType[]
   }
 };
 
 export type JoinGroupRequest = {
-  group_id: number,
+  group_id: GroupId,
   user_id: number,
 };
 
-export type LeaveGroupRequest = {
-  group_id: number,
-  user_id: number,
+export type LeaveGroupRequest = JoinGroupRequest;
+
+export type GetMyGroupsResponse = ResponseType & {
+  data: {
+    groups: GroupType[]
+  }
 };
 
-export type GetGroupMembersRequest = GroupId;
-
-export type GetGroupPostsRequest = GroupId;
-
-export type DeleteGroupRequest = GroupId;
+export type GetGroupAccessRequestsResponse = ResponseType & {
+  data: {
+    requests: JoinGroupType[]
+  }
+};

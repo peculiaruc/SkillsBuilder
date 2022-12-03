@@ -1,8 +1,6 @@
-import { CourseType } from './CourseType';
-import { ResponseType } from './ResponseType';
-import { GroupType } from './GroupTypes';
-import { PostType } from './PostType';
 import { AssignmentType } from './AssignmentType';
+import { PostType } from './PostType';
+import { ResponseType } from './ResponseType';
 
 export type UserId = number;
 
@@ -53,20 +51,6 @@ export type DeleteUserResponse = ResponseType;
 export type UpdateUserRequest = UserType;
 export type UpdateUserResponse = CreateUserResponse;
 
-export type GetMyCoursesRequest = UserId;
-
-export type GetMyCoursesResponse = ResponseType & {
-  data: {
-    courses: CourseType[]
-  }
-};
-
-export type GetMyGroupsResponse = ResponseType & {
-  data: {
-    groups: GroupType[]
-  }
-};
-
 export type GetMyPostsResponse = ResponseType & {
   data: {
     posts: PostType[]
@@ -85,15 +69,11 @@ export type GetMyLearnersResponse = ResponseType & {
   }
 };
 
-export type GetAllAuthorsRequest = void;
-
 export type GetAllAuthorsResponse = ResponseType & {
   data: {
     authors: UserType[]
   }
 };
-
-export type GetAllLearnersRequest = void;
 
 export type GetAllLearnersResponse = ResponseType & {
   data: {
@@ -101,10 +81,16 @@ export type GetAllLearnersResponse = ResponseType & {
   }
 };
 
-export type GetAllAdminsRequest = void;
-
 export type GetAllAdminsResponse = ResponseType & {
   data: {
     admins: UserType[]
+  }
+};
+
+export type GetCourseLearnersResponse = GetAllUsersResponse;
+
+export type GetCourseAuthorResponse = ResponseType & {
+  data:{
+    author: UserType,
   }
 };

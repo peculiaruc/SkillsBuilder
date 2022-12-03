@@ -1,6 +1,5 @@
-import { CourseMaterialType } from "./MaterialType";
-import { ResponseType } from "./ResponseType";
-import { GetAllUsersResponse, UserId, UserType } from "./UserType";
+import { CourseMaterialType } from './MaterialType';
+import { ResponseType } from './ResponseType';
 
 export type CourseId = number;
 
@@ -42,7 +41,7 @@ export type GetAllCoursesResponse = ResponseType & {
 
 export type EnrollInCourseRequest = {
   courseId: CourseId,
-  userId: UserId
+  userId: number
 };
 
 export type EnrollInCourseResponse = ResponseType;
@@ -53,34 +52,15 @@ export type UnEnrollInCourseResponse = ResponseType;
 
 export type GetCourseLearnersRequest = CourseId;
 
-export type GetCourseLearnersResponse = GetAllUsersResponse;
-
 export type GetCourseMaterialsResponse = ResponseType & {
   data:{
     materials: CourseMaterialType[],
   }
 };
 
-export type GetCourseAuthorResponse = ResponseType & {
-  data:{
-    author: UserType,
-  }
-};
-
-export type EnrolledCourseType = {
-  id: number,
-  course_id: number,
-  enroll_date: string,
-  unenroll_date: string,
-  created_at: string,
-  updated_at: string,
-} & CourseType;
-
-export type EnrolledCourseResponseType = {
-  status: string,
-  error?: string,
+export type GetMyCoursesResponse = ResponseType & {
   data: {
-    courses: EnrolledCourseType[],
+    courses: CourseType[]
   }
 };
 
