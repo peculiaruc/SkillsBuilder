@@ -34,6 +34,8 @@ class Model {
 
   initialValues!: Field;
 
+  data!: unknown;
+
   setInitialValues() {
     const values:Field = {};
     this.fields.forEach((field: FieldProps) => {
@@ -42,6 +44,7 @@ class Model {
       field.label = field.label ?? field.name.charAt(0).toUpperCase().concat(field.name.slice(1));
     });
     this.initialValues = values;
+    this.data = {};
   }
 }
 

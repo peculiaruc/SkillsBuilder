@@ -33,12 +33,6 @@ class Course extends Model {
         rows: 4,
         required: true,
       },
-      {
-        name: 'matetial',
-        label: 'Course Materials',
-        type: 'file',
-        multiple: true,
-      },
     ];
     this.setInitialValues();
   }
