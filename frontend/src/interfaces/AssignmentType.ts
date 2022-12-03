@@ -1,5 +1,8 @@
+import { ResponseType } from './ResponseType';
+
+export type AssignmentId = number;
 export interface AssignmentType {
-  id:number;
+  id:AssignmentId;
   course_id: number;
   author_id: number;
   description: string;
@@ -58,38 +61,29 @@ export interface AnswerType {
 /**
  * Assignment request type and Response type
  */
-export type CreateAssignmentRequest = Omit<AssignmentType, 'created_at' | 'updated_at' | 'id'>;
 
-export type UpdateAssignmentRequest = AssignmentType;
+export type CreateAssignmentRequest = Omit<AssignmentType, 'id' | 'created_at' | 'updated_at'>;
 
-export type CreateAssignmentResponse = {
-  message: string,
-  status: string,
+export type CreateAssignmentResponse = ResponseType & {
   data: {
-    assignment: AssignmentType[]
+    assignment: AssignmentType
   }
 };
 
-export type GetAssignmentResponse = {
-  message: string,
-  status: string,
-  data: AssignmentType
-};
-
-export type GetAssignmentsResponse = {
-  message: string,
-  status: string,
+export type GetAssignmentRequest = AssignmentId;
+export type GetAssignmentResponse = CreateAssignmentResponse;
+export type GetAllAssignmentsResponse = ResponseType & {
   data: {
     assignments: AssignmentType[]
-  },
+  }
 };
+
+export type DeleteAssignmentResponse = ResponseType;
+export type UpdateAssignmentRequest = AssignmentType;
+export type UpdateAssignmentResponse = CreateAssignmentResponse;
 
 export type GetCourseAssignmentRequest = {
   course_id: number,
-};
-
-export type DeleteAssignmentRequest = {
-  assignment_id: number,
 };
 
 export type SubmitAssignmentRequest = {
@@ -105,19 +99,21 @@ export type SubmitAssignmentResponse = {
 };
 */
 
-export type GetAssignmentQuestionsRequest = {
-  assignment_id: number,
+export type GetAssignmentQuestionsRequest = AssignmentId;
+
+export type GetAssignmentQuestionsResponse = ResponseType & {
+  data: {
+    questions: QuestionType[]
+  }
+};
+
+export type GetAssignmentAnswersResponse = ResponseType & {
+  data: {
+    answers: QuestionType[]
+  }
 };
 
 export type GetAssignmentSubmissionsRequest = {
   assignment_id: number,
   user_id: number,
-};
-
-export type GetAssignmentQuestionsResponse = {
-  message: string,
-  status: string,
-  data: {
-    questions: QuestionType[]
-  },
 };

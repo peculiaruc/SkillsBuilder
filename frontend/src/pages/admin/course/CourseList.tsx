@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { useCreateCourseMutation, useGetAllCoursesQuery } from '../../../apiServices/courseService';
 import FormBuilder from '../../../components/forms/FormBuilder';
-import { CourseType } from '../../../interfaces/Course';
+import { CourseType } from '../../../interfaces/CourseType';
 import Course from '../../../models/Course';
 import { useAuth } from '../../../store/authReducer';
 import { useCourses } from '../../../store/courseReducer';

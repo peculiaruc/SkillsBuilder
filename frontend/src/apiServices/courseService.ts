@@ -1,82 +1,81 @@
 import api from '.';
+import { GetAllAssignmentsResponse } from '../interfaces/AssignmentType';
 import {
-  CourseType, EnrollInCourseRequest, EnrollInCourseResponse
-} from '../interfaces/Course';
-
-export type GetAllCoursesResponse = {
-  status: string,
-  error?: string,
-  data: {
-    totalCourses: number,
-    courses: CourseType[]
-  }
-};
-
-type GetCourseResponse = {
-  status: string,
-  error: string,
-  data: CourseType
-};
-
-type GetCourseByIdResponse = {
-  status: string,
-  error: string,
-  data: {
-    course: CourseType
-  }
-};
-
-type GetCourseRequest = Partial<CourseType>;
+  CourseId,
+  CreateCourseRequest,
+  CreateCourseResponse,
+  DeleteCourseResponse,
+  EnrollInCourseRequest,
+  EnrollInCourseResponse,
+  GetAllCoursesResponse,
+  GetCourseAuthorResponse,
+  GetCourseLearnersResponse,
+  GetCourseMaterialsResponse,
+  GetCourseResponse,
+  UnEnrollInCourseRequest,
+  UnEnrollInCourseResponse,
+  UpdateCourseRequest,
+  UpdateCourseResponse,
+} from '../interfaces/CourseType';
 
 const courseService = api.injectEndpoints({
   endpoints: (builder) => ({
-    createCourse: builder.mutation<GetCourseResponse, GetCourseRequest>({
+    createCourse: builder.mutation<CreateCourseResponse, CreateCourseRequest>({
       query: (course) => ({ url: '/course/create', method: 'POST', data: course }),
       invalidatesTags: ['LIST_ALL_COURSES'],
     }),
-    updateOneCourse: builder.mutation<GetCourseResponse, GetCourseRequest>({
+    updateOneCourse: builder.mutation<UpdateCourseResponse, UpdateCourseRequest>({
       query: (course) => ({ url: `/course/${course.id}`, method: 'PUT', data: course }),
+      invalidatesTags: ['AllEnrolledCourses', 'LIST_ALL_COURSES'],
     }),
-    getCourseById: builder.query<GetCourseByIdResponse, number>({
-      query: (id) => ({ url: `/course/${id}`, method: 'POST' }),
+    getCourseById: builder.query<GetCourseResponse, CourseId>({
+      query: (id) => ({ url: `/course/${id}`, method: 'GET' }),
     }),
     getAllCourses: builder.query<GetAllCoursesResponse, void>({
       query: () => ({ url: '/course/all', method: 'GET' }),
       providesTags: ['LIST_ALL_COURSES'],
     }),
-    deleteOneCourse: builder.mutation({
-      query: (course_id) => ({ url: `/course/${course_id}`, method: 'POST' }),
+    deleteOneCourse: builder.mutation<DeleteCourseResponse, CourseId>({
+      query: (id) => ({ url: `/course/${id}`, method: 'DELETE' }),
     }),
-    enrollInOneCourse: builder.mutation<EnrollInCourseResponse, EnrollInCourseRequest>({
-      query: (data) => ({ url: `/course/${data.course_id}/enroll`, method: 'POST', data: { userId: data.userId } }),
-      invalidatesTags: ['AllEnrolledCourses', 'LIST_ALL_COURSES'],
+    enrollInCourse: builder.mutation<EnrollInCourseResponse, EnrollInCourseRequest>({
+      query: (data) => ({ url: `/course/${data.courseId}/enroll`, method: 'POST', data: { userId: data.userId } }),
+      invalidatesTags: ['AllEnrolledCourses'],
     }),
-    unEnrollInOneCourse: builder.mutation<EnrollInCourseResponse, EnrollInCourseRequest>({
-      query: (data) => ({ url: `/course/${data.course_id}/unenroll`, method: 'POST', data: { userId: data.userId } }),
-      invalidatesTags: ['AllEnrolledCourses', 'LIST_ALL_COURSES'],
+    unEnrollInOneCourse: builder.mutation<UnEnrollInCourseResponse, UnEnrollInCourseRequest>({
+      query: (data) => ({ url: `/course/${data.courseId}/unenroll`, method: 'POST', data: { userId: data.userId } }),
+      invalidatesTags: ['AllEnrolledCourses'],
     }),
-    getCourseLearners: builder.mutation<EnrollInCourseResponse, EnrollInCourseRequest>({
-      query: (data) => ({ url: `/course/${data.course_id}/learners`, method: 'POST', data: { userId: data.userId } }),
-      invalidatesTags: ['AllEnrolledCourses', 'LIST_ALL_COURSES'],
+    getCourseLearners: builder.query<GetCourseLearnersResponse, CourseId>({
+      query: (id) => ({ url: `/course/${id}/learners`, method: 'GET' }),
+      providesTags: ['COURSE_LEARNERS'],
     }),
-    getCourseAssigments: builder.mutation<EnrollInCourseResponse, EnrollInCourseRequest>({
-      query: (data) => ({ url: `/course/${data.course_id}/learners`, method: 'POST', data: { userId: data.userId } }),
-      invalidatesTags: ['AllEnrolledCourses', 'LIST_ALL_COURSES'],
+    getCourseAssigments: builder.query<GetAllAssignmentsResponse, CourseId>({
+      query: (id) => ({ url: `/course/${id}/assignments`, method: 'GET' }),
+      providesTags: ['COURSE_ASSIGNMENTS'],
     }),
-    getCourseAuthor: builder.mutation<EnrollInCourseResponse, EnrollInCourseRequest>({
-      query: (data) => ({ url: `/course/${data.course_id}/learners`, method: 'POST', data: { userId: data.userId } }),
-      invalidatesTags: ['AllEnrolledCourses', 'LIST_ALL_COURSES'],
+    getCourseMaterials: builder.query<GetCourseMaterialsResponse, CourseId>({
+      query: (id) => ({ url: `/course/${id}/materials`, method: 'GET' }),
+      providesTags: ['COURSE_MATERIALS'],
+    }),
+    getCourseAuthor: builder.query<GetCourseAuthorResponse, CourseId>({
+      query: (id) => ({ url: `/course/${id}/author`, method: 'GET' }),
     }),
   }),
 });
 
 export const {
-  useEnrollInOneCourseMutation,
   useCreateCourseMutation,
   useGetCourseByIdQuery,
   useDeleteOneCourseMutation,
   useUpdateOneCourseMutation,
   useGetAllCoursesQuery,
+  useGetCourseAssigmentsQuery,
+  useGetCourseAuthorQuery,
+  useGetCourseLearnersQuery,
+  useGetCourseMaterialsQuery,
+  useUnEnrollInOneCourseMutation,
+  useEnrollInCourseMutation,
 } = courseService;
 
 export default courseService;

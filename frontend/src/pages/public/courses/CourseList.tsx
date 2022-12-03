@@ -1,5 +1,5 @@
 import { Stack } from '@mui/material';
-import { CourseType } from '../../../interfaces/Course';
+import { CourseType } from '../../../interfaces/CourseType';
 import { useCourses, useEnrolledCourses } from '../../../store/courseReducer';
 import ListItemCourse from './ListItemCourse';
 

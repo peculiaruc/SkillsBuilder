@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import Cookies from 'js-cookie';
 import { defaultCookieExpires, userCookie } from '../configs/app';
 import authService, { LoginResponseType } from '../apiServices/authService';
-import { UserType } from '../interfaces/User';
+import { UserType } from '../interfaces/UserType';
 
 type AuthState = {
   token: string

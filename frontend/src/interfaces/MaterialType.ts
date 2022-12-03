@@ -14,15 +14,3 @@ export type CreateCourseMatarialResponse = ResponseType & {
     material: CourseMaterialType,
   }
 };
-
-export type GetCourseMaterialRequest = {
-  course_id: number,
-};
-
-export type GetCourseMaterialResponse = {
-  error: string,
-  status:string,
-  data:{
-    materials: CourseMaterialType[],
-  }
-};

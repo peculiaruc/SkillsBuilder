@@ -1,11 +1,13 @@
-import { CourseType } from './Course';
+import { CourseType } from './CourseType';
 import { ResponseType } from './ResponseType';
 import { GroupType } from './GroupTypes';
 import { PostType } from './PostType';
 import { AssignmentType } from './AssignmentType';
 
+export type UserId = number;
+
 export type UserType = {
-  id: number,
+  id: UserId,
   fullname: string,
   email: string,
   password: string,
@@ -20,8 +22,6 @@ export type UserType = {
   github: string,
   role: number,
 };
-
-export type UserId = number;
 
 export type CredentialsType = {
   email: string,
@@ -61,15 +61,11 @@ export type GetMyCoursesResponse = ResponseType & {
   }
 };
 
-export type GetMyGroupsRequest = UserId;
-
 export type GetMyGroupsResponse = ResponseType & {
   data: {
     groups: GroupType[]
   }
 };
-
-export type GetMyPostsRequest = UserId;
 
 export type GetMyPostsResponse = ResponseType & {
   data: {
@@ -77,15 +73,11 @@ export type GetMyPostsResponse = ResponseType & {
   }
 };
 
-export type GetMyAssignmentsRequest = UserId;
-
 export type GetMyAssignmentsResponse = ResponseType & {
   data: {
     assignments: AssignmentType[]
   }
 };
-
-export type GetMyLearnersRequest = UserId;
 
 export type GetMyLearnersResponse = ResponseType & {
   data: {

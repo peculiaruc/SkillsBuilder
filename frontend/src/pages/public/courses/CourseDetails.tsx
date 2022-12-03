@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useEnrolleInOneCourseMutation, useGetCourseByIdQuery, useGetEnrolledCoursesQuery } from '../../../apiServices/courseService';
 import TabView from '../../../components/TabView';
-import { CourseType, EnrolledCourseType } from '../../../interfaces/Course';
+import { CourseType, EnrolledCourseType } from '../../../interfaces/CourseType';
 import { useAuth } from '../../../store/authReducer';
 import EmptyView from '../../errors/EmptyView';
 

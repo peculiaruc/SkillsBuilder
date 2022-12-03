@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { useSelector } from 'react-redux';
 import courseService, { GetAllCoursesResponse } from '../apiServices/courseService';
-import { CourseType, EnrolledCourseResponseType, EnrolledCourseType } from '../interfaces/Course';
+import { CourseType, EnrolledCourseResponseType, EnrolledCourseType } from '../interfaces/CourseType';
 
 type InitialStateType = {
   enrolled:EnrolledCourseType[],

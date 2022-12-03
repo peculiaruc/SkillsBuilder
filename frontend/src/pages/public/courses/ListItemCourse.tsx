@@ -2,7 +2,7 @@ import {
   Box, Button, Grid, Paper, Typography,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { CourseType } from '../../../interfaces/Course';
+import { CourseType } from '../../../interfaces/CourseType';
 
 type Props = {
   course: CourseType
