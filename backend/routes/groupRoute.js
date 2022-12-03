@@ -24,4 +24,6 @@ router.put('/requests/:id', GroupController.updateGroupRequest);
 
 router.delete('/requests/:id', GroupController.deleteGroupRequest);
 
+router.get('/:id/members', GroupController.groupMembers);
+
 module.exports = router;

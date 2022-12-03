@@ -2,9 +2,11 @@ import Helpers from '../helpers/helpers';
 import Group from '../models/groups';
 import JoinedGroup from '../models/joinedGroups';
 import moment from 'moment';
+import Database from '../db/db';
 
 const group = new Group();
 const joinedG = new JoinedGroup();
+const db = new Database();
 const date = moment(new Date()).format('YYYY-MM-DD');
 
 class GroupController {
@@ -163,6 +165,15 @@ class GroupController {
     }
 
     return Helpers.sendResponse(res, 401, 'You should not be here!');
+  }
+
+  static async groupMembers(req, res) {
+    const _members = await db.queryBuilder(
+      `SELECT users.fullname, users.email, users.phone, users.city, joined_groups.join_date FROM users JOIN joined_groups ON joined_groups.user_id = users.id WHERE joined_groups.id = ${req.params.id};`
+    );
+    if (_members.errors) return Helpers.dbError(res, _members);
+
+    return Helpers.sendResponse(res, 200, 'success', { members: _members.rows });
   }
 }
 
