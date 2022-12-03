@@ -1,4 +1,4 @@
-export interface AssingmentType {
+export interface AssignmentType {
   id:number;
   course_id: number;
   author_id: number;
@@ -32,12 +32,14 @@ export interface QuestionType {
 } 7
 
 */
+
 export interface QuestionType {
   id:number;
   question: string;
+  mark: number;
   assignment_id: number;
   choices: ChoiceType[];
-  mark: number;
+  type: string,
   created_at: Date;
   updated_at: Date;
 }
@@ -48,7 +50,7 @@ export interface QuestionType {
 export interface AnswerType {
   id:number;
   question_id: number;
-  answers: number[];
+  answers: ChoiceType[];
   created_at: Date;
   updated_at: Date;
 }
@@ -56,29 +58,29 @@ export interface AnswerType {
 /**
  * Assignment request type and Response type
  */
-export type CreateAssignmentRequest = Omit<AssingmentType, 'created_at' | 'updated_at' | 'id'>;
+export type CreateAssignmentRequest = Omit<AssignmentType, 'created_at' | 'updated_at' | 'id'>;
 
-export type UpdateAssignmentRequest = AssingmentType;
+export type UpdateAssignmentRequest = AssignmentType;
 
 export type CreateAssignmentResponse = {
   message: string,
   status: string,
   data: {
-    assignment: AssingmentType[]
+    assignment: AssignmentType[]
   }
 };
 
 export type GetAssignmentResponse = {
   message: string,
   status: string,
-  data: AssingmentType
+  data: AssignmentType
 };
 
 export type GetAssignmentsResponse = {
   message: string,
   status: string,
   data: {
-    assignments: AssingmentType[]
+    assignments: AssignmentType[]
   },
 };
 

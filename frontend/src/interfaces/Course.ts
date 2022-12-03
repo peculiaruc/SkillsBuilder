@@ -1,28 +1,25 @@
-export type CourseItem = {
-  name: string,
-  summary: string,
-  description: string,
-  thumbnail?: string,
-  author_id?: string,
-  updated_at?: string,
+export type CourseType = {
   id: number,
-  created_at?:string;
+  title: string,
+  description: string,
+  content: string,
+  author_id: number,
+  updated_at: string,
+  created_at:string;
 };
 
 export type CourseListType = {
-  courses: CourseItem[]
+  courses: CourseType[]
 };
 
 export type EnrolledCourseType = {
   id: number,
   course_id: number,
-  user_id: number,
   enroll_date: string,
   unenroll_date: string,
   created_at: string,
   updated_at: string,
-  course_name?: string
-};
+} & CourseType;
 
 export type EnrolledCourseResponseType = {
   status: string,
@@ -32,6 +29,10 @@ export type EnrolledCourseResponseType = {
   }
 };
 
+export type EnrollInCourseRequest = {
+  userId:number,
+  course_id:number,
+};
 export type EnrollInCourseResponse = {
   error?: string,
   status:string,
