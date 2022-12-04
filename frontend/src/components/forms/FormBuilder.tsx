@@ -7,6 +7,7 @@ import Model from '../../models/Model';
 import { useFormState } from '../../store/dialogFormReducer';
 import MixedInput from './inputs/MixedInput';
 
+type SelectOptions = Record<string, any>;
 interface FormProps {
   title: string | React.ReactNode,
   dialog: boolean,
@@ -29,6 +30,8 @@ function FormBuilder({
   const { errors, getFieldProps, touched } = formik;
 
   const fieldNames = Object.keys(errors);
+  const options = Object.keys(model.data as SelectOptions);
+
   const formContent = (
     <>
       <DialogTitle>{title}</DialogTitle>
@@ -43,6 +46,7 @@ function FormBuilder({
                   error={touched[field.name] && fieldNames.includes(field.name)}
                   helperText={fieldNames.includes(field.name) && touched[field.name] ? errors[field.name] as string : ''}
                   key={field.name}
+                  options={options.includes(field.name) ? model.data[field.name] : undefined}
                 />
               ),
             )}

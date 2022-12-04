@@ -16,13 +16,13 @@ class User extends Model {
       linkedin: Yup.string(),
       github: Yup.string(),
       password: Yup.string().required(),
-      confirm_password: Yup.string().required().oneOf([Yup.ref('password'), 'Password not match']),
+      confirm_password: Yup.string().required().oneOf([Yup.ref('password')], 'Password not match'),
       role: Yup.string().required(),
     });
     this.fields = [
-      { name: 'fullname', type: 'string' },
+      { name: 'fullname', type: 'text' },
       { name: 'email', type: 'email' },
-      { name: 'phone', type: 'phone' },
+      { name: 'phone', type: 'tel' },
       { name: 'city', type: 'text' },
       { name: 'country', type: 'text' },
       { name: 'telegram', type: 'text' },
@@ -33,9 +33,9 @@ class User extends Model {
       { name: 'password', type: 'password' },
       { name: 'confirm_password', type: 'password' },
     ];
-    this.setInitialValues();
+    this.setInitialValues({ role: 'learner' });
     this.data = {
-      role: ['Learner', 'Author', 'Admin'],
+      role: ['learner', 'author', 'admin'],
     };
   }
 }

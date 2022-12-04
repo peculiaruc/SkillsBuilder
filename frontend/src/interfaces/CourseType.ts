@@ -13,10 +13,6 @@ export type CourseType = {
   created_at:string;
 };
 
-export type CourseListType = {
-  courses: CourseType[]
-};
-
 export type CreateCourseRequest = Omit<CourseType, 'id' | 'created_at' | 'updated_at'>;
 
 export type CreateCourseResponse = ResponseType & {
@@ -58,9 +54,11 @@ export type GetCourseMaterialsResponse = ResponseType & {
   }
 };
 
+export type EnrolledCourseType = CourseType & { course_id: CourseId };
+
 export type GetMyCoursesResponse = ResponseType & {
   data: {
-    courses: CourseType[]
+    courses: EnrolledCourseType[]
   }
 };
 

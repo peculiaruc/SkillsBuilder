@@ -15,8 +15,8 @@ export default function GroupItem({ group }:Props) {
   const { name, id } = group;
   const isJoined = joined.includes(id);
   const dispatch = useDispatch();
-  const handleJoinGroup = (groupId: string) => dispatch(joinGroup(groupId));
-  const handleLeaveGroup = (groupId: string) => dispatch(leaveGroup(groupId));
+  const handleJoinGroup = (groupId: number) => dispatch(joinGroup(groupId));
+  const handleLeaveGroup = (groupId: number) => dispatch(leaveGroup(groupId));
   return (
     <Paper
       sx={{

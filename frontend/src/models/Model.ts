@@ -19,7 +19,7 @@ const FieldType: Field = {
   number: 0,
   switch: [],
   checkbox: [],
-  select: [],
+  select: undefined,
   date: new Date(),
 };
 
@@ -34,14 +34,15 @@ class Model {
 
   initialValues!: Field;
 
-  data!: unknown;
+  data!: any;
 
-  setInitialValues() {
-    const values:Field = {};
+  setInitialValues(values: Field = {}) {
     this.fields.forEach((field: FieldProps) => {
-      values[field.name] = FieldType[field.type || 'text'];
+      if (!Object.keys(values).includes(field.name)) {
+        values[field.name] = FieldType[field.type || 'text'];
+      }
       // eslint-disable-next-line no-param-reassign
-      field.label = field.label ?? field.name.charAt(0).toUpperCase().concat(field.name.slice(1));
+      field.label = field.label ?? `${this.name.charAt(0).toUpperCase().concat(this.name.slice(1))} ${field.name.charAt(0).toUpperCase().concat(field.name.slice(1))}`;
     });
     this.initialValues = values;
     this.data = {};

@@ -60,7 +60,7 @@ function CourseList() {
           />
         </>
       )}
-      {courses.map((course: CourseType) => <ListItemCourse course={course} key={course.name} />)}
+      {courses.map((course: CourseType) => <ListItemCourse course={course} key={course.title} />)}
     </Stack>
   );
 }

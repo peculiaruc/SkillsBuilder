@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { Chip, Stack, Typography } from '@mui/material';
-import { AssingmentType } from '../../../interfaces/AssignmentType';
+import { AssignmentType } from '../../../interfaces/AssignmentType';
 
-export default function AssignmentDescription(props:Partial<AssingmentType>) {
+export default function AssignmentDescription(props:Partial<AssignmentType>) {
   const {
     title, description, max_attemps, passing_score,
   } = props;

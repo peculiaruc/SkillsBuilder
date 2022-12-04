@@ -1,9 +1,9 @@
-import { createSlice, nanoid, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { useSelector } from 'react-redux';
-import { GroupType } from '../interfaces/GroupTypes';
+import { GroupId, GroupType } from '../interfaces/GroupTypes';
 
 type InitialStateType = {
-  joined: string[],
+  joined: GroupId[],
   groups: GroupType[],
 };
 
@@ -11,6 +11,7 @@ type ReducerState = {
   groups: InitialStateType
 };
 
+const nanoid = () => Math.floor(Math.random() * 1000000000000000000);
 const groupReducer = createSlice({
   name: 'groups',
   initialState: {
@@ -62,14 +63,14 @@ const groupReducer = createSlice({
     addGroup: (state:InitialStateType, action: PayloadAction<GroupType>) => {
       state.groups.push(action.payload);
     },
-    joinGroup: (state:InitialStateType, action: PayloadAction<string>) => {
+    joinGroup: (state:InitialStateType, action: PayloadAction<GroupId>) => {
       const group = state.groups.find((g) => g.id === action.payload);
       if (group) { state.joined.push(group.id); }
     },
-    leaveGroup: (state:InitialStateType, action: PayloadAction<string>) => {
+    leaveGroup: (state:InitialStateType, action: PayloadAction<GroupId>) => {
       state.joined = state.joined.filter((id) => id !== action.payload);
     },
-    deleteGroup: (state:InitialStateType, action: PayloadAction<string>) => {
+    deleteGroup: (state:InitialStateType, action: PayloadAction<GroupId>) => {
       state.groups = state.groups.filter((group) => group.id !== action.payload);
     },
   },

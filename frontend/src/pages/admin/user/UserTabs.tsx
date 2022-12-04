@@ -1,7 +1,8 @@
 import { Button, Paper } from '@mui/material';
-import TabView from '../../components/TabView';
+import TabView from '../../../components/TabView';
+import UserList from './UserList';
 
-function UserList() {
+function UserTabs() {
   return (
     <TabView
       title="Users"
@@ -9,19 +10,7 @@ function UserList() {
       [
         {
           name: 'All',
-          component: (
-            <Paper sx={{
-              height: '300px',
-              width: '100%',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              borderRadius: 2,
-            }}
-            >
-              <Button size="large">Add course author or learner</Button>
-            </Paper>
-          ),
+          component: <UserList />,
         },
         {
           name: 'Learners',
@@ -63,4 +52,4 @@ function UserList() {
   );
 }
 
-export default UserList;
+export default UserTabs;

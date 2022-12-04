@@ -41,7 +41,7 @@ const courseService = api.injectEndpoints({
       query: (data) => ({ url: `/course/${data.courseId}/enroll`, method: 'POST', data: { userId: data.userId } }),
       invalidatesTags: ['AllEnrolledCourses'],
     }),
-    unEnrollInOneCourse: builder.mutation<UnEnrollInCourseResponse, UnEnrollInCourseRequest>({
+    unEnrollInCourse: builder.mutation<UnEnrollInCourseResponse, UnEnrollInCourseRequest>({
       query: (data) => ({ url: `/course/${data.courseId}/unenroll`, method: 'POST', data: { userId: data.userId } }),
       invalidatesTags: ['AllEnrolledCourses'],
     }),
@@ -73,7 +73,7 @@ export const {
   useGetCourseAuthorQuery,
   useGetCourseLearnersQuery,
   useGetCourseMaterialsQuery,
-  useUnEnrollInOneCourseMutation,
+  useUnEnrollInCourseMutation,
   useEnrollInCourseMutation,
 } = courseService;
 
