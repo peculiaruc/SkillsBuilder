@@ -53,17 +53,9 @@ const userService = api.injectEndpoints({
       query: (id) => ({ url: `/user/${id}/mycourses`, method: 'GET' }),
       providesTags: ['USER_COURSES'],
     }),
-    getAllLearners: builder.query<GetAllLearnersResponse, void>({
-      query: () => ({ url: '/user/learners/all', method: 'GET' }),
-      providesTags: ['ALL_LEARNERS'],
-    }),
-    getAllAuthors: builder.query<GetAllAuthorsResponse, void>({
-      query: () => ({ url: '/user/authors/all', method: 'GET' }),
-      providesTags: ['ALL_AUTHORS'],
-    }),
-    getAllAdmins: builder.query<GetAllAdminsResponse, void>({
-      query: () => ({ url: '/user/admins/all', method: 'GET' }),
-      providesTags: ['ALL_ADMINS'],
+    getUsersByRole: builder.query<GetAllUsersResponse, string>({
+      query: (role) => ({ url: role !== 'all' ? `/user/${role}/all` : '/user/all', method: 'GET' }),
+      providesTags: (result, err, id) => (result ? [{ type: 'Users', id }] : [{ type: 'Users', id: 'LIST' }]),
     }),
   }),
 });
@@ -78,6 +70,7 @@ export const {
   useGetUserCoursesQuery,
   useGetUserGroupsQuery,
   useGetUserPostsQuery,
+  useGetUsersByRoleQuery,
 } = userService;
 
 export default userService;

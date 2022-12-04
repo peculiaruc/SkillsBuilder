@@ -1,4 +1,3 @@
-import { Button, Paper } from '@mui/material';
 import TabView from '../../../components/TabView';
 import UserList from './UserList';
 
@@ -10,39 +9,19 @@ function UserTabs() {
       [
         {
           name: 'All',
-          component: <UserList />,
+          component: <UserList userRole="all" />,
         },
         {
           name: 'Learners',
-          component: (
-            <Paper sx={{
-              height: '300px',
-              width: '100%',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              borderRadius: 2,
-            }}
-            >
-              <Button size="large">Add learner</Button>
-            </Paper>
-          ),
+          component: <UserList userRole="learners" />,
         },
         {
           name: 'Course authors',
-          component: (
-            <Paper sx={{
-              height: '300px',
-              width: '100%',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              borderRadius: 2,
-            }}
-            >
-              <Button size="large">Add course author</Button>
-            </Paper>
-          ),
+          component: <UserList userRole="authors" />,
+        },
+        {
+          name: 'Admins',
+          component: <UserList userRole="admins" />,
         },
       ]
      }

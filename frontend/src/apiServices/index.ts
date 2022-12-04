@@ -5,6 +5,7 @@ import axiosBaseQuery from '../configs/axiosBaseQuery';
 const api = createApi({
   reducerPath: 'api',
   tagTypes: [
+    'Users',
     'AllEnrolledCourses',
     'LIST_ALL_COURSES',
     'LIST_ALL_LESSONS',

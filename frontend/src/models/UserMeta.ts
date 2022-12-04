@@ -22,6 +22,13 @@ class User extends Model {
     this.fields = [
       { name: 'fullname', type: 'text' },
       { name: 'email', type: 'email' },
+      { name: 'phone', type: 'tel' },
+      { name: 'city', type: 'text' },
+      { name: 'country', type: 'text' },
+      { name: 'telegram', type: 'text' },
+      { name: 'whatsapp', type: 'text' },
+      { name: 'linkedin', type: 'text' },
+      { name: 'github', type: 'text' },
       { name: 'role', type: 'select' },
       { name: 'password', type: 'password' },
       { name: 'confirm_password', type: 'password' },

@@ -18,14 +18,15 @@ export default function DashboardLayout() {
   axios.defaults.headers.common.Authorization = `Bearer ${auth.token}`;
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex', height: '100%' }}>
       <Topbar />
       <Sidebar />
       <Box
         component="main"
         sx={{
           flexGrow: 1,
-          p: 3,
+          height: '100%',
+          p: 2,
           width: { md: `calc(100% - ${drawerWidth}px)` },
           marginLeft: `${drawerWidth}px`,
           [theme.breakpoints.down('md')]: {
@@ -38,8 +39,7 @@ export default function DashboardLayout() {
           spacing={2}
           sx={{
             display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
+            height: '100%',
           }}
         >
           <Outlet />
