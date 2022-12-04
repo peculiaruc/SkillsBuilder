@@ -36,6 +36,7 @@ function Topbar() {
         <Typography variant="h6" sx={{ flexGrow: 1 }}>
           SkillBuddy
         </Typography>
+        <Typography>{user.fullname}</Typography>
         <IconButton
           onClick={handleClick}
           size="small"
@@ -44,7 +45,7 @@ function Topbar() {
           aria-haspopup="true"
           aria-expanded={open ? 'true' : undefined}
         >
-          <Avatar>{user.fullname.charAt(0).toUpperCase()}</Avatar>
+          <Avatar src={user.picture}>{user.fullname.charAt(0).toUpperCase()}</Avatar>
         </IconButton>
         <Menu
           anchorEl={anchorEl}

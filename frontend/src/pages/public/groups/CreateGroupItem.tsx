@@ -1,27 +1,23 @@
 import { GroupAddSharp } from '@mui/icons-material';
 import { Button, Paper, Stack } from '@mui/material';
-import { nanoid } from '@reduxjs/toolkit';
 import { FormikValues } from 'formik';
-import { batch, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { useCreateGroupMutation } from '../../../apiServices/groupService';
 import FormBuilder from '../../../components/forms/FormBuilder';
-import { GroupType } from '../../../interfaces/GroupTypes';
+import { CreateGroupRequest } from '../../../interfaces/GroupTypes';
 import Group from '../../../models/Group';
 import { useAuth } from '../../../store/authReducer';
 import { closeDialog, openDialog } from '../../../store/dialogFormReducer';
-import { addGroup, joinGroup } from '../../../store/groupReducer';
 
 export default function CreateGroupItem() {
-  const dispatch = useDispatch();
   const auth = useAuth();
+  const dispatch = useDispatch();
+  const [createGroup] = useCreateGroupMutation();
   const onCancel = () => dispatch(closeDialog());
   const handleCreateGroup = () => dispatch(openDialog());
-  const onSubmit = (group: FormikValues) => {
-    const newGroup = { ...group, id: nanoid(), owner: String(auth.user.id) } as GroupType;
-    batch(() => {
-      dispatch(addGroup(newGroup));
-      dispatch(joinGroup(newGroup.id));
-      onCancel();
-    });
+  const onSubmit = async (group: FormikValues) => {
+    const request = { ...group, owner_id: auth.user.id } as CreateGroupRequest;
+    await createGroup(request).unwrap();
   };
   const model = new Group();
 

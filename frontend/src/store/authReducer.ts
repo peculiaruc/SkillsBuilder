@@ -4,15 +4,13 @@ import Cookies from 'js-cookie';
 import { defaultCookieExpires, userCookie } from '../configs/app';
 import authService, { LoginResponseType } from '../apiServices/authService';
 import { UserType } from '../interfaces/UserType';
+import { RootState } from '.';
 
 type AuthState = {
   token: string
   user: UserType
 };
 
-type ReducerState = {
-  auth: AuthState
-};
 const auth = Cookies.get(userCookie) as string;
 
 const defaultState: Partial<AuthState> = { token: undefined, user: undefined };
@@ -22,7 +20,6 @@ const initialState: AuthState = auth ? JSON.parse(auth) : defaultState;
 const login = (state: AuthState, { payload }: { payload: LoginResponseType }) => {
   let currentState = state;
   currentState = payload.data;
-  currentState.user.role = 2;
   Cookies.set(userCookie, JSON.stringify(currentState), {
     expires: defaultCookieExpires,
     domain: window.location.hostname,
@@ -52,6 +49,6 @@ const authReducer = createSlice({
   },
 });
 
-export const useAuth = () => useSelector((state: ReducerState) => state.auth);
+export const useAuth = () => useSelector((state: RootState) => state.auth);
 
 export default authReducer;

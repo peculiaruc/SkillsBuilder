@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { useSelector } from 'react-redux';
+import { RootState } from '.';
 import courseService from '../apiServices/courseService';
 import userService from '../apiServices/userService';
 import {
@@ -12,10 +13,6 @@ import {
 type InitialStateType = {
   enrolled:EnrolledCourseType[],
   courses:CourseType[]
-};
-
-type ReducerState = {
-  courses: InitialStateType
 };
 
 const courseReducer = createSlice({
@@ -48,7 +45,7 @@ const courseReducer = createSlice({
   },
 });
 
-export const useCourses = () => useSelector((state:ReducerState) => state.courses.courses);
-export const useEnrolledCourses = () => useSelector((state:ReducerState) => state.courses.enrolled);
+export const useCourses = () => useSelector((state:RootState) => state.courses.courses);
+export const useEnrolledCourses = () => useSelector((state:RootState) => state.courses.enrolled);
 export const { addCourse } = courseReducer.actions;
 export default courseReducer;

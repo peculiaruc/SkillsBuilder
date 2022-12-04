@@ -7,7 +7,7 @@ import GroupItem from './GroupItem';
 export default function GroupListMe() {
   const auth = useAuth();
   const allGroups = useGroups();
-  const groups = allGroups.filter((group) => group.owner === String(auth.user.id));
+  const groups = allGroups.filter((group) => group.owner_id === String(auth.user.id));
 
   return (
     <Grid container columns={[1, 2, 3, 4]} spacing={2}>

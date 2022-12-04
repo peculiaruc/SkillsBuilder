@@ -1,19 +1,14 @@
+import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 import { useSelector } from 'react-redux';
-import type { PayloadAction } from '@reduxjs/toolkit';
 
+import { RootState } from '.';
 import assignmentService from '../apiServices/assignmentService';
-import {
-  AssingmentType, GetAssignmentQuestionsResponse, GetAssignmentsResponse, QuestionType,
-} from '../interfaces/AssignmentType';
+import { AssignmentType, GetAllAssignmentsResponse, GetAssignmentQuestionsResponse, QuestionType } from '../interfaces/AssignmentType';
 
 type InitialStateType = {
-  assignments: AssingmentType[],
+  assignments: AssignmentType[],
   questions: QuestionType[]
-};
-
-type ReducerState = {
-  assignments: InitialStateType
 };
 
 const initialState:InitialStateType = {
@@ -41,16 +36,16 @@ const assignmentReducer = createSlice({
         },
       ).addMatcher(
         assignmentService.endpoints.getCourseAssignments.matchFulfilled,
-        (state: InitialStateType, action: PayloadAction<GetAssignmentsResponse>) => {
+        (state: InitialStateType, action: PayloadAction<GetAllAssignmentsResponse>) => {
           state.assignments = action.payload.data.assignments ?? [];
         },
       );
   },
 });
 
-export const useQuestions = () => useSelector((state: ReducerState) => state.assignments.questions);
+export const useQuestions = () => useSelector((state: RootState) => state.assignments.questions);
 export const useAssignments = () => useSelector(
-  (state: ReducerState) => state.assignments.assignments,
+  (state: RootState) => state.assignments.assignments,
 );
 export const { addQuestion, removeQuestion } = assignmentReducer.actions;
 export default assignmentReducer;
