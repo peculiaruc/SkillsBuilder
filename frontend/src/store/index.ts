@@ -5,10 +5,12 @@ import authReducer from './authReducer';
 import courseReducer from './courseReducer';
 import dialogFormReducer from './dialogFormReducer';
 import groupReducer from './groupReducer';
+import userReducer from './userReducer';
 
 const store = configureStore({
   reducer: {
     [groupReducer.name]: groupReducer.reducer,
+    [userReducer.name]: userReducer.reducer,
     [assignmentReducer.name]: assignmentReducer.reducer,
     [dialogFormReducer.name]: dialogFormReducer.reducer,
     [courseReducer.name]: courseReducer.reducer,
