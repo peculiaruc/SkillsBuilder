@@ -176,7 +176,7 @@ class UserController {
     }
     const _authors = await user.allWhere({ role: 1 });
     if (_authors.errors) return Helpers.dbError(res, _authors);
-    return Helpers.sendResponse(res, 200, 'success', { authors: _authors.rows });
+    return Helpers.sendResponse(res, 200, 'success', { users: _authors.rows });
   }
 
   static async getAllLearners(req, res) {
@@ -186,7 +186,7 @@ class UserController {
     }
     const _users = await user.allWhere({ role: 0 });
     if (_users.errors) return Helpers.dbError(res, _users);
-    return Helpers.sendResponse(res, 200, 'success', { authors: _users.rows });
+    return Helpers.sendResponse(res, 200, 'success', { users: _users.rows });
   }
 
   static async getAllAdmins(req, res) {
@@ -196,7 +196,7 @@ class UserController {
     }
     const _users = await user.allWhere({ role: 2 });
     if (_users.errors) return Helpers.dbError(res, _users);
-    return Helpers.sendResponse(res, 200, 'success', { authors: _users.rows });
+    return Helpers.sendResponse(res, 200, 'success', { users: _users.rows });
   }
 }
 
