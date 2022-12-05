@@ -56,15 +56,18 @@ class AuthController {
   }
 
   static async login(req, res) {
-    const { email, password } = req.body;
-
-    const _user = await user.getByEmail(email);
-
+    const _user = await user.getByEmail(req.bodyemail);
     if (_user.error) return Helpers.dbError(res, _user);
 
-    if (_user.count > 0 && Helpers.comparePassword(_user.row.password, password)) {
+    if (_user.count > 0 && Helpers.comparePassword(_user.row.password, req.body.password)) {
       const token = Helpers.generateToken(_user.row.id);
       const refreshToken = Helpers.generateRefreshToken(_user.row.id);
+
+      const oldToken = await tokn.allWhere({ user_id: _user.row.id, type: 'refresh' });
+      if (oldToken.errors) return Helpers.dbError(res, oldToken);
+      const delOldToken = await tokn.delete({ id: oldToken.rows[0].id });
+      if (delOldToken.errors) return Helpers.dbError(res, delOldToken);
+
       const newToken = {
         user_id: _user.row.id,
         token: refreshToken,
@@ -74,7 +77,7 @@ class AuthController {
       if (saveToken.errors) {
         return Helpers.dbError(res, saveToken);
       }
-      return Helpers.sendResponse(res, 200, 'User is successfully logged in', {
+      return Helpers.sendResponse(res, 200, 'User successfully logged in', {
         token,
         refreshToken,
         user: _user.row,
