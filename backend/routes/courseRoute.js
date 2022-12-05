@@ -34,4 +34,6 @@ router.get('/:id/author', courseController.getCourseAuthor);
 
 router.get('/status', courseController.courseStatus);
 
+router.get('/categories', courseController.getCourseCategories);
+
 module.exports = router;

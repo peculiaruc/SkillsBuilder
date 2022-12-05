@@ -85,6 +85,7 @@ class Database {
   }
 
   async allWhere(where) {
+    try{
     const conditions = this.prepareObject(where, ' AND ');
     const sql = `SELECT * FROM ${this.table} WHERE ${conditions}`;
     const query = await this.queryBuilder(sql, []);
@@ -94,6 +95,11 @@ class Database {
           count: query.count,
         }
       : query;
+    } catch(errors){
+      console.log(errors)
+      return { errors };
+
+    }
   }
 
   async allWithOffset(limit = 5, offset = 0, orderBy = 'id DESC', where) {
