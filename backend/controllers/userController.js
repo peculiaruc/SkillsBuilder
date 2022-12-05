@@ -6,6 +6,7 @@ import Helpers from '../helpers/helpers';
 import Enrollment from '../models/enrollments';
 import Database from '../db/db';
 import Post from '../models/posts';
+import Course from '../models/course';
 
 dotenv.config();
 
@@ -14,7 +15,7 @@ const tokn = new Token();
 const enroll = new Enrollment();
 const post = new Post();
 const db = new Database();
-
+const course = new Course();
 class UserController {
   static async getAllUsers(req, res) {
     const currentuser = await Helpers.getLoggedInUser(req, res);
@@ -167,6 +168,12 @@ class UserController {
 
     if (_enrollments.errors) return Helpers.dbError(res, _enrollments);
     return Helpers.sendResponse(res, 200, 'success', { learners: _enrollments.rows });
+  }
+
+  static async getAuthorsCourses(req, res) {
+    const _courses = await course.allWhere({ author_id: req.params.id });
+    if (_courses.errors) return Helpers.dbError(res, _courses);
+    return Helpers.sendResponse(res, 200, 'success', { courses: _courses.rows });
   }
 
   static async getAllAuthors(req, res) {
