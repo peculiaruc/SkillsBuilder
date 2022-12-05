@@ -94,7 +94,7 @@ class AuthController {
     const _user = await user.getByEmail(email);
     if (_user.errors) return Helpers.dbError(res, _user);
     if (_user.count > 0) {
-      const randomToken = Helpers.createRandomToken();
+      const randomToken = await Helpers.createRandomToken();
       const savedToken = await tokn.getTokenByUser(_user.row.id);
       if (savedToken.count > 0) {
         tokn.delete({ token: savedToken.row.id });
