@@ -22,7 +22,7 @@ router.get('/:id/mygroups', UserController.getUserGroups);
 
 router.get('/:id/myposts', UserController.getUserPosts);
 
-router.get('/authors/:id/mygroups', UserController.getAuthorsCourses);
+router.get('/authors/:id/mycourses', UserController.getAuthorsCourses);
 
 // router.get('/:id/myassignments', userController.getUserAssignments);
 
