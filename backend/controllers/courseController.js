@@ -9,6 +9,7 @@ import moment from 'moment';
 import Database from '../db/db';
 import Assignment from '../models/assignment';
 import CourseStatus from '../models/courseStatus';
+import Material from '../models/courseMaterial';
 
 const course = new Course();
 const enrollment = new Enrollment();
@@ -18,6 +19,7 @@ const materials = new CourseLesson();
 const db = new Database();
 const assignment = new Assignment();
 const status = new CourseStatus();
+const material = new Material();
 
 class CourseController {
   static async getAllCourses(req, res) {
@@ -137,6 +139,12 @@ class CourseController {
     const _assignment = await assignment.allWhere({ course_id: req.params.id });
     if (_assignment.errors) return Helpers.dbError(res, _assignment);
     return Helpers.sendResponse(res, 200, 'success', { assignments: _assignment.rows });
+  }
+
+  static async getCourseMaterials(req, res) {
+    const _material = await material.allWhere({ course_id: req.params.id });
+    if (_material.errors) return Helpers.dbError(res, _material);
+    return Helpers.sendResponse(res, 200, 'success', { materials: _material.rows });
   }
 
   static async getCourseLessons(req, res) {

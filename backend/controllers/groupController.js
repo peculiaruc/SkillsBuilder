@@ -13,8 +13,9 @@ const date = moment(new Date()).format('YYYY-MM-DD');
 
 class GroupController {
   static async getAllGroups(req, res) {
-    const _group = await group.allWhere({ status: 'active' });
+    const _group = await group.activeGroups();
     if (_group.errors) return Helpers.dbError(res, _group);
+    console.log(_group);
     return Helpers.sendResponse(res, 200, 'success', { groups: _group.rows });
   }
 

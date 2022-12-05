@@ -12,7 +12,7 @@ router.get('/:id', GroupController.groupById);
 
 router.put('/:id', GroupController.updateGroup);
 
-router.get('/all', GroupController.getAllGroups);
+router.get('/all/active', GroupController.getAllGroups);
 
 router.delete('/:id', GroupController.deleteGroup);
 

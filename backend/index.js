@@ -13,6 +13,7 @@ import {
   questionRoute,
   submissionRoute,
   postsRoute,
+  materialRoute,
 } from './routes';
 
 dotenv.config();
@@ -37,6 +38,7 @@ app.use('/api/v1/question', questionRoute);
 app.use('/api/v1/group', groupRoute);
 app.use('/api/v1/user', userRoute);
 app.use('/api/v1/post', postsRoute);
+app.use('/api/v1/material', materialRoute);
 
 app.use((req, res) => {
   res.status(404).send({

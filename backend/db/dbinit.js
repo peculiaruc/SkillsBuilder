@@ -14,6 +14,7 @@ import {
   choiceType,
   courseStatus,
   posts,
+  courseMaterial,
 } from '../migrations';
 
 export default async () => {
@@ -39,6 +40,7 @@ export default async () => {
     await db.queryBuilder(choiceType);
     await db.queryBuilder(courseStatus);
     await db.queryBuilder(posts);
+    await db.queryBuilder(courseMaterial);
     return true;
   } catch (e) {
     console.log('db init err', e);

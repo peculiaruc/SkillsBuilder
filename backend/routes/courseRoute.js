@@ -28,7 +28,7 @@ router.get('/:id/learners', courseController.courseLearners);
 
 router.get('/:id/assignments', courseController.getCourseAssignments);
 
-router.get('/:id/materials', courseController.getCourseLessons);
+router.get('/:id/materials', courseController.getCourseMaterials);
 
 router.get('/:id/author', courseController.getCourseAuthor);
 
