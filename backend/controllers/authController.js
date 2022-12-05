@@ -122,7 +122,7 @@ class AuthController {
     if (_user.errors) return Helpers.dbError(res, _user);
     if (_user.count > 0) {
       // check if token is valid
-      const savedToken = await tokn.allWhere({ id, token: resetToken, type: 'reset' });
+      const savedToken = await tokn.allWhere({ user_id, token: resetToken, type: 'reset' });
       if (savedToken.errors) return Helpers.dbError(res, savedToken);
       if (savedToken.count > 0) {
         const hashedPass = Helpers.hashPassword(password);
