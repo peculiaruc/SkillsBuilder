@@ -143,7 +143,7 @@ class UserController {
 
   static async getUserGroups(req, res) {
     const _group = await db.queryBuilder(
-      `SELECT groups.name, groups.description, joined_groups.id, joined_groups.group_id, joined_groups.join_date, joined_groups.leave_date FROM groups JOIN joined_groups ON joined_groups.group_id = groups.id WHERE joined_groups.user_id = ${req.params.id} AND joined_groups.leave_date IS NULL;`
+      `SELECT groups.name, groups.description, groups.owner_id, joined_groups.id, joined_groups.group_id, joined_groups.join_date, joined_groups.leave_date FROM groups JOIN joined_groups ON joined_groups.group_id = groups.id WHERE joined_groups.user_id = ${req.params.id} AND joined_groups.leave_date IS NULL;`
     );
     // const _group = await joinedG.allWhere({ user_id: req.params.id, leave_date: IS NULL });
     if (_group.errors) {
