@@ -11,6 +11,7 @@ import { groups } from './create_groups_table';
 import { joinedGroups } from './create_joined_groups_table';
 import { choiceType } from './create_table_choice_type';
 import { courseStatus } from './create_table_course_status';
+import { posts } from './create_table_posts';
 
 export {
   users,
@@ -26,4 +27,5 @@ export {
   joinedGroups,
   choiceType,
   courseStatus,
+  posts,
 };

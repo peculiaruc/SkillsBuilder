@@ -7,6 +7,7 @@ import adminRoute from './adminRoute';
 import userRoute from './userRoute';
 import questionRoute from './questionRoute';
 import submissionRoute from './submissionRoute';
+import postsRoute from './postsRoute';
 
 export {
   authRoute,
@@ -18,4 +19,5 @@ export {
   userRoute,
   questionRoute,
   submissionRoute,
+  postsRoute,
 };
