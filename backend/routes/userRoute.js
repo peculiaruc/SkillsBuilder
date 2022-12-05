@@ -20,6 +20,8 @@ router.get('/:id/mycourses', UserController.getUserCourses);
 
 router.get('/:id/mygroups', UserController.getUserGroups);
 
+router.get('/:id/myposts', UserController.getUserPosts);
+
 // router.get('/:id/myassignments', userController.getUserAssignments);
 
 router.get('/:id/learners', UserController.getAuthorsLearners);

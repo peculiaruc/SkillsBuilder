@@ -5,12 +5,14 @@ import Token from '../models/token';
 import Helpers from '../helpers/helpers';
 import Enrollment from '../models/enrollments';
 import Database from '../db/db';
+import Post from '../models/posts';
 
 dotenv.config();
 
 const user = new User();
 const tokn = new Token();
 const enroll = new Enrollment();
+const post = new Post();
 const db = new Database();
 
 class UserController {
@@ -148,6 +150,14 @@ class UserController {
       return Helpers.dbError(res, _group);
     }
     return Helpers.sendResponse(res, 200, 'success', { groups: _group.rows });
+  }
+
+  static async getUserPosts(req, res) {
+    const _posts = await post.allWhere({ user_id: req.params.id });
+    if (_posts.errors) {
+      return Helpers.dbError(res, _posts);
+    }
+    return Helpers.sendResponse(res, 200, 'success', { posts: _posts.rows });
   }
 
   static async getAuthorsLearners(req, res) {

@@ -205,8 +205,9 @@ class GroupController {
   }
 
   static async groupPosts(req, res) {
-    const _posts = post.allWhere({ group_id: req.params.id });
+    const _posts = await post.allWhere({ group_id: req.params.id });
     if (_posts.errors) return Helpers.dbError(res, _posts);
+    console.log(_posts);
     return Helpers.sendResponse(res, 200, 'success', { posts: _posts.rows });
   }
 }
