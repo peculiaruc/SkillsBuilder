@@ -3,9 +3,11 @@ import Group from '../models/groups';
 import JoinedGroup from '../models/joinedGroups';
 import moment from 'moment';
 import Database from '../db/db';
+import Post from '../models/posts';
 
 const group = new Group();
 const joinedG = new JoinedGroup();
+const post = new Post();
 const db = new Database();
 const date = moment(new Date()).format('YYYY-MM-DD');
 
@@ -200,6 +202,12 @@ class GroupController {
     if (_members.errors) return Helpers.dbError(res, _members);
 
     return Helpers.sendResponse(res, 200, 'success', { members: _members.rows });
+  }
+
+  static async groupPosts(req, res) {
+    const _posts = post.allWhere({ group_id: req.params.id });
+    if (_posts.errors) return Helpers.dbError(res, _posts);
+    return Helpers.sendResponse(res, 200, 'success', { posts: _posts.rows });
   }
 }
 

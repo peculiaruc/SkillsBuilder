@@ -28,4 +28,6 @@ router.delete('/requests/:id', GroupController.deleteGroupRequest);
 
 router.get('/:id/members', GroupController.groupMembers);
 
+router.get('/:id/posts', GroupController.groupPosts);
+
 module.exports = router;
