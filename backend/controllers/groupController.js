@@ -26,7 +26,6 @@ class GroupController {
     if (_group.errors) {
       return Helpers.dbError(res, _group);
     }
-    const date = moment(new Date()).format('YYYY-MM-DD');
     const newJoin = {
       user_id: currentuser.id,
       group_id: _group.rows[0].id,
