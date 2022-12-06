@@ -9,6 +9,8 @@ import moment from 'moment';
 import Database from '../db/db';
 import Assignment from '../models/assignment';
 import CourseStatus from '../models/courseStatus';
+import Material from '../models/courseMaterial';
+import { ALREADY_ENROLLED, NOT_AUTHORISED, SUCCESS } from '../utils/constants';
 
 const course = new Course();
 const enrollment = new Enrollment();
@@ -18,20 +20,21 @@ const materials = new CourseLesson();
 const db = new Database();
 const assignment = new Assignment();
 const status = new CourseStatus();
+const material = new Material();
 
 class CourseController {
   static async getAllCourses(req, res) {
     const { offset, limit } = req.query;
     const _courses = await course.all(limit || 5, offset || 0, 'id DESC', { status: 2 });
     if (_courses.errors) return Helpers.dbError(res, _courses);
-    return Helpers.sendResponse(res, 200, 'success', { courses: _courses.rows });
+    return Helpers.sendResponse(res, 200, SUCCESS, { courses: _courses.rows });
   }
 
   static async getCoursesByCategories(req, res) {
     const { categories } = req.body;
     const _courses = await course.getByCategory(categories);
     if (_courses.errors) return Helpers.dbError(res, _courses);
-    return Helpers.sendResponse(res, 200, 'success', {
+    return Helpers.sendResponse(res, 200, SUCCESS, {
       totalCourses: _courses.count,
       courses: _courses.rows,
     });
@@ -41,7 +44,7 @@ class CourseController {
     const { id } = req.params;
     const _courses = await course.getById(id);
     if (_courses.errors) return Helpers.dbError(res, _courses);
-    return Helpers.sendResponse(res, 200, 'success', {
+    return Helpers.sendResponse(res, 200, SUCCESS, {
       course: _courses.row,
     });
   }
@@ -50,7 +53,7 @@ class CourseController {
     const { id } = req.params;
     const _courses = await enrollment.getByUser(id);
     if (_courses.errors) return Helpers.dbError(res, _courses);
-    return Helpers.sendResponse(res, 200, 'success', {
+    return Helpers.sendResponse(res, 200, SUCCESS, {
       course: _courses.rows,
       totalCourses: _courses.count,
     });
@@ -59,7 +62,7 @@ class CourseController {
   static async getCourseCategories(req, res) {
     const _categories = await cat.all();
     if (_categories.errors) return Helpers.dbError(res, _categories);
-    return Helpers.sendResponse(res, 200, 'success', {
+    return Helpers.sendResponse(res, 200, SUCCESS, {
       categories: _categories.rows,
     });
   }
@@ -71,8 +74,7 @@ class CourseController {
 
     if (checkEnrollment.errors) return Helpers.dbError(res, checkEnrollment);
 
-    if (checkEnrollment.count > 0)
-      return Helpers.sendResponse(res, 400, 'User already enrolled in course');
+    if (checkEnrollment.count > 0) return Helpers.sendResponse(res, 400, ALREADY_ENROLLED);
 
     const _user = await user.getById(req.body.userId);
     if (_user.errors) return Helpers.dbError(res, _user);
@@ -81,10 +83,11 @@ class CourseController {
     if (_course.errors) return Helpers.dbError(res, _course);
 
     const date = moment(new Date()).format('YYYY-MM-DD');
-
+    console.log(_course.row);
     const newEnroll = {
       user_id: req.body.userId,
       course_id: req.params.id,
+      author_id: _course.row.author_id,
       enroll_date: date,
     };
     const _enroll = await enrollment.create(newEnroll);
@@ -95,7 +98,7 @@ class CourseController {
       'Enrollment Confirmation',
       `You have successfully enrolled in ${_course.row.title}`
     );
-    return Helpers.sendResponse(res, 200, 'successfully enrolled');
+    return Helpers.sendResponse(res, 200, SUCCESS);
   }
 
   static async unEnrollUser(req, res) {
@@ -121,28 +124,33 @@ class CourseController {
       'Unenrollment Confirmation',
       `You have successfully unenrolled in ${_course.row.title}`
     );
-    return Helpers.sendResponse(res, 200, 'successfully unenrolled');
+    return Helpers.sendResponse(res, 200, SUCCESS);
   }
 
   static async courseLearners(req, res) {
-    // `SELECT * FROM enrollments JOIN users ON users.id = enrollments.user_id  WHERE course_id = ${req.params.id};`
     const _learners = await db.queryBuilder(
       `SELECT users.fullname, users.email, users.phone, users.city, enrollments.enroll_date, enrollments.unenroll_date FROM users JOIN enrollments ON enrollments.user_id = users.id WHERE enrollments.course_id = ${req.params.id};`
     );
     if (_learners.errors) return Helpers.dbError(res, _learners);
-    return Helpers.sendResponse(res, 200, 'success', { learners: _learners.rows });
+    return Helpers.sendResponse(res, 200, SUCCESS, { learners: _learners.rows });
   }
 
   static async getCourseAssignments(req, res) {
     const _assignment = await assignment.allWhere({ course_id: req.params.id });
     if (_assignment.errors) return Helpers.dbError(res, _assignment);
-    return Helpers.sendResponse(res, 200, 'success', { assignments: _assignment.rows });
+    return Helpers.sendResponse(res, 200, SUCCESS, { assignments: _assignment.rows });
+  }
+
+  static async getCourseMaterials(req, res) {
+    const _material = await material.allWhere({ course_id: req.params.id });
+    if (_material.errors) return Helpers.dbError(res, _material);
+    return Helpers.sendResponse(res, 200, SUCCESS, { materials: _material.rows });
   }
 
   static async getCourseLessons(req, res) {
     const _materials = await materials.allWhere({ course_id: req.params.id });
     if (_materials.errors) return Helpers.dbError(res, _materials);
-    return Helpers.sendResponse(res, 200, 'success', { materials: _materials.rows });
+    return Helpers.sendResponse(res, 200, SUCCESS, { materials: _materials.rows });
   }
 
   static async getCourseAuthor(req, res) {
@@ -150,7 +158,7 @@ class CourseController {
     if (_course.errors) return Helpers.dbError(res, _course);
     const _user = await user.getById(_course.row.author_id);
     if (_user.errors) return Helpers.dbError(res, _user);
-    return Helpers.sendResponse(res, 200, 'success', { author: _user.row });
+    return Helpers.sendResponse(res, 200, SUCCESS, { author: _user.row });
   }
 
   static async updateCourse(req, res) {
@@ -162,16 +170,16 @@ class CourseController {
     if (currentuser.role === 2 || _course.row.author_id === currentuser.id) {
       const _course = await course.update({ ...req.body }, { id: req.params.id });
       if (_course.errors) return Helpers.dbError(res, _course);
-      return Helpers.sendResponse(res, 200, 'success', { course: _course.rows[0] });
+      return Helpers.sendResponse(res, 200, SUCCESS, { course: _course.rows[0] });
     }
-    return Helpers.sendResponse(res, 404, 'User not authorised to perform this task');
+    return Helpers.sendResponse(res, 404, NOT_AUTHORISED);
   }
 
   static async createCourse(req, res) {
     const currentuser = await Helpers.getLoggedInUser(req, res);
 
     if (currentuser.role === 0) {
-      return Helpers.sendResponse(res, 404, 'User not authorised to perform this task');
+      return Helpers.sendResponse(res, 404, NOT_AUTHORISED);
     }
 
     const newCourse = {
@@ -181,7 +189,7 @@ class CourseController {
     if (_course.errors) {
       return Helpers.dbError(res, _course);
     }
-    return Helpers.sendResponse(res, 200, 'Course created successfully', {
+    return Helpers.sendResponse(res, 200, SUCCESS, {
       course: _course.rows[0],
     });
   }
@@ -196,9 +204,9 @@ class CourseController {
       if (_del.errors) {
         return Helpers.dbError(res, _del);
       }
-      return Helpers.sendResponse(res, 200, 'Course deleted successfully');
+      return Helpers.sendResponse(res, 200, SUCCESS);
     }
-    return Helpers.sendResponse(res, 404, 'User not authorised to perform this task');
+    return Helpers.sendResponse(res, 404, NOT_AUTHORISED);
   }
 
   static async courseStatus(req, res) {
@@ -207,7 +215,7 @@ class CourseController {
     if (_status.errors) {
       return Helpers.dbError(res, _status);
     }
-    return Helpers.sendResponse(res, 200, 'success', { status: _status.rows });
+    return Helpers.sendResponse(res, 200, SUCCESS, { status: _status.rows });
   }
 }
 
