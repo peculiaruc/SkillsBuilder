@@ -21,14 +21,15 @@ const courseService = api.injectEndpoints({
   endpoints: (builder) => ({
     createCourse: builder.mutation<CreateCourseResponse, CreateCourseRequest>({
       query: (course) => ({ url: '/course/create', method: 'POST', data: course }),
-      invalidatesTags: ['LIST_ALL_COURSES'],
+      invalidatesTags: ['LIST_ALL_COURSES', 'USER_COURSES'],
     }),
     updateOneCourse: builder.mutation<UpdateCourseResponse, UpdateCourseRequest>({
       query: (course) => ({ url: `/course/${course.id}`, method: 'PUT', data: course }),
-      invalidatesTags: ['AllEnrolledCourses', 'LIST_ALL_COURSES'],
+      invalidatesTags: [{ type: 'Course', id: 'Enrolled' }, 'LIST_ALL_COURSES'],
     }),
     getCourseById: builder.query<GetCourseResponse, CourseId>({
       query: (id) => ({ url: `/course/${id}`, method: 'GET' }),
+      providesTags: (_res, _err, id) => [{ type: 'Course', id }],
     }),
     getAllCourses: builder.query<GetAllCoursesResponse, void>({
       query: () => ({ url: '/course/all', method: 'GET' }),
@@ -39,7 +40,7 @@ const courseService = api.injectEndpoints({
     }),
     enrollInCourse: builder.mutation<EnrollInCourseResponse, EnrollInCourseRequest>({
       query: (data) => ({ url: `/course/${data.courseId}/enroll`, method: 'POST', data: { userId: data.userId } }),
-      invalidatesTags: ['AllEnrolledCourses'],
+      invalidatesTags: (_res, _err, { courseId }) => [{ type: 'Course', id: 'Enrolled' }, { type: 'Course', id: courseId }],
     }),
     unEnrollInCourse: builder.mutation<UnEnrollInCourseResponse, UnEnrollInCourseRequest>({
       query: (data) => ({ url: `/course/${data.courseId}/unenroll`, method: 'POST', data: { userId: data.userId } }),
@@ -47,7 +48,7 @@ const courseService = api.injectEndpoints({
     }),
     getCourseLearners: builder.query<GetCourseLearnersResponse, CourseId>({
       query: (id) => ({ url: `/course/${id}/learners`, method: 'GET' }),
-      providesTags: ['COURSE_LEARNERS'],
+      providesTags: ['COURSE_LEARNERS', { type: 'Course', id: 'Enrolled' }],
     }),
     getCourseAssigments: builder.query<GetAllAssignmentsResponse, CourseId>({
       query: (id) => ({ url: `/course/${id}/assignments`, method: 'GET' }),

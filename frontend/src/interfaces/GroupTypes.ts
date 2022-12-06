@@ -8,6 +8,7 @@ export type GroupType = {
   id: GroupId,
   name:string,
   owner_id:number,
+  description:string,
   type:string,
   status:string,
   created_at:Date,
@@ -27,7 +28,7 @@ export type CreateGroupRequest = Omit<GroupType, 'id' | 'created_at' | 'updated_
 
 export type CreateGroupResponse = ResponseType & {
   data: {
-    post: GroupType
+    group: GroupType
   }
 };
 export type GetGroupResponse = CreateGroupResponse;
@@ -41,6 +42,11 @@ export type GetGroupMembersResponse = ResponseType & {
   }
 };
 
+export type GetGroupbyIdResponse = ResponseType & {
+  data:{
+    groups: GroupType
+  }
+};
 export type GetGroupPostsResponse = ResponseType & {
   data:{
     posts: PostType[]

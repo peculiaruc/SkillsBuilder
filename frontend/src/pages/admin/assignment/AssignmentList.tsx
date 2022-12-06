@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { useCreateAssignmentMutation, useGetCourseAssignmentsQuery } from '../../../apiServices/assignmentService';
 import FormBuilder from '../../../components/forms/FormBuilder';
-import { AssingmentType } from '../../../interfaces/AssignmentType';
+import { AssignmentType } from '../../../interfaces/AssignmentType';
 import Assignment from '../../../models/Assignments';
 import { useAuth } from '../../../store/authReducer';
 import { closeDialog, openDialog } from '../../../store/dialogFormReducer';
@@ -19,11 +19,11 @@ function AssignmentList() {
   const handleOpen = () => dispatch(openDialog());
   const onCancel = () => dispatch(closeDialog());
   const [createAssignment] = useCreateAssignmentMutation();
-  const { isLoading } = useGetCourseAssignmentsQuery({ course_id: courseId });
+  const { isLoading } = useGetCourseAssignmentsQuery(courseId);
   if (isLoading) return <CircularProgress />;
 
   const onSubmit = async (values: FormikValues) => {
-    const assignment = { ...values, course_id: courseId } as AssingmentType;
+    const assignment = { ...values, course_id: courseId } as AssignmentType;
     await createAssignment(assignment).unwrap();
   //  console.log(values, response);
   };

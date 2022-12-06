@@ -3,6 +3,8 @@ import CourseDetails from './courses/CourseDetails';
 import CourseView from './courses/CourseView';
 import MyGroupList from './groups/MyGroupList';
 import MyStudyPlan from './groups/MyStudyPlan';
+import GroupDetails from './groups/GroupDetails';
+import Profile from './Profile';
 
 export default [
   {
@@ -24,5 +26,13 @@ export default [
   {
     path: '/course/:id',
     element: <CourseDetails />,
+  },
+  {
+    path: '/group/:id',
+    element: <GroupDetails />,
+  },
+  {
+    path: '/profile',
+    element: <Profile />,
   },
 ];

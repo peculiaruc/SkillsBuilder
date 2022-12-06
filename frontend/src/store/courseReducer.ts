@@ -41,11 +41,19 @@ const courseReducer = createSlice({
           const currenState = state;
           currenState.enrolled = payload.data.courses;
         },
+      ).addMatcher(
+        userService.endpoints.getAuthorCourses.matchFulfilled,
+        (state: InitialStateType, { payload }: { payload: GetMyCoursesResponse }) => {
+          const currenState = state;
+          currenState.courses = payload.data.courses;
+        },
       );
   },
 });
 
 export const useCourses = () => useSelector((state:RootState) => state.courses.courses);
-export const useEnrolledCourses = () => useSelector((state:RootState) => state.courses.enrolled);
+export const useEnrolledCourses = () => useSelector(
+  (state:RootState) => state.courses.enrolled ?? [],
+);
 export const { addCourse } = courseReducer.actions;
 export default courseReducer;

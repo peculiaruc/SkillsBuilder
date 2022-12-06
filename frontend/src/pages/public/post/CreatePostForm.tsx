@@ -1,27 +1,26 @@
+import { PostAddSharp } from '@mui/icons-material';
 import { Button, Paper, Stack } from '@mui/material';
 import { FormikValues } from 'formik';
 import { useDispatch } from 'react-redux';
-import { useCreateUserMutation } from '../../../apiServices/userService';
+import { useParams } from 'react-router-dom';
 import FormBuilder from '../../../components/forms/FormBuilder';
-import { CreateUserRequest } from '../../../interfaces/UserType';
-import User from '../../../models/User';
+import Post from '../../../models/Post';
+import { useAuth } from '../../../store/authReducer';
 import { closeDialog, openDialog } from '../../../store/dialogFormReducer';
 
-type Props = {
-  title: string
-};
-
-export default function CreateUserForm({ title = 'Add new user' } : Props) {
-  const model = new User();
+export default function CreatePostItem() {
+  const auth = useAuth();
   const dispatch = useDispatch();
-  const openForm = () => dispatch(openDialog());
+  const { id } = useParams();
   const onCancel = () => dispatch(closeDialog());
-  const [createUser] = useCreateUserMutation();
-  const onSubmit = async (values:FormikValues) => {
-    const user = { ...values, role: model.data.role.indexOf(values.role) } as CreateUserRequest;
-    await createUser(user).unwrap();
-    onCancel();
+  const handleCreatePost = () => dispatch(openDialog());
+  const onSubmit = async (post: FormikValues) => {
+    const request = { ...post, group_id: id, owner_id: auth.user.id };
+    // eslint-disable-next-line no-console
+    console.log(request);
   };
+  const model = new Post();
+
   return (
     <Paper
       sx={{
@@ -41,13 +40,16 @@ export default function CreateUserForm({ title = 'Add new user' } : Props) {
         }}
       >
         <FormBuilder
-          title={title}
+          title="Create a post"
           dialog
           model={model}
           onSubmit={onSubmit}
           onCancel={onCancel}
         />
-        <Button size="large" onClick={openForm}>{title}</Button>
+        <PostAddSharp />
+        <Button onClick={handleCreatePost} color="success">
+          Create Post
+        </Button>
       </Stack>
     </Paper>
   );

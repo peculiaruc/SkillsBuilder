@@ -46,7 +46,13 @@ function Sidebar() {
             <Divider />
             <MenuItem path="" name="Creation Center" icon={<EmojiObjects fontSize="large" sx={{ color: 'common.white' }} />} />
             <MenuItem path="/admin/overview" name="Overview" active={location.pathname === '/admin/overview'} />
-            <MenuItem path="/admin/courses" name="Courses" active={location.pathname === '/admin/courses'} />
+            {
+              auth.user.role === 1 ? (
+                <MenuItem path="/admin/courses/me" name="Courses" active={location.pathname === '/admin/courses/me'} />
+              )
+                : (<MenuItem path="/admin/courses" name="Courses" active={location.pathname === '/admin/courses'} />)
+            }
+
             <MenuItem path="/admin/assignments" name="Assignments" active={location.pathname === '/admin/assignments'} />
             <MenuItem path="/admin/groups" name="Groups" active={location.pathname === '/admin/groups'} />
             {auth.user.role > 1 && (

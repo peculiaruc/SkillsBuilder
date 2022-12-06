@@ -4,11 +4,7 @@ import { GetMyGroupsResponse } from '../interfaces/GroupTypes';
 import {
   CreateUserRequest,
   CreateUserResponse,
-  DeleteUserResponse,
-  GetAllAdminsResponse,
-  GetAllAuthorsResponse,
-  GetAllLearnersResponse,
-  GetAllUsersResponse,
+  DeleteUserResponse, GetAllUsersResponse,
   GetMyAssignmentsResponse,
   GetUserPostsResponse,
   GetUserResponse,
@@ -43,7 +39,7 @@ const userService = api.injectEndpoints({
     }),
     getUserGroups: builder.query<GetMyGroupsResponse, UserId>({
       query: (id) => ({ url: `/user/${id}/mygroups`, method: 'GET' }),
-      providesTags: ['USER_GROUPS'],
+      providesTags: ['MY_GROUPS'],
     }),
     getUserAssignments: builder.query<GetMyAssignmentsResponse, UserId>({
       query: (id) => ({ url: `/user/${id}/myassignments`, method: 'GET' }),
@@ -53,9 +49,15 @@ const userService = api.injectEndpoints({
       query: (id) => ({ url: `/user/${id}/mycourses`, method: 'GET' }),
       providesTags: ['USER_COURSES'],
     }),
+    getAuthorCourses: builder.query<GetMyCoursesResponse, UserId>({
+      query: (id) => ({ url: `/user/authors/${id}/mycourses`, method: 'GET' }),
+      providesTags: ['USER_COURSES'],
+    }),
     getUsersByRole: builder.query<GetAllUsersResponse, string>({
       query: (role) => ({ url: role !== 'all' ? `/user/${role}/all` : '/user/all', method: 'GET' }),
-      providesTags: (result, err, id) => (result ? [{ type: 'Users', id }] : [{ type: 'Users', id: 'LIST' }]),
+      // eslint-disable-next-line max-len
+      // providesTags: (result, err, id) => (result ? [{ type: 'Users', id }] : [{ type: 'Users', id: 'LIST' }]),
+      providesTags: ['LIST_ALL_USERS'],
     }),
   }),
 });
@@ -71,6 +73,7 @@ export const {
   useGetUserGroupsQuery,
   useGetUserPostsQuery,
   useGetUsersByRoleQuery,
+  useGetAuthorCoursesQuery,
 } = userService;
 
 export default userService;

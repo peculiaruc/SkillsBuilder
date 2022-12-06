@@ -27,7 +27,7 @@ export type CredentialsType = {
   rememberMe?: boolean
 };
 
-export type UserRegisterType = Pick<UserType, 'fullname' | 'email' | 'city' | 'phone' | 'password'>;
+export type UserRegisterType = Pick<UserType, 'rememberMe' | 'fullname' | 'email' | 'city' | 'phone' | 'password'>;
 
 export type UserTypeId = number;
 
@@ -35,7 +35,7 @@ export type CreateUserRequest = Omit<UserType, 'id' | 'created_at' | 'updated_at
 
 export type CreateUserResponse = ResponseType & {
   data: {
-    post: UserType
+    user: UserType
   }
 };
 export type GetUserRequest = UserId;

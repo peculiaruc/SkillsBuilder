@@ -1,3 +1,4 @@
+import { CourseId } from './CourseType';
 import { ResponseType } from './ResponseType';
 
 export type AssignmentId = number;
@@ -82,9 +83,7 @@ export type DeleteAssignmentResponse = ResponseType;
 export type UpdateAssignmentRequest = AssignmentType;
 export type UpdateAssignmentResponse = CreateAssignmentResponse;
 
-export type GetCourseAssignmentRequest = {
-  course_id: number,
-};
+export type GetCourseAssignmentRequest = CourseId;
 
 export type SubmitAssignmentRequest = {
   assignment_id: number,

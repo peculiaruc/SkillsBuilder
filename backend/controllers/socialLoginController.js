@@ -117,7 +117,8 @@ module.exports = {
         });
 
         res.status(200).send({
-          status: 'success',
+          status: 200,
+          message: 'success',
           data: {
             token,
             user: user.row,
@@ -125,13 +126,13 @@ module.exports = {
         });
       }
       res.status(400).send({
-        status: 'error',
+        status: 400,
         message: 'Invalid params',
       });
     } catch (err) {
       // console.log(err);
       res.status(400).send({
-        status: err.message,
+        message: err.message,
       });
     }
   },

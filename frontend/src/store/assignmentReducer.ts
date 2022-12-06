@@ -4,7 +4,9 @@ import { useSelector } from 'react-redux';
 
 import { RootState } from '.';
 import assignmentService from '../apiServices/assignmentService';
-import { AssignmentType, GetAllAssignmentsResponse, GetAssignmentQuestionsResponse, QuestionType } from '../interfaces/AssignmentType';
+import {
+  AssignmentType, GetAllAssignmentsResponse, GetAssignmentQuestionsResponse, QuestionType,
+} from '../interfaces/AssignmentType';
 
 type InitialStateType = {
   assignments: AssignmentType[],

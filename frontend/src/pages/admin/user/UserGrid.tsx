@@ -4,9 +4,9 @@ import UserItem from './UserItem';
 
 type Props = {
   users: UserType[],
-  children: React.ReactNode
+  children?: React.ReactNode
 };
-export default function UserGrid({ users, children }: Required<Props>) {
+export default function UserGrid({ users, children }: Props) {
   return (
     <Grid container columns={[1, 2, 3, 4]} spacing={2}>
       <Grid item xs={1}>

@@ -14,9 +14,7 @@ export default function CreateAssignmentQuestionView() {
   const dispatch = useDispatch();
 
   const { isLoading } = useGetAssignmentByIdQuery(assignmentId);
-  const { isLoading: isLoadingA } = useGetAssignmentQuestionsQuery({
-    assignment_id: assignmentId,
-  });
+  const { isLoading: isLoadingA } = useGetAssignmentQuestionsQuery(assignmentId);
 
   const createEmptyQuestion = () => {
     dispatch(addQuestion({

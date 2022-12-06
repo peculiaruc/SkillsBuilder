@@ -6,6 +6,7 @@ const api = createApi({
   reducerPath: 'api',
   tagTypes: [
     'Users',
+    'Course',
     'AllEnrolledCourses',
     'LIST_ALL_COURSES',
     'LIST_ALL_LESSONS',

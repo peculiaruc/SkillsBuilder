@@ -1,5 +1,8 @@
 import { Person3 } from '@mui/icons-material';
-import { Paper, Stack, Typography } from '@mui/material';
+import {
+  Button, Paper, Stack, Typography,
+} from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import { UserType } from '../../../interfaces/UserType';
 
 type Props = {
@@ -7,6 +10,8 @@ type Props = {
 };
 
 export default function UserItem({ user }:Props) {
+  const navigate = useNavigate();
+  const openProfile = () => navigate(`/user/${user.id}`);
   const {
     fullname, phone, email,
   } = user;
@@ -38,6 +43,7 @@ export default function UserItem({ user }:Props) {
           <b>Phone: </b>
           {phone}
         </Typography>
+        <Button onClick={openProfile}>View Profile</Button>
       </Stack>
     </Paper>
   );

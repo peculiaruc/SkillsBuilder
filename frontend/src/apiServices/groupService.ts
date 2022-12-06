@@ -4,9 +4,9 @@ import {
   CreateGroupResponse,
   DeleteGroupResponse,
   GetGroupAccessRequestsResponse,
+  GetGroupbyIdResponse,
   GetGroupMembersResponse,
   GetGroupPostsResponse,
-  GetGroupResponse,
   GetMyGroupsResponse,
   GroupAccessRequestId,
   GroupId,
@@ -17,24 +17,19 @@ import {
   UpdateGroupResponse,
 } from '../interfaces/GroupTypes';
 import { ResponseType } from '../interfaces/ResponseType';
-import { UserId } from '../interfaces/UserType';
 
 const groupService = api.injectEndpoints({
   endpoints: (builder) => ({
     createGroup: builder.mutation<CreateGroupResponse, CreateGroupRequest>({
       query: (group) => ({ url: '/group/create', method: 'POST', data: group }),
-      invalidatesTags: ['LIST_ALL_COURSES', 'MY_GROUPS'],
+      invalidatesTags: ['LIST_ALL_COURSES', 'MY_GROUPS', 'USER_GROUPS'],
     }),
     updateGroup: builder.mutation<UpdateGroupResponse, UpdateGroupRequest>({
       query: (group) => ({ url: `/group/${group.id}`, method: 'PUT', data: group }),
       invalidatesTags: ['LIST_ALL_COURSES', 'MY_GROUPS'],
     }),
-    getGroupById: builder.query<GetGroupResponse, GroupId>({
+    getGroupById: builder.query<GetGroupbyIdResponse, GroupId>({
       query: (id) => ({ url: `/group/${id}`, method: 'GET' }),
-    }),
-    getMyGroups: builder.query<GetMyGroupsResponse, UserId>({
-      query: (id) => ({ url: `/user/${id}`, method: 'GET' }),
-      providesTags: ['MY_GROUPS'],
     }),
     getAllGroups: builder.query<GetMyGroupsResponse, void>({
       query: () => ({ url: '/group/all', method: 'GET' }),
@@ -91,7 +86,6 @@ export const {
   useGetGroupAccessRequestsQuery,
   useGetGroupMembersQuery,
   useGetGroupPostsQuery,
-  useGetMyGroupsQuery,
   useJoinGroupMutation,
   useLeaveGroupMutation,
   useUpdateGroupAccessRequestMutation,

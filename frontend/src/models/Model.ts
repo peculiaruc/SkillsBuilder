@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { TextFieldProps } from '@mui/material';
 
 type Field = Record<string, unknown>;

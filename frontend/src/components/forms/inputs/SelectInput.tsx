@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Autocomplete, TextField } from '@mui/material';
 import React from 'react';
 import { MuiInputProps } from './InputType';

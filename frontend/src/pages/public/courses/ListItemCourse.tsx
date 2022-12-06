@@ -10,7 +10,7 @@ type Props = {
 
 function ListItemCourse({ course }: Props) {
   const {
-    name, summary, thumbnail, id,
+    title, description, id,
   } = course;
   const navigate = useNavigate();
   const style = { display: 'flex', justifyContent: 'center', alignItems: 'center' };
@@ -31,15 +31,15 @@ function ListItemCourse({ course }: Props) {
             height: '100%',
             borderRadius: 2,
             p: 3,
-            backgroundImage: `url(${thumbnail})`,
+            // backgroundImage: `url(${thumbnail})`,
           }}
           >
-            <Typography fontWeight="bold" color="common.white">{name}</Typography>
+            <Typography fontWeight="bold" color="common.white">{title}</Typography>
           </Box>
 
         </Grid>
         <Grid item xs={1} sm={1} md={2} sx={{ ...style, justifyContent: 'flex-start' }}>
-          <p>{summary.substring(0, 250)}</p>
+          <p>{description.substring(0, 250)}</p>
         </Grid>
         <Grid item xs={1} sm={1} md={1} sx={style}>
           <Button onClick={() => navigate(`/course/${id}`)}>View Details</Button>

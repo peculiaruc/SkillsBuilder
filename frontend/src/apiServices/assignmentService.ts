@@ -1,16 +1,14 @@
 import api from '.';
 import {
   CreateAssignmentRequest,
-  GetAssignmentResponse,
-  GetAssignmentsResponse,
-  GetCourseAssignmentRequest,
-  UpdateAssignmentRequest,
-  DeleteAssignmentRequest,
-  SubmitAssignmentRequest,
-  GetAssignmentQuestionsRequest,
+  GetAllAssignmentsResponse,
   GetAssignmentQuestionsResponse,
+  GetAssignmentResponse,
   GetAssignmentSubmissionsRequest,
+  SubmitAssignmentRequest,
+  UpdateAssignmentRequest,
 } from '../interfaces/AssignmentType';
+import { CourseId } from '../interfaces/CourseType';
 
 const assignmentService = api.injectEndpoints({
   endpoints: (builder) => ({
@@ -23,15 +21,15 @@ const assignmentService = api.injectEndpoints({
     getAssignmentById: builder.query<GetAssignmentResponse, number>({
       query: (id) => ({ url: `/assignment/${id}`, method: 'GET' }),
     }),
-    getCourseAssignments: builder.query<GetAssignmentsResponse, GetCourseAssignmentRequest>({
-      query: (data) => ({ url: '/assignment/assignments', method: 'POST', data }),
+    getCourseAssignments: builder.query<GetAllAssignmentsResponse, CourseId>({
+      query: (id) => ({ url: `/course/${id}/assignments`, method: 'DELETE' }),
     }),
     getAssignmentQuestions: builder
-      .query<GetAssignmentQuestionsResponse, GetAssignmentQuestionsRequest>({
-      query: (data) => ({ url: '/assignment/questions', method: 'POST', data }),
+      .query<GetAssignmentQuestionsResponse, number>({
+      query: (id) => ({ url: `/assignment/${id}/questions`, method: 'GET' }),
     }),
-    deleteOneAssignment: builder.mutation<void, DeleteAssignmentRequest>({
-      query: (data) => ({ url: '/assignment/delete', method: 'POST', data }),
+    deleteOneAssignment: builder.mutation<void, number>({
+      query: (id) => ({ url: `/assignment/${id}`, method: 'DELETE' }),
     }),
     deleteOneQuestion: builder.mutation<void, number>({
       query: (question_id) => ({ url: `/questions/${question_id}`, method: 'DELETE' }),
@@ -40,7 +38,7 @@ const assignmentService = api.injectEndpoints({
       query: (data) => ({ url: '/assignment/submit', method: 'POST', data }),
     }),
     getAssignmentSubmissions: builder
-      .query<GetAssignmentsResponse, GetAssignmentSubmissionsRequest>({
+      .query<GetAllAssignmentsResponse, GetAssignmentSubmissionsRequest>({
       query: (data) => ({ url: '/assignment/submissions', method: 'POST', data }),
     }),
   }),

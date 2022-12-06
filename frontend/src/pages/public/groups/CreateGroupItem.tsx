@@ -2,6 +2,7 @@ import { GroupAddSharp } from '@mui/icons-material';
 import { Button, Paper, Stack } from '@mui/material';
 import { FormikValues } from 'formik';
 import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
 import { useCreateGroupMutation } from '../../../apiServices/groupService';
 import FormBuilder from '../../../components/forms/FormBuilder';
 import { CreateGroupRequest } from '../../../interfaces/GroupTypes';
@@ -18,6 +19,8 @@ export default function CreateGroupItem() {
   const onSubmit = async (group: FormikValues) => {
     const request = { ...group, owner_id: auth.user.id } as CreateGroupRequest;
     await createGroup(request).unwrap();
+    onCancel();
+    toast('Group created successfully');
   };
   const model = new Group();
 
@@ -37,6 +40,7 @@ export default function CreateGroupItem() {
           justifyContent: 'center',
           alignItems: 'center',
           borderRadius: 2,
+          height: '100%',
         }}
       >
         <FormBuilder

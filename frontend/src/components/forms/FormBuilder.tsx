@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import {
   Button, Dialog, DialogActions, DialogContent, DialogTitle, Paper, Stack,
 } from '@mui/material';
@@ -7,12 +9,12 @@ import Model from '../../models/Model';
 import { useFormState } from '../../store/dialogFormReducer';
 import MixedInput from './inputs/MixedInput';
 
-type SelectOptions = Record<string, any>;
+type SelectOptions = Record<string, unknown>;
 interface FormProps {
   title: string | React.ReactNode,
   dialog: boolean,
   model: Model,
-  data?: unknown,
+  data?: any,
   onSubmit: (values: FormikValues) => void,
   onCancel: () => void,
 }

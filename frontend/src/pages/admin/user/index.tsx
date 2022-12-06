@@ -1,3 +1,4 @@
+import Profile from '../../public/Profile';
 import UserTabs from './UserTabs';
 
 export default {
@@ -6,6 +7,10 @@ export default {
     {
       index: true,
       element: <UserTabs />,
+    },
+    {
+      path: 'profile',
+      element: <Profile />,
     },
   ],
 };

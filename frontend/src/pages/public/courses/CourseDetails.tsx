@@ -9,6 +9,7 @@ import TabView from '../../../components/TabView';
 import { CourseType, EnrolledCourseType } from '../../../interfaces/CourseType';
 import { useAuth } from '../../../store/authReducer';
 import EmptyView from '../../errors/EmptyView';
+import CourseMaterial from './CourseMaterialList';
 
 function CourseDetails() {
   const params = useParams();
@@ -93,6 +94,10 @@ function CourseDetails() {
               {
                 name: 'Course Outline',
                 component: <>.</>,
+              },
+              {
+                name: 'Course Materials',
+                component: <CourseMaterial course={course} />,
               },
             ]
         }
