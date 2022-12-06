@@ -52,9 +52,9 @@ module.exports = {
       if (email.data?.elements?.length) {
         email = email.data.elements.pop()['handle~'];
       }
-      const { data } = await getUserInfo(process.env['LINKEDIN_USER_PROFILE_URI'], access_token);
-      const picture = data.profilePicture['displayImage~'].elements[0].identifiers[0].identifier;
-      const {localizedFirstName, localizedLastName} = data
+      const userInfo = await getUserInfo(process.env['LINKEDIN_USER_PROFILE_URI'], access_token);
+      const picture = userInfo.data.profilePicture['displayImage~'].elements[0].identifiers[0].identifier;
+      const {localizedFirstName, localizedLastName} = userInfo.data;
       return { data: { localizedFirstName, localizedLastName, picture, ...email } };
     },
   },
