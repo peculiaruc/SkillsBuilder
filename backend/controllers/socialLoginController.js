@@ -1,10 +1,8 @@
-import { google, linkedin } from '../services/socialAuthService';
-import Database from '../db/db';
 import Helpers from '../helpers/helpers';
-import User from '../models/users';
 import Token from '../models/token';
+import User from '../models/users';
+import { google, linkedin } from '../services/socialAuthService';
 
-const db = new Database();
 const model = new User();
 const tokn = new Token();
 
@@ -84,8 +82,13 @@ module.exports = {
        * Verify the access token by query user info
        */
       if (access_token) {
-        const { data } = await linkedin.getUserInfo(access_token);
-        const { emailAddress, localizedFirstName, localizedLastName, picture } = data;
+        const { data: response } = await linkedin.getUserInfo(access_token);
+        const {
+          emailAddress,
+          localizedFirstName,
+          localizedLastName,
+          picture,
+        } = response;
         /**
          * Verify if the user exists in database
          * */
@@ -117,8 +120,7 @@ module.exports = {
         });
 
         res.status(200).send({
-          status: 200,
-          message: 'success',
+          status: 'success',
           data: {
             token,
             user: user.row,
@@ -126,13 +128,13 @@ module.exports = {
         });
       }
       res.status(400).send({
-        status: 400,
+        status: 'error',
         message: 'Invalid params',
       });
     } catch (err) {
       // console.log(err);
       res.status(400).send({
-        message: err.message,
+        status: err.message,
       });
     }
   },
