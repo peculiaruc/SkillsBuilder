@@ -6,7 +6,7 @@ import theme from '../../../theme/theme';
 import CourseTitle from './CourseTitle';
 import courseImage from '../../../assets/images/Group.png';
 import AssignmentDescription from './AssignmentDescription';
-import { AssingmentType } from '../../../interfaces/AssingmentType';
+import { AssignmentType } from '../../../interfaces/AssignmentType';
 
 const SlyledPaper = styled(Paper)({
   width: '100%',
@@ -19,7 +19,7 @@ const SlyledPaper = styled(Paper)({
   },
 });
 
-function AssignmentItem(props : Partial<AssingmentType> & { status:string }) {
+function AssignmentItem(props : Partial<AssignmentType> & { status:string }) {
   const { title, status } = props;
   return (
     <SlyledPaper>
