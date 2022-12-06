@@ -1,7 +1,6 @@
 import express from 'express';
-import { verifyToken, verifyAuthorUserToken, verifyAdminUserToken } from '../middlewares/authCheck';
+import { verifyToken } from '../middlewares/authCheck';
 import courseController from '../controllers/courseController';
-import adminController from '../controllers/adminController';
 
 const router = express.Router();
 
@@ -29,10 +28,12 @@ router.get('/:id/learners', courseController.courseLearners);
 
 router.get('/:id/assignments', courseController.getCourseAssignments);
 
-router.get('/:id/materials', courseController.getCourseLessons);
+router.get('/:id/materials', courseController.getCourseMaterials);
 
 router.get('/:id/author', courseController.getCourseAuthor);
 
 router.get('/status', courseController.courseStatus);
+
+router.get('/categories', courseController.getCourseCategories);
 
 module.exports = router;
