@@ -32,7 +32,6 @@ export default function MixedForm({
   return (
     <Paper
       sx={{
-        height: '100%',
         width: '100%',
         bgcolor: 'common.background',
         p: 2,
