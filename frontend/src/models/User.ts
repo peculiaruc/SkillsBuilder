@@ -1,9 +1,10 @@
+import { FormikValues } from 'formik';
 import * as Yup from 'yup';
-import Model from './Model';
+import Model, { Field } from './Model';
 
 class User extends Model {
-  constructor() {
-    super();
+  constructor(props: Field = {}) {
+    super({ ...props, role: 'learner' });
     this.name = 'user';
     this.validationSchema = Yup.object().shape({
       fullname: Yup.string().required(),
@@ -26,10 +27,13 @@ class User extends Model {
       { name: 'password', type: 'password' },
       { name: 'confirm_password', type: 'password' },
     ];
-    this.setInitialValues({ role: 'learner' });
     this.data = {
       role: ['learner', 'author', 'admin'],
     };
+  }
+
+  beforeSubmit(values: FormikValues): FormikValues {
+    return { ...values, role: this.data.role.indexOf(values.role) };
   }
 }
 
