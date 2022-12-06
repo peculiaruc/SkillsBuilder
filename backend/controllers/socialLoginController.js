@@ -1,8 +1,11 @@
-import { google, linkedin } from '../services/socialAuthService';
-import Database from '../db/db';
 import Helpers from '../helpers/helpers';
+import Token from '../models/token';
+import User from '../models/users';
+import { google, linkedin } from '../services/socialAuthService';
 
-const db = new Database();
+const model = new User();
+const tokn = new Token();
+
 module.exports = {
   googleLogin: async (req, res) => {
     try {
@@ -17,31 +20,42 @@ module.exports = {
        */
       if (access_token) {
         const { data } = await google.getUserInfo(access_token);
-        const { email, name } = data;
+        const { email, name, picture } = data;
         /**
          * Verify if the user exists in database
          */
-        let user = await db.queryBuilder('SELECT * FROM users WHERE email = $1 LIMIT 1', [email]);
+        let user = await model.getByEmail(email);
+        // let user = await db.queryBuilder('SELECT * FROM users WHERE email = $1 LIMIT 1', [email]);
 
-        if (!user.rowCount) {
+        if (!user.count) {
           /**
            * If not register the user
            */
-          user = await db.queryBuilder(
-            'INSERT INTO users(fullName, email, password, city, auth_method) VALUES($1, $2, $3, $4, $5) RETURNING *',
-            [name, email, '', '', 'google']
-          );
+          user = await model.create({
+            email,
+            fullname: name,
+            auth_method: 'google',
+            role: 0,
+            picture,
+          });
+          // eslint-disable-next-line prefer-destructuring
+          user = { row: user.rows[0] };
         }
         /**
          * Create a token for the current user
          */
-        const token = Helpers.generateToken(user.rows[0].id);
+        const token = Helpers.generateToken(user.row.id);
+        await tokn.create({
+          user_id: user.row.id,
+          token,
+          type: 'verify',
+        });
 
         res.status(200).send({
           status: 'success',
           data: {
             token,
-            user: user.rows[0],
+            user: user.row,
           },
         });
       }
@@ -52,7 +66,7 @@ module.exports = {
     } catch (err) {
       // console.log(err);
       res.status(400).send({
-        status: err.data.message,
+        status: err.message,
       });
     }
   },
@@ -68,34 +82,48 @@ module.exports = {
        * Verify the access token by query user info
        */
       if (access_token) {
-        const { data } = await linkedin.getUserInfo(access_token);
-        const { emailAddress, localizedFirstName, localizedLastName } = data;
+        const { data: response } = await linkedin.getUserInfo(access_token);
+        const {
+          emailAddress,
+          localizedFirstName,
+          localizedLastName,
+          picture,
+        } = response;
         /**
          * Verify if the user exists in database
-         */
-        let user = await db.queryBuilder('SELECT * FROM users WHERE email = $1 LIMIT 1', [
-          emailAddress,
-        ]);
+         * */
+        let user = await model.getByEmail(emailAddress);
+        // let user = await db.queryBuilder('SELECT * FROM users WHERE email = $1 LIMIT 1', [email]);
 
-        if (!user.rowCount) {
+        if (!user.count) {
           /**
            * If not register the user
            */
-          user = await db.query(
-            'INSERT INTO users(fullName, email, password, city, auth_method) VALUES($1, $2, $3, $4, $5) RETURNING *',
-            [`${localizedFirstName} ${localizedLastName}`, emailAddress, '', '', 'linkedin']
-          );
+          user = await model.create({
+            email: emailAddress,
+            picture,
+            fullname: `${localizedFirstName} ${localizedLastName}`,
+            auth_method: 'linkedin',
+            role: 0,
+          });
+          // eslint-disable-next-line prefer-destructuring
+          user = { row: user.rows[0] };
         }
         /**
          * Create a token for the current user
          */
-        const token = Helpers.generateToken(user.rows[0].id);
+        const token = Helpers.generateToken(user.row.id);
+        await tokn.create({
+          user_id: user.row.id,
+          token,
+          type: 'verify',
+        });
 
         res.status(200).send({
           status: 'success',
           data: {
             token,
-            user: user.rows[0],
+            user: user.row,
           },
         });
       }
@@ -106,7 +134,7 @@ module.exports = {
     } catch (err) {
       // console.log(err);
       res.status(400).send({
-        status: err?.data?.message,
+        status: err.message,
       });
     }
   },

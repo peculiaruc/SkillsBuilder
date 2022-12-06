@@ -1,83 +1,42 @@
-import { createSlice, nanoid, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { useSelector } from 'react-redux';
-import { GroupType } from '../interfaces/GroupTypes';
+import { RootState } from '.';
+import groupService from '../apiServices/groupService';
+import userService from '../apiServices/userService';
+import { GetMyGroupsResponse, GroupType } from '../interfaces/GroupTypes';
 
 type InitialStateType = {
-  joined: string[],
   groups: GroupType[],
-};
-
-type ReducerState = {
-  groups: InitialStateType
+  joined: GroupType[],
 };
 
 const groupReducer = createSlice({
   name: 'groups',
   initialState: {
+    groups: [],
     joined: [],
-    groups: [
-      {
-        id: nanoid(),
-        owner: nanoid(),
-        name: 'Learn React',
-      },
-      {
-        id: nanoid(),
-        owner: nanoid(),
-        name: 'Learn NodeJS',
-      },
-      {
-        id: nanoid(),
-        owner: nanoid(),
-        name: 'Learn GraphQL',
-      },
-      {
-        id: nanoid(),
-        owner: nanoid(),
-        name: 'Learn Google Cloud',
-      },
-      {
-        id: nanoid(),
-        owner: nanoid(),
-        name: 'Learn AWS',
-      },
-      {
-        id: nanoid(),
-        owner: nanoid(),
-        name: 'Learn Java',
-      },
-      {
-        id: nanoid(),
-        owner: nanoid(),
-        name: 'Learn Android',
-      },
-      {
-        id: nanoid(),
-        owner: nanoid(),
-        name: 'Learn Python',
-      },
-    ],
   },
-  reducers: {
-    addGroup: (state:InitialStateType, action: PayloadAction<GroupType>) => {
-      state.groups.push(action.payload);
-    },
-    joinGroup: (state:InitialStateType, action: PayloadAction<string>) => {
-      const group = state.groups.find((g) => g.id === action.payload);
-      if (group) { state.joined.push(group.id); }
-    },
-    leaveGroup: (state:InitialStateType, action: PayloadAction<string>) => {
-      state.joined = state.joined.filter((id) => id !== action.payload);
-    },
-    deleteGroup: (state:InitialStateType, action: PayloadAction<string>) => {
-      state.groups = state.groups.filter((group) => group.id !== action.payload);
-    },
+  reducers: {},
+  extraReducers(builder) {
+    builder
+      .addMatcher(
+        userService.endpoints.getUserGroups.matchFulfilled,
+        (state: InitialStateType, action: PayloadAction<GetMyGroupsResponse>) => {
+          state.joined = action.payload.data.groups;
+        },
+      )
+      .addMatcher(
+        groupService.endpoints.getAllGroups.matchFulfilled,
+        (state: InitialStateType, action: PayloadAction<GetMyGroupsResponse>) => {
+          state.groups = action.payload.data.groups;
+        },
+      );
   },
 });
 
-export const useGroups = () => useSelector((state:ReducerState) => state.groups.groups ?? []);
-export const useJoinedGroups = () => useSelector((state:ReducerState) => state.groups.joined ?? []);
-export const {
-  addGroup, deleteGroup, leaveGroup, joinGroup,
-} = groupReducer.actions;
+export const useGroups = () => useSelector((state:RootState) => state.groups.groups ?? []);
+// eslint-disable-next-line max-len
+export const useMyGroups = () => useSelector((state:RootState) => state.groups.groups.filter((g:GroupType) => g.id === state.auth.user.id));
+export const useJoinedGroups = () => useSelector((state:RootState) => state.groups.joined);
+
 export default groupReducer;

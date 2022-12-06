@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 import { useLoginMutation } from '../../apiServices/authService';
 import Logo from '../../assets/images/Logo.png';
 import appConfig from '../../configs/app';
-import { CredentialsType } from '../../interfaces/User';
+import { CredentialsType } from '../../interfaces/UserType';
 import SocialLoginForm from './SocialLogin';
 
 export default function LoginView() {
