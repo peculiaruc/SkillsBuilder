@@ -56,13 +56,10 @@ class AuthController {
   }
 
   static async login(req, res) {
-    const { email, password } = req.body;
-
-    const _user = await user.getByEmail(email);
-
+    const _user = await user.getByEmail(req.body.email);
     if (_user.error) return Helpers.dbError(res, _user);
 
-    if (_user.count > 0 && Helpers.comparePassword(_user.row.password, password)) {
+    if (_user.count > 0 && Helpers.comparePassword(_user.row.password, req.body.password)) {
       const token = Helpers.generateToken(_user.row.id);
       const refreshToken = Helpers.generateRefreshToken(_user.row.id);
       const newToken = {
@@ -84,8 +81,7 @@ class AuthController {
   }
 
   static async passwordReset(req, res) {
-    const { email } = req.body;
-    const _user = await user.getByEmail(email);
+    const _user = await user.getByEmail(req.body.email);
     if (_user.errors) return Helpers.dbError(res, _user);
     if (_user.count > 0) {
       const randomToken = Helpers.createRandomToken();
@@ -111,12 +107,10 @@ class AuthController {
 
   static async passwordUpdate(req, res) {
     const { resetToken, user_id, password } = req.body;
-
     const _user = await user.getById(user_id);
     if (_user.errors) return Helpers.dbError(res, _user);
     if (_user.count > 0) {
-      // check if token is valid
-      const savedToken = await tokn.allWhere({ id, token: resetToken, type: 'reset' });
+      const savedToken = await tokn.allWhere({ user_id, token: resetToken, type: 'reset' });
       if (savedToken.errors) return Helpers.dbError(res, savedToken);
       if (savedToken.count > 0) {
         const hashedPass = Helpers.hashPassword(password);

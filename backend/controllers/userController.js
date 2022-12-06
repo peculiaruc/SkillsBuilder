@@ -4,6 +4,7 @@ import User from '../models/users';
 import Token from '../models/token';
 import Helpers from '../helpers/helpers';
 import Enrollment from '../models/enrollments';
+import Course from '../models/course';
 import Database from '../db/db';
 
 dotenv.config();
@@ -11,8 +12,8 @@ dotenv.config();
 const user = new User();
 const tokn = new Token();
 const enroll = new Enrollment();
+const course = new Course();
 const db = new Database();
-
 class UserController {
   static async getAllUsers(req, res) {
     const currentuser = await Helpers.getLoggedInUser(req, res);
@@ -164,9 +165,9 @@ class UserController {
     if (currentuser.role !== 2) {
       return Helpers.sendResponse(res, 401, 'User not authorised to perform this task');
     }
-    const _authors = await user.allWhere({ role: 1 });
-    if (_authors.errors) return Helpers.dbError(res, _authors);
-    return Helpers.sendResponse(res, 200, 'success', { authors: _authors.rows });
+    const _users = await user.allWhere({ role: 1 });
+    if (_users.errors) return Helpers.dbError(res, _users);
+    return Helpers.sendResponse(res, 200, 'success', { authors: _users.rows });
   }
 
   static async getAllLearners(req, res) {
