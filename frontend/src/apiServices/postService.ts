@@ -1,6 +1,4 @@
 import api from '.';
-import { GetMyCoursesResponse } from '../interfaces/CourseType';
-import { GetMyGroupsResponse } from '../interfaces/GroupTypes';
 import {
   CreatePostRequest,
   CreatePostResponse,

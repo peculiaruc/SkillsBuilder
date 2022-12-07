@@ -1,4 +1,4 @@
-import { Button, Paper, Stack } from '@mui/material';
+import { Button, Stack } from '@mui/material';
 import { FormikValues } from 'formik';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
