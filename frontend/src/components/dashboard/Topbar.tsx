@@ -2,6 +2,8 @@ import {
   AppBar, Avatar, IconButton, Toolbar, Typography, Menu, MenuItem, ListItemIcon,
 } from '@mui/material';
 import React from 'react';
+import { Person } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
 import Logout from '@mui/icons-material/Logout';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useAuth } from '../../store/authReducer';
@@ -9,6 +11,9 @@ import { useLogoutMutation } from '../../apiServices/authService';
 
 function Topbar() {
   const { user } = useAuth();
+  const navigate = useNavigate();
+
+  const openProfile = () => navigate('/profile');
 
   const [logout] = useLogoutMutation();
 
@@ -36,6 +41,7 @@ function Topbar() {
         <Typography variant="h6" sx={{ flexGrow: 1 }}>
           SkillBuddy
         </Typography>
+        <Typography>{user.fullname}</Typography>
         <IconButton
           onClick={handleClick}
           size="small"
@@ -44,7 +50,7 @@ function Topbar() {
           aria-haspopup="true"
           aria-expanded={open ? 'true' : undefined}
         >
-          <Avatar>{user.fullname.charAt(0).toUpperCase()}</Avatar>
+          <Avatar src={user.picture}>{user.fullname.charAt(0).toUpperCase()}</Avatar>
         </IconButton>
         <Menu
           anchorEl={anchorEl}
@@ -55,6 +61,12 @@ function Topbar() {
           transformOrigin={{ horizontal: 'right', vertical: 'top' }}
           anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
         >
+          <MenuItem onClick={openProfile}>
+            <ListItemIcon>
+              <Person fontSize="small" />
+            </ListItemIcon>
+            Profile
+          </MenuItem>
           <MenuItem onClick={() => logout(user.id)}>
             <ListItemIcon>
               <Logout fontSize="small" />

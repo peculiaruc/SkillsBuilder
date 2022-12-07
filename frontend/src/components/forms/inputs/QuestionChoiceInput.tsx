@@ -3,7 +3,7 @@ import {
   IconButton,
   InputAdornment, Switch, TextField, TextFieldProps, Stack,
 } from '@mui/material';
-import { ChoiceType } from '../../../interfaces/AssingmentType';
+import { ChoiceType } from '../../../interfaces/AssignmentType';
 
 type OptionInputProps = {
   value: ChoiceType[];

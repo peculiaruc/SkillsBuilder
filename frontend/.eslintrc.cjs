@@ -25,5 +25,7 @@ module.exports = {
     'react/no-array-index-key': 'off',
     'react/require-default-props': 'off',
     'no-param-reassign': 'off',
+    'import/no-cycle': 'off',
+    '@typescript-eslint/no-explicit-any': 'off',
   },
 };

@@ -2,7 +2,7 @@ import { Button, CircularProgress, Stack } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { useGetAssignmentByIdQuery, useGetAssignmentQuestionsQuery } from '../../../apiServices/assignmentService';
-import { QuestionType } from '../../../interfaces/AssingmentType';
+import { QuestionType } from '../../../interfaces/AssignmentType';
 import { addQuestion } from '../../../store/assignmentReducer';
 import { useAuth } from '../../../store/authReducer';
 import QuestionForm from './QuestionForm';
@@ -14,9 +14,7 @@ export default function CreateAssignmentQuestionView() {
   const dispatch = useDispatch();
 
   const { isLoading } = useGetAssignmentByIdQuery(assignmentId);
-  const { isLoading: isLoadingA } = useGetAssignmentQuestionsQuery({
-    assignment_id: assignmentId,
-  });
+  const { isLoading: isLoadingA } = useGetAssignmentQuestionsQuery(assignmentId);
 
   const createEmptyQuestion = () => {
     dispatch(addQuestion({

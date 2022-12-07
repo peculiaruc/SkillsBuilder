@@ -1,13 +1,22 @@
 import { Grid } from '@mui/material';
+import { useGetUserGroupsQuery } from '../../../apiServices/userService';
+import Loader from '../../../components/Loader';
+import { GroupType } from '../../../interfaces/GroupTypes';
 import { useAuth } from '../../../store/authReducer';
-import { useGroups } from '../../../store/groupReducer';
+import EmptyView from '../../errors/EmptyView';
 import CreateGroupItem from './CreateGroupItem';
 import GroupItem from './GroupItem';
 
 export default function GroupListMe() {
   const auth = useAuth();
-  const allGroups = useGroups();
-  const groups = allGroups.filter((group) => group.owner === String(auth.user.id));
+  const { data, isLoading } = useGetUserGroupsQuery(auth.user.id);
+  if (isLoading) return <Loader />;
+
+  const groups = data?.data.groups.filter(
+    (g: GroupType) => Number(g.owner_id) === Number(auth.user.id),
+  );
+
+  if (!groups) return <EmptyView title="User group not found" code={404} />;
 
   return (
     <Grid container columns={[1, 2, 3, 4]} spacing={2}>

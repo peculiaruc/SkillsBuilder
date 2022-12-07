@@ -2,21 +2,44 @@ import { GroupOutlined } from '@mui/icons-material';
 import {
   Button, Paper, Stack, Typography,
 } from '@mui/material';
-import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { useDeleteGroupMutation, useJoinGroupMutation, useLeaveGroupMutation } from '../../../apiServices/groupService';
 import { GroupType } from '../../../interfaces/GroupTypes';
-import { joinGroup, leaveGroup, useJoinedGroups } from '../../../store/groupReducer';
+import { useAuth } from '../../../store/authReducer';
+import { useJoinedGroups } from '../../../store/groupReducer';
 
 type Props = {
   group: GroupType
 };
 
 export default function GroupItem({ group }:Props) {
-  const joined = useJoinedGroups() ?? [];
   const { name, id } = group;
-  const isJoined = joined.includes(id);
-  const dispatch = useDispatch();
-  const handleJoinGroup = (groupId: string) => dispatch(joinGroup(groupId));
-  const handleLeaveGroup = (groupId: string) => dispatch(leaveGroup(groupId));
+  const navigate = useNavigate();
+  const auth = useAuth();
+  const joinedIds = useJoinedGroups().map((g: GroupType) => g.id);
+  // console.log(joined);
+  const req = {
+    user_id: auth.user.id,
+    group_id: id,
+  };
+  const isJoined = joinedIds.includes(id);
+  const [leaveGroup] = useLeaveGroupMutation();
+  const [joinGroup] = useJoinGroupMutation();
+  const [deleteGroup] = useDeleteGroupMutation();
+  const handleJoinGroup = async () => {
+    await joinGroup(req);
+    toast('You joined the group successfully');
+  };
+  const handleDeleteGroup = async () => {
+    await deleteGroup(id);
+    toast('Group deleted successfully');
+  };
+  const handleLeaveGroup = async () => {
+    await leaveGroup(req);
+    toast('You leaved the group successfully');
+  };
+  const openGroup = () => navigate(`/group/${id}`);
   return (
     <Paper
       sx={{
@@ -37,15 +60,17 @@ export default function GroupItem({ group }:Props) {
       >
         <GroupOutlined />
         <Typography fontWeight="bold">{name}</Typography>
-        {!isJoined && (<Button onClick={() => handleJoinGroup(id)}>Join Group</Button>)}
+        {!isJoined && (<Button onClick={handleJoinGroup}>Join Group</Button>)}
         {isJoined && (
-        <>
-          <Button>Open Group</Button>
-          <Button color="error" onClick={() => handleLeaveGroup(id)}>
-            Leave Group
-          </Button>
-        </>
-
+          <>
+            <Button onClick={openGroup}>Open Group</Button>
+            <Button color="secondary" onClick={handleLeaveGroup}>
+              Leave Group
+            </Button>
+            {auth.user.id === group.owner_id && (
+            <Button color="error" onClick={handleDeleteGroup}>Delete Group</Button>
+            )}
+          </>
         )}
       </Stack>
     </Paper>
