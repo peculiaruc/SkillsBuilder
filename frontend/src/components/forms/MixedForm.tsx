@@ -31,31 +31,23 @@ export default function MixedForm({
     onCancel();
   };
   return (
-    <Paper
+    <Stack
+      spacing={2}
       sx={{
-        width: '100%',
-        bgcolor: 'common.background',
-        p: 2,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'flex-end',
+        borderRadius: 2,
       }}
     >
-      <Stack
-        spacing={2}
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          borderRadius: 2,
-        }}
-      >
-        <FormBuilder
-          dialog={dialog}
-          title={title}
-          model={model}
-          onSubmit={onSubmit}
-          onCancel={onCancel}
-        />
-        {dialog && (<Button size="large" onClick={openForm}>{title}</Button>)}
-      </Stack>
-    </Paper>
+      {dialog && (<Button size="large" onClick={openForm}>{title}</Button>)}
+      <FormBuilder
+        dialog={dialog}
+        title={title}
+        model={model}
+        onSubmit={onSubmit}
+        onCancel={onCancel}
+      />
+    </Stack>
   );
 }

@@ -1,13 +1,13 @@
 import * as Yup from 'yup';
-import Model from './Model';
+import Model, { Field } from './Model';
 
 class Post extends Model {
-  constructor() {
-    super();
+  constructor(props: Field = {}) {
+    super(props);
     this.name = 'post';
     this.validationSchema = Yup.object().shape({
-      title: Yup.string().min(3),
-      content: Yup.string().min(3),
+      title: Yup.string().required().min(3),
+      content: Yup.string().required().min(3),
     });
     this.fields = [
       {
@@ -24,7 +24,7 @@ class Post extends Model {
         required: true,
       },
     ];
-    this.setInitialValues();
+    this.init(props);
   }
 }
 

@@ -60,7 +60,7 @@ const groupService = api.injectEndpoints({
     }),
     getGroupPosts: builder.query<GetGroupPostsResponse, GroupId>({
       query: (id) => ({ url: `/group/${id}/posts`, method: 'GET' }),
-      providesTags: ['GROUP_POSTS'],
+      providesTags: [{ type: 'Post', id: 'LIST' }],
     }),
     getGroupAccessRequests: builder.query<GetGroupAccessRequestsResponse, GroupId>({
       query: (id) => ({ url: `/group/requests/${id}`, method: 'GET' }),

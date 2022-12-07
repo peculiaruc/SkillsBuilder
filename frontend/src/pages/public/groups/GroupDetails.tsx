@@ -4,7 +4,7 @@ import { useGetGroupByIdQuery } from '../../../apiServices/groupService';
 import Loader from '../../../components/Loader';
 import TabView from '../../../components/TabView';
 import EmptyView from '../../errors/EmptyView';
-import CreatePostItem from '../post/CreatePostForm';
+import GroupFeed from './GroupFeed';
 import GroupMember from './GroupMember';
 
 export default function GroupDetails() {
@@ -25,7 +25,7 @@ export default function GroupDetails() {
       tabs={[
         {
           name: 'Group Feed',
-          component: (<CreatePostItem />),
+          component: (<GroupFeed />),
         },
         {
           name: 'Members',
