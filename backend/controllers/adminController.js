@@ -20,8 +20,10 @@ class AdminController {
       thumbnail: req.body.thumbnail,
       summary: req.body.summary,
       category_ids: req.body.category,
+      author_id: req.body.author_id,
     };
     const _course = await course.create(newCourse);
+    console.log('course', _course);
     if (_course.errors) {
       return Helpers.dbError(res, _course);
     }

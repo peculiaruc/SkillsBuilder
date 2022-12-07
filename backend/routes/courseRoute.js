@@ -6,16 +6,34 @@ const router = express.Router();
 
 router.use(verifyToken);
 
-router.get('/courses', courseController.getAllCourses);
+router.get('/all', courseController.getAllCourses);
 
-router.post('/filter-courses', courseController.getCoursesByCategories);
+router.get('/:id', courseController.getCoursesById);
 
-router.post('/enrolled-courses', courseController.getEnrolledCourses);
+router.post('/create', courseController.createCourse);
 
-router.get('/categories', courseController.getCourseCategory);
+router.delete('/:id', courseController.deleteCourse);
 
-router.post('/enroll-in-course', courseController.enrollUser);
+router.post('/:id/enroll', courseController.enrollUser);
 
-router.post('/:id', courseController.getCoursesById);
+router.put('/:id', courseController.updateCourse);
+
+router.post('/filter', courseController.getCoursesByCategories);
+
+router.get('/categories', courseController.getCourseCategories);
+
+router.post('/:id/unenroll', courseController.unEnrollUser);
+
+router.get('/:id/learners', courseController.courseLearners);
+
+router.get('/:id/assignments', courseController.getCourseAssignments);
+
+router.get('/:id/materials', courseController.getCourseMaterials);
+
+router.get('/:id/author', courseController.getCourseAuthor);
+
+router.get('/status', courseController.courseStatus);
+
+router.get('/categories', courseController.getCourseCategories);
 
 module.exports = router;

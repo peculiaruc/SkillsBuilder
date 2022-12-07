@@ -1,6 +1,10 @@
 import bcryptjs from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
+import Database from '../db/db';
+import { DATABASE_ERROR } from '../utils/constants';
+
+const db = new Database();
 class Helpers {
   static hashPassword(password) {
     return bcryptjs.hashSync(password, bcryptjs.genSaltSync(10));
@@ -59,7 +63,7 @@ class Helpers {
   static dbError(response, query) {
     if (query.errors) {
       console.log(query.errors);
-      return Helpers.sendResponse(response, 500, 'Oops Something went wrong.');
+      return Helpers.sendResponse(response, 500, DATABASE_ERROR);
     }
   }
 
@@ -68,6 +72,26 @@ class Helpers {
       console.log(query.errors);
       return Helpers.sendResponse(response, 500, errors.message);
     }
+  }
+
+  static async getLoggedInUser(req, res) {
+    const token = req.headers.authorization.split(' ')[1];
+    if (!token) {
+      return res.status(404).json({
+        status: 'error',
+        error: 'User is not Authenticated',
+      });
+    }
+    const verified = await jwt.verify(token, process.env.JWT_PRIVATE_KEY);
+    const userId = verified.id;
+
+    const response = await db.queryBuilder('SELECT * FROM users WHERE id = $1', [userId]);
+    // console.log('response', response.rows);
+    if (response.errors) {
+      return Helpers.dbError(res, response);
+    }
+    const user = response.rows[0];
+    return user;
   }
 }
 

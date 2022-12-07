@@ -9,11 +9,10 @@ import {
   assignmentSubmission,
   assignments,
   assignmentQuestions,
-  makePassNullable,
-  addType,
-  addColumns,
   joinedGroups,
   groups,
+  choiceType,
+  courseStatus,
 } from '../migrations';
 
 export default async () => {
@@ -34,11 +33,10 @@ export default async () => {
     await db.queryBuilder(assignmentSubmission);
     await db.queryBuilder(assignments);
     await db.queryBuilder(assignmentQuestions);
-    await db.queryBuilder(makePassNullable);
-    await db.queryBuilder(addType);
-    await db.queryBuilder(addColumns);
     await db.queryBuilder(groups);
     await db.queryBuilder(joinedGroups);
+    await db.queryBuilder(choiceType);
+    await db.queryBuilder(courseStatus);
     return true;
   } catch (e) {
     console.log('db init err', e);

@@ -6,6 +6,9 @@ export const assignments = `CREATE TABLE IF NOT EXISTS assignments (
     deadline VARCHAR NOT NULL,
     passing_score INT DEFAULT 100,
     max_attempts INT DEFAULT 5,
+    title VARCHAR,
     created_at TIMESTAMP DEFAULT NOW(),
-    updated_at TIMESTAMP DEFAULT NOW()
+    updated_at TIMESTAMP DEFAULT NOW(),
+    FOREIGN KEY ("course_id") REFERENCES "courses" ("id"),
+    FOREIGN KEY ("author_id") REFERENCES "users" ("id")
 );`;
