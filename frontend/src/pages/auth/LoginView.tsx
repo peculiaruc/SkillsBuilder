@@ -5,18 +5,21 @@ import {
   Button, Checkbox, FormControlLabel, InputAdornment, Stack, TextField, Typography,
 } from '@mui/material';
 import { useFormik } from 'formik';
+import { ThreeDots } from 'react-loader-spinner';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useLoginMutation } from '../../apiServices/authService';
 import Logo from '../../assets/images/Logo.png';
 import appConfig from '../../configs/app';
 import { CredentialsType } from '../../interfaces/UserType';
+import { usePalette } from '../../theme/theme';
 import SocialLoginForm from './SocialLogin';
 
 export default function LoginView() {
+  const palette = usePalette();
   const navigate = useNavigate();
 
-  const [login] = useLoginMutation();
+  const [login, { isLoading }] = useLoginMutation();
 
   const initialValues: CredentialsType = {
     email: '',
@@ -90,7 +93,16 @@ export default function LoginView() {
             </Typography>
 
           </Box>
-          <Button type="submit">Login</Button>
+          { !isLoading ? <Button type="submit">Login</Button> : (
+            <ThreeDots
+              height="20"
+              width="100%"
+              radius="9"
+              color={palette.primary.main}
+              ariaLabel="three-dots-loading"
+              visible
+            />
+          )}
         </Stack>
       </form>
       <Stack

@@ -36,7 +36,7 @@ class Helpers {
   }
 
   static createRandomToken() {
-    crypto.randomBytes(32).toString('hex');
+    return crypto.randomBytes(32).toString('hex');
   }
 
   static validationResponse(validation, response) {

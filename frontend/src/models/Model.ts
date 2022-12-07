@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { TextFieldProps } from '@mui/material';
+import { FormikValues } from 'formik';
 
-type Field = Record<string, unknown>;
+export type Field = Record<string, unknown>;
 
 type RequiredField = Required<{
   name: string,
@@ -10,6 +11,7 @@ type RequiredField = Required<{
 
 const FieldType: Field = {
   text: '',
+  hidden: '',
   textarea: '',
   question_choices: [{ isAnswer: false, name: '' }],
   email: '',
@@ -31,11 +33,19 @@ class Model {
 
   validationSchema!: unknown;
 
-  fields!: FieldProps[];
+  fields: FieldProps[] = [];
 
   initialValues!: Field;
 
   data!: any;
+
+  constructor(values: Field = {}) {
+    this.init(values);
+  }
+
+  init(values: Field = {}) {
+    this.setInitialValues(values);
+  }
 
   setInitialValues(values: Field = {}) {
     this.fields.forEach((field: FieldProps) => {
@@ -47,6 +57,11 @@ class Model {
     });
     this.initialValues = values;
     this.data = {};
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  beforeSubmit(values: FormikValues) {
+    return values;
   }
 }
 

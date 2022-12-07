@@ -13,12 +13,10 @@ const dialogFormReducer = createSlice({
   },
   reducers: {
     openDialog: (state:InitialStateType) => {
-      const currentState = state;
-      currentState.open = true;
+      state.open = true;
     },
     closeDialog: (state:InitialStateType) => {
-      const currentState = state;
-      currentState.open = false;
+      state.open = false;
     },
   },
 });
