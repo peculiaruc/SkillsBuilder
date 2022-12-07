@@ -3,18 +3,20 @@ import Group from '../models/groups';
 import JoinedGroup from '../models/joinedGroups';
 import moment from 'moment';
 import Database from '../db/db';
-import { SUCCESS, NOT_AUTHORISED } from '../utils/constants';
+import Post from '../models/posts';
 
 const group = new Group();
 const joinedG = new JoinedGroup();
+const post = new Post();
 const db = new Database();
 const date = moment(new Date()).format('YYYY-MM-DD');
 
 class GroupController {
   static async getAllGroups(req, res) {
-    const _group = await group.allWhere({ status: 'active' });
+    const _group = await group.activeGroups();
     if (_group.errors) return Helpers.dbError(res, _group);
-    return Helpers.sendResponse(res, 200, SUCCESS, { groups: _group.rows });
+    console.log(_group);
+    return Helpers.sendResponse(res, 200, 'success', { groups: _group.rows });
   }
 
   static async createGroup(req, res) {
@@ -37,7 +39,7 @@ class GroupController {
     if (_join.errors) {
       return Helpers.dbError(res, _join);
     }
-    return Helpers.sendResponse(res, 200, SUCCESS, { group: _group.rows[0] });
+    return Helpers.sendResponse(res, 200, 'Group created successfully', { group: _group.rows[0] });
   }
 
   static async joinGroup(req, res) {
@@ -68,7 +70,7 @@ class GroupController {
     if (_newjoin.errors) {
       return Helpers.dbError(res, _newjoin);
     }
-    return Helpers.sendResponse(res, 200, SUCCESS, {
+    return Helpers.sendResponse(res, 200, 'success', {
       group: _newjoin.rows,
     });
   }
@@ -80,14 +82,14 @@ class GroupController {
       return Helpers.dbError(res, _group);
     }
     if (currentuser.id !== _group.row.owner_id) {
-      return Helpers.sendResponse(res, 401, NOT_AUTHORISED);
+      return Helpers.sendResponse(res, 401, 'You are not authorised to perform this task');
     }
 
     const _deletegroup = await group.update({ status: 'inactive' }, { id: req.params.id });
     if (_deletegroup.errors) {
       return Helpers.dbError(res, _deletegroup);
     }
-    return Helpers.sendResponse(res, 200, SUCCESS);
+    return Helpers.sendResponse(res, 200, 'Group deleted successfully');
   }
 
   static async updateGroup(req, res) {
@@ -97,7 +99,7 @@ class GroupController {
       return Helpers.dbError(res, _group);
     }
     if (currentuser.id !== _group.row.owner_id) {
-      return Helpers.sendResponse(res, 401, NOT_AUTHORISED);
+      return Helpers.sendResponse(res, 401, 'You are not authorised to perform this task');
     }
 
     const newupdate = {
@@ -107,7 +109,7 @@ class GroupController {
     if (_updategroup.errors) {
       return Helpers.dbError(res, _updategroup);
     }
-    return Helpers.sendResponse(res, 200, SUCCESS, {
+    return Helpers.sendResponse(res, 200, 'Group updated successfully', {
       group: _updategroup.rows[0],
     });
   }
@@ -119,7 +121,7 @@ class GroupController {
     if (_group.errors) {
       return Helpers.dbError(res, _group);
     }
-    return Helpers.sendResponse(res, 200, SUCCESS);
+    return Helpers.sendResponse(res, 200, 'Group left successfully');
   }
 
   static async groupById(req, res) {
@@ -127,7 +129,7 @@ class GroupController {
     if (_group.errors) {
       return Helpers.dbError(res, _group);
     }
-    return Helpers.sendResponse(res, 200, SUCCESS, { groups: _group.row });
+    return Helpers.sendResponse(res, 200, 'success', { groups: _group.row });
   }
 
   static async getGroupRequests(req, res) {
@@ -143,10 +145,10 @@ class GroupController {
       if (_requests.errors) {
         return Helpers.dbError(res, _requests);
       }
-      return Helpers.sendResponse(res, 200, SUCCESS, { requests: _requests.rows });
+      return Helpers.sendResponse(res, 200, 'success', { requests: _requests.rows });
     }
 
-    return Helpers.sendResponse(res, 400, NOT_AUTHORISED);
+    return Helpers.sendResponse(res, 400, 'You are not a group admin');
   }
 
   static async updateGroupRequest(req, res) {
@@ -168,10 +170,10 @@ class GroupController {
       if (_requests.errors) {
         return Helpers.dbError(res, _requests);
       }
-      return Helpers.sendResponse(res, 200, SUCCESS, { requests: _requests.rows });
+      return Helpers.sendResponse(res, 200, 'success', { requests: _requests.rows });
     }
 
-    return Helpers.sendResponse(res, 401, NOT_AUTHORISED);
+    return Helpers.sendResponse(res, 401, 'You are not a group admin');
   }
 
   static async deleteGroupRequest(req, res) {
@@ -187,10 +189,10 @@ class GroupController {
       if (_requests.errors) {
         return Helpers.dbError(res, _requests);
       }
-      return Helpers.sendResponse(res, 200, SUCCESS);
+      return Helpers.sendResponse(res, 200, 'successfully deleted request');
     }
 
-    return Helpers.sendResponse(res, 401, NOT_AUTHORISED);
+    return Helpers.sendResponse(res, 401, 'You should not be here!');
   }
 
   static async groupMembers(req, res) {
@@ -198,7 +200,14 @@ class GroupController {
     const _members = await db.queryBuilder(sql);
     if (_members.errors) return Helpers.dbError(res, _members);
 
-    return Helpers.sendResponse(res, 200, SUCCESS, { members: _members.rows });
+    return Helpers.sendResponse(res, 200, 'success', { members: _members.rows });
+  }
+
+  static async groupPosts(req, res) {
+    const _posts = await post.allWhere({ group_id: req.params.id });
+    if (_posts.errors) return Helpers.dbError(res, _posts);
+    console.log(_posts);
+    return Helpers.sendResponse(res, 200, 'success', { posts: _posts.rows });
   }
 }
 

@@ -13,6 +13,8 @@ import {
   groups,
   choiceType,
   courseStatus,
+  posts,
+  courseMaterial,
 } from '../migrations';
 
 export default async () => {
@@ -20,7 +22,7 @@ export default async () => {
   let db = new Database();
   try {
     date = await db.queryBuilder('SELECT NOW()');
-    if (process.env !== 'production') {
+    if (process.env.NODE_ENV !== 'production') {
       console.log(date);
       console.log('Database connected', date.rows[0]);
     }
@@ -37,6 +39,8 @@ export default async () => {
     await db.queryBuilder(joinedGroups);
     await db.queryBuilder(choiceType);
     await db.queryBuilder(courseStatus);
+    await db.queryBuilder(posts);
+    await db.queryBuilder(courseMaterial);
     return true;
   } catch (e) {
     console.log('db init err', e);

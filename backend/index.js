@@ -9,8 +9,11 @@ import {
   socialLoginRoute,
   assignmentRoute,
   groupRoute,
-  adminRoute,
   userRoute,
+  questionRoute,
+  submissionRoute,
+  postsRoute,
+  materialRoute,
 } from './routes';
 
 dotenv.config();
@@ -30,9 +33,12 @@ app.use('/api/v1/auth', authRoute);
 app.use('/api/v1/social', socialLoginRoute);
 app.use('/api/v1/course', courseRoute);
 app.use('/api/v1/assignment', assignmentRoute);
+app.use('/api/v1/submission', submissionRoute);
+app.use('/api/v1/question', questionRoute);
 app.use('/api/v1/group', groupRoute);
-app.use('/api/v1/admin', adminRoute);
 app.use('/api/v1/user', userRoute);
+app.use('/api/v1/post', postsRoute);
+app.use('/api/v1/material', materialRoute);
 
 app.use((req, res) => {
   res.status(404).send({

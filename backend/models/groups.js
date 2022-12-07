@@ -16,6 +16,10 @@ class Group extends Database {
   async all(orderBy = 'created_at DESC') {
     return super.all(orderBy);
   }
+
+  async activeGroups() {
+    return super.allWhere({ status: 'active' });
+  }
 }
 
 export default Group;

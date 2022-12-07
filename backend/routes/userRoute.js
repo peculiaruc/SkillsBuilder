@@ -20,14 +20,18 @@ router.get('/:id/mycourses', UserController.getUserCourses);
 
 router.get('/:id/mygroups', UserController.getUserGroups);
 
+router.get('/:id/myposts', UserController.getUserPosts);
+
+router.get('/authors/:id/mycourses', UserController.getAuthorsCourses);
+
 // router.get('/:id/myassignments', userController.getUserAssignments);
 
 router.get('/:id/learners', UserController.getAuthorsLearners);
 
-router.get('/authors', UserController.getAllAuthors);
+router.get('/authors/all', UserController.getAllAuthors);
 
-router.get('/learners', UserController.getAllLearners);
+router.get('/learners/all', UserController.getAllLearners);
 
-router.get('/admins', UserController.getAllAdmins);
+router.get('/admins/all', UserController.getAllAdmins);
 
 module.exports = router;

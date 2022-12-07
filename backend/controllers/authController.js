@@ -3,7 +3,6 @@ import sendEmail from '../utils/sendEmails';
 import User from '../models/users';
 import Token from '../models/token';
 import Helpers from '../helpers/helpers';
-import { SUCCESS, ALREADY_EXISTS, INVALID_CREDENTIALS } from '../utils/constants';
 
 dotenv.config();
 
@@ -20,7 +19,7 @@ class AuthController {
     }
 
     if (checkEmail.count > 0) {
-      return Helpers.sendResponse(res, 400, ALREADY_EXISTS);
+      return Helpers.sendResponse(res, 400, 'A user with Email address already exists !');
     }
     const newUser = {
       email: req.body.email,
@@ -48,7 +47,7 @@ class AuthController {
       const token = Helpers.generateToken(saveUser.rows[0].id);
       const refreshToken = Helpers.generateRefreshToken(saveUser.rows[0].id);
 
-      return Helpers.sendResponse(res, 200, SUCCESS, {
+      return Helpers.sendResponse(res, 200, 'User created successfully', {
         token,
         refreshToken,
         user: saveUser.rows[0],
@@ -81,20 +80,20 @@ class AuthController {
       if (saveToken.errors) {
         return Helpers.dbError(res, saveToken);
       }
-      return Helpers.sendResponse(res, 200, SUCCESS, {
+      return Helpers.sendResponse(res, 200, 'User successfully logged in', {
         token,
         refreshToken,
         user: _user.row,
       });
     }
-    return Helpers.sendResponse(res, 400, INVALID_CREDENTIALS);
+    return Helpers.sendResponse(res, 400, 'Invalid credentials');
   }
 
   static async passwordReset(req, res) {
     const _user = await user.getByEmail(req.body.email);
     if (_user.errors) return Helpers.dbError(res, _user);
     if (_user.count > 0) {
-      const randomToken = Helpers.createRandomToken();
+      const randomToken = await Helpers.createRandomToken();
       const savedToken = await tokn.getTokenByUser(_user.row.id);
       if (savedToken.count > 0) {
         tokn.delete({ token: savedToken.row.id });
@@ -107,7 +106,7 @@ class AuthController {
       const saveToken = await tokn.create(newToken);
       if (saveToken.errors) return Helpers.dbError(res, saveToken);
 
-      return Helpers.sendResponse(res, 200, SUCCESS, {
+      return Helpers.sendResponse(res, 200, 'User password reset details', {
         reset_token: saveToken.rows[0].token,
         user_id: saveToken.rows[0].user_id,
       });
@@ -131,7 +130,7 @@ class AuthController {
         if (update.errors) return Helpers.dbError(res, update);
         if (update.count > 0) {
           await tokn.delete({ id: savedToken.rows[0].id });
-          return Helpers.sendResponse(res, 200, SUCCESS, {});
+          return Helpers.sendResponse(res, 200, 'password reset sucessfully', {});
         }
       }
     }
@@ -153,7 +152,7 @@ class AuthController {
         if (update.errors) return Helpers.dbError(res, update);
         if (update.count > 0) {
           await tokn.delete({ id: savedToken.rows[0].id });
-          return Helpers.sendResponse(res, 200, SUCCESS, {});
+          return Helpers.sendResponse(res, 200, 'email verified successfully', {});
         }
       }
       return Helpers.sendResponse(res, 400, 'Link is invalid or expired');
@@ -166,7 +165,7 @@ class AuthController {
     if (deleteTokens.errors) {
       return Helpers.dbError(res, deleteTokens);
     }
-    return Helpers.sendResponse(res, 200, SUCCESS);
+    return Helpers.sendResponse(res, 200, 'Logout Sucessfull!');
   }
 
   static async refreshToken(req, res) {
@@ -197,7 +196,7 @@ class AuthController {
         return Helpers.dbError(res, saveToken);
       }
 
-      return Helpers.sendResponse(res, 200, SUCCESS, {
+      return Helpers.sendResponse(res, 200, 'token refreshed successfully', {
         token: newToken,
         refreshToken: newRefreshToken,
       });
@@ -229,7 +228,7 @@ class AuthController {
 
     const link = `${process.env.BASE_URL}/api/v1/auth/verify-email/${_user.row.id}/${saveToken.rows[0].token}`;
     await sendEmail(_user.row.email, 'Verify Email', link);
-    return Helpers.sendResponse(res, 200, SUCCESS);
+    return Helpers.sendResponse(res, 200, 'Verification email sent!', {});
   }
 }
 
