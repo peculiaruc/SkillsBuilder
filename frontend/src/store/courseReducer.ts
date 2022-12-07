@@ -1,15 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { useSelector } from 'react-redux';
-import courseService, { GetAllCoursesResponse } from '../apiServices/courseService';
-import { CourseItem, EnrolledCourseResponseType, EnrolledCourseType } from '../interfaces/Course';
+import { RootState } from '.';
+import courseService from '../apiServices/courseService';
+import userService from '../apiServices/userService';
+import {
+  CourseType,
+  EnrolledCourseType,
+  GetAllCoursesResponse,
+  GetMyCoursesResponse,
+} from '../interfaces/CourseType';
 
 type InitialStateType = {
   enrolled:EnrolledCourseType[],
-  courses:CourseItem[]
-};
-
-type ReducerState = {
-  courses: InitialStateType
+  courses:CourseType[]
 };
 
 const courseReducer = createSlice({
@@ -19,7 +22,7 @@ const courseReducer = createSlice({
     courses: [],
   },
   reducers: {
-    addCourse: (state:InitialStateType, { payload }:{ payload:CourseItem }) => {
+    addCourse: (state:InitialStateType, { payload }:{ payload:CourseType }) => {
       const currentState = state;
       currentState.courses.push(payload);
     },
@@ -33,16 +36,24 @@ const courseReducer = createSlice({
           currenState.courses = payload.data.courses;
         },
       ).addMatcher(
-        courseService.endpoints.getEnrolledCourses.matchFulfilled,
-        (state: InitialStateType, { payload }: { payload: EnrolledCourseResponseType }) => {
+        userService.endpoints.getUserCourses.matchFulfilled,
+        (state: InitialStateType, { payload }: { payload: GetMyCoursesResponse }) => {
           const currenState = state;
           currenState.enrolled = payload.data.courses;
+        },
+      ).addMatcher(
+        userService.endpoints.getAuthorCourses.matchFulfilled,
+        (state: InitialStateType, { payload }: { payload: GetMyCoursesResponse }) => {
+          const currenState = state;
+          currenState.courses = payload.data.courses;
         },
       );
   },
 });
 
-export const useCourses = () => useSelector((state:ReducerState) => state.courses.courses);
-export const useEnrolledCourses = () => useSelector((state:ReducerState) => state.courses.enrolled);
+export const useCourses = () => useSelector((state:RootState) => state.courses.courses);
+export const useEnrolledCourses = () => useSelector(
+  (state:RootState) => state.courses.enrolled ?? [],
+);
 export const { addCourse } = courseReducer.actions;
 export default courseReducer;

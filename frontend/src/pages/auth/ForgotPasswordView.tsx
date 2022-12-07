@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 import { usePasswordResetMutation } from '../../apiServices/authService';
 import Logo from '../../assets/images/Logo.png';
 import appConfig from '../../configs/app';
-import { ResetPasswordRequest } from '../../interfaces/Course';
+import { ResetPasswordRequest } from '../../interfaces/CourseType';
 
 export default function ForgotPasswordView() {
   const navigate = useNavigate();
