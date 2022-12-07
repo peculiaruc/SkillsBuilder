@@ -56,15 +56,21 @@ class AuthController {
   }
 
   static async login(req, res) {
-    const { email, password } = req.body;
-
-    const _user = await user.getByEmail(email);
-
+    const _user = await user.getByEmail(req.body.email);
     if (_user.error) return Helpers.dbError(res, _user);
 
-    if (_user.count > 0 && Helpers.comparePassword(_user.row.password, password)) {
+    if (_user.count > 0 && Helpers.comparePassword(_user.row.password, req.body.password)) {
       const token = Helpers.generateToken(_user.row.id);
       const refreshToken = Helpers.generateRefreshToken(_user.row.id);
+
+      const oldToken = await tokn.allWhere({ user_id: _user.row.id, type: 'refresh' });
+      if (oldToken.errors) return Helpers.dbError(res, oldToken);
+
+      if (oldToken.count > 0) {
+        const delOldToken = await tokn.delete({ id: oldToken.rows[0].id });
+        if (delOldToken.errors) return Helpers.dbError(res, delOldToken);
+      }
+
       const newToken = {
         user_id: _user.row.id,
         token: refreshToken,
@@ -74,7 +80,7 @@ class AuthController {
       if (saveToken.errors) {
         return Helpers.dbError(res, saveToken);
       }
-      return Helpers.sendResponse(res, 200, 'User is successfully logged in', {
+      return Helpers.sendResponse(res, 200, 'User successfully logged in', {
         token,
         refreshToken,
         user: _user.row,
@@ -88,7 +94,7 @@ class AuthController {
     const _user = await user.getByEmail(email);
     if (_user.errors) return Helpers.dbError(res, _user);
     if (_user.count > 0) {
-      const randomToken = Helpers.createRandomToken();
+      const randomToken = await Helpers.createRandomToken();
       const savedToken = await tokn.getTokenByUser(_user.row.id);
       if (savedToken.count > 0) {
         tokn.delete({ token: savedToken.row.id });
@@ -116,7 +122,7 @@ class AuthController {
     if (_user.errors) return Helpers.dbError(res, _user);
     if (_user.count > 0) {
       // check if token is valid
-      const savedToken = await tokn.allWhere({ id, token: resetToken, type: 'reset' });
+      const savedToken = await tokn.allWhere({ user_id, token: resetToken, type: 'reset' });
       if (savedToken.errors) return Helpers.dbError(res, savedToken);
       if (savedToken.count > 0) {
         const hashedPass = Helpers.hashPassword(password);
