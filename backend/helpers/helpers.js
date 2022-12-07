@@ -2,6 +2,7 @@ import bcryptjs from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import Database from '../db/db';
+import { DATABASE_ERROR } from '../utils/constants';
 
 const db = new Database();
 class Helpers {
@@ -62,7 +63,7 @@ class Helpers {
   static dbError(response, query) {
     if (query.errors) {
       console.log(query.errors);
-      return Helpers.sendResponse(response, 500, 'Oops Something went wrong.');
+      return Helpers.sendResponse(response, 500, DATABASE_ERROR);
     }
   }
 

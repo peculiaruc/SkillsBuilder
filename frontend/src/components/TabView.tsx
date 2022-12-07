@@ -35,14 +35,12 @@ function TabView(props: TabViewProps) {
       sx={{
         display: 'flex',
         alignItems: 'center',
-        height: '100%',
         width: '100%',
         borderRadius: 2,
         overflow: 'hidden',
       }}
     >
       <Box sx={{
-        height: '100%',
         bgcolor: 'primary.main',
         justifyContent: 'center',
         alignItems: 'center',

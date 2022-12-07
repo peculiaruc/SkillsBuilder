@@ -1,21 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 import api from '../apiServices';
-import assignmentReducer from './assignmentReducer';
-import authReducer from './authReducer';
-import courseReducer from './courseReducer';
-import dialogFormReducer from './dialogFormReducer';
-import groupReducer from './groupReducer';
+import rootReducer from './RootReducer';
 
 const store = configureStore({
-  reducer: {
-    [groupReducer.name]: groupReducer.reducer,
-    [assignmentReducer.name]: assignmentReducer.reducer,
-    [dialogFormReducer.name]: dialogFormReducer.reducer,
-    [courseReducer.name]: courseReducer.reducer,
-    [authReducer.name]: authReducer.reducer,
-    [api.reducerPath]: api.reducer,
-  },
+  reducer: rootReducer,
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat([api.middleware]),
 });
+
+export type RootState = ReturnType<typeof store.getState>;
 
 export default store;

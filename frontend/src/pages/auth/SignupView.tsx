@@ -12,7 +12,7 @@ import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import Logo from '../../assets/images/Logo.png';
 import { useRegisterMutation } from '../../apiServices/authService';
-import { UserRegisterType } from '../../interfaces/User';
+import { UserRegisterType } from '../../interfaces/UserType';
 import appConfig from '../../configs/app';
 
 export default function SignupView() {

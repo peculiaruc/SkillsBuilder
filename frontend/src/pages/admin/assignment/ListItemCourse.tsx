@@ -2,16 +2,14 @@ import {
   Box, Button, Grid, Paper, Stack, Typography,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { CourseItem } from '../../../interfaces/Course';
+import { CourseType } from '../../../interfaces/CourseType';
 
 type Props = {
-  course: CourseItem
+  course: CourseType
 };
 
 function ListItemCourse({ course }: Props) {
-  const {
-    name, summary, thumbnail, id,
-  } = course;
+  const { title, description, id } = course;
   const style = { display: 'flex', justifyContent: 'center', alignItems: 'center' };
 
   const navigate = useNavigate();
@@ -33,15 +31,15 @@ function ListItemCourse({ course }: Props) {
             height: '100%',
             borderRadius: 2,
             p: 3,
-            backgroundImage: `url(${thumbnail})`,
+            // backgroundImage: `url(${thumbnail})`,
           }}
           >
-            <Typography fontWeight="bold">{name}</Typography>
+            <Typography fontWeight="bold">{title}</Typography>
           </Box>
 
         </Grid>
         <Grid item xs={1} sm={1} md={2} sx={{ ...style, justifyContent: 'flex-start' }}>
-          <p>{summary.substring(0, 250)}</p>
+          <p>{description.substring(0, 250)}</p>
         </Grid>
         <Grid item xs={1} sm={1} md={1} sx={style}>
           <Stack spacing={2}>

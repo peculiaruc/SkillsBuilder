@@ -1,6 +1,7 @@
 import type { BaseQueryFn } from '@reduxjs/toolkit/query';
 import type { AxiosError, AxiosRequestConfig } from 'axios';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const axiosBaseQuery = (
   { baseUrl }: { baseUrl: string } = { baseUrl: '' },
@@ -30,7 +31,8 @@ unknown
     return { data: result.data };
   } catch (axiosError) {
     const err = axiosError as AxiosError;
-    // console.log(err)
+    const rest = err.response?.data as { message: string };
+    toast(rest?.message || err.message, { type: 'error' });
     return {
       error: {
         status: err.response?.status,
