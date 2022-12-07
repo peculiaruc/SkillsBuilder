@@ -8,9 +8,9 @@ const question = new AssignmentQuestions();
 class QuestionController {
   static async createQuestion(req, res) {
     const currentuser = await Helpers.getLoggedInUser(req, res);
-    if (currentuser.role === 0)
+    if (currentuser.role === 0) {
       return Helpers.sendResponse(res, 401, 'User not authorised to perform this task');
-
+    }
     const newAss = {
       ...req.body,
       choices: JSON.stringify(req.body.choices),

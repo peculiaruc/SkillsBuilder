@@ -29,7 +29,6 @@ class GroupController {
     if (_group.errors) {
       return Helpers.dbError(res, _group);
     }
-    const date = moment(new Date()).format('YYYY-MM-DD');
     const newJoin = {
       user_id: currentuser.id,
       group_id: _group.rows[0].id,
@@ -197,9 +196,8 @@ class GroupController {
   }
 
   static async groupMembers(req, res) {
-    const _members = await db.queryBuilder(
-      `SELECT users.fullname, users.email, users.phone, users.city, joined_groups.join_date FROM users JOIN joined_groups ON joined_groups.user_id = users.id WHERE joined_groups.group_id = ${req.params.id};`
-    );
+    const sql = `SELECT users.fullname, users.email, users.phone, users.city, joined_groups.join_date FROM users JOIN joined_groups ON joined_groups.user_id = users.id WHERE joined_groups.group_id = ${req.params.id};`;
+    const _members = await db.queryBuilder(sql);
     if (_members.errors) return Helpers.dbError(res, _members);
 
     return Helpers.sendResponse(res, 200, 'success', { members: _members.rows });
