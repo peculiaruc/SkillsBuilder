@@ -4,16 +4,18 @@ import User from '../models/users';
 import Token from '../models/token';
 import Helpers from '../helpers/helpers';
 import Enrollment from '../models/enrollments';
-import Course from '../models/course';
 import Database from '../db/db';
+import Post from '../models/posts';
+import Course from '../models/course';
 
 dotenv.config();
 
 const user = new User();
 const tokn = new Token();
 const enroll = new Enrollment();
-const course = new Course();
+const post = new Post();
 const db = new Database();
+const course = new Course();
 class UserController {
   static async getAllUsers(req, res) {
     const currentuser = await Helpers.getLoggedInUser(req, res);
@@ -142,13 +144,21 @@ class UserController {
 
   static async getUserGroups(req, res) {
     const _group = await db.queryBuilder(
-      `SELECT groups.name, groups.description, joined_groups.id, joined_groups.group_id, joined_groups.join_date, joined_groups.leave_date FROM groups JOIN joined_groups ON joined_groups.group_id = groups.id WHERE joined_groups.user_id = ${req.params.id} AND joined_groups.leave_date IS NULL;`
+      `SELECT groups.name, groups.description, groups.owner_id, joined_groups.id, joined_groups.group_id, joined_groups.join_date, joined_groups.leave_date FROM groups JOIN joined_groups ON joined_groups.group_id = groups.id WHERE joined_groups.user_id = ${req.params.id} AND joined_groups.leave_date IS NULL;`
     );
     // const _group = await joinedG.allWhere({ user_id: req.params.id, leave_date: IS NULL });
     if (_group.errors) {
       return Helpers.dbError(res, _group);
     }
     return Helpers.sendResponse(res, 200, 'success', { groups: _group.rows });
+  }
+
+  static async getUserPosts(req, res) {
+    const _posts = await post.allWhere({ user_id: req.params.id });
+    if (_posts.errors) {
+      return Helpers.dbError(res, _posts);
+    }
+    return Helpers.sendResponse(res, 200, 'success', { posts: _posts.rows });
   }
 
   static async getAuthorsLearners(req, res) {
@@ -160,14 +170,20 @@ class UserController {
     return Helpers.sendResponse(res, 200, 'success', { learners: _enrollments.rows });
   }
 
+  static async getAuthorsCourses(req, res) {
+    const _courses = await course.allWhere({ author_id: req.params.id });
+    if (_courses.errors) return Helpers.dbError(res, _courses);
+    return Helpers.sendResponse(res, 200, 'success', { courses: _courses.rows });
+  }
+
   static async getAllAuthors(req, res) {
     const currentuser = await Helpers.getLoggedInUser(req, res);
     if (currentuser.role !== 2) {
       return Helpers.sendResponse(res, 401, 'User not authorised to perform this task');
     }
-    const _users = await user.allWhere({ role: 1 });
-    if (_users.errors) return Helpers.dbError(res, _users);
-    return Helpers.sendResponse(res, 200, 'success', { authors: _users.rows });
+    const _authors = await user.allWhere({ role: 1 });
+    if (_authors.errors) return Helpers.dbError(res, _authors);
+    return Helpers.sendResponse(res, 200, 'success', { users: _authors.rows });
   }
 
   static async getAllLearners(req, res) {
@@ -177,7 +193,7 @@ class UserController {
     }
     const _users = await user.allWhere({ role: 0 });
     if (_users.errors) return Helpers.dbError(res, _users);
-    return Helpers.sendResponse(res, 200, 'success', { authors: _users.rows });
+    return Helpers.sendResponse(res, 200, 'success', { users: _users.rows });
   }
 
   static async getAllAdmins(req, res) {
@@ -187,7 +203,7 @@ class UserController {
     }
     const _users = await user.allWhere({ role: 2 });
     if (_users.errors) return Helpers.dbError(res, _users);
-    return Helpers.sendResponse(res, 200, 'success', { authors: _users.rows });
+    return Helpers.sendResponse(res, 200, 'success', { users: _users.rows });
   }
 }
 
