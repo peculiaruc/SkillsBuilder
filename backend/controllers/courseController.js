@@ -24,8 +24,7 @@ const material = new Material();
 
 class CourseController {
   static async getAllCourses(req, res) {
-    const { offset, limit } = req.query;
-    const _courses = await course.all(limit || 5, offset || 0, 'id DESC', { status: 2 });
+    const _courses = await course.allWhere({ status: 2 });
     if (_courses.errors) return Helpers.dbError(res, _courses);
     return Helpers.sendResponse(res, 200, SUCCESS, { courses: _courses.rows });
   }
@@ -68,12 +67,9 @@ class CourseController {
   }
 
   static async enrollUser(req, res) {
-    const checkEnrollment = await enrollment.queryBuilder(
-      `SELECT * FROM enrollments WHERE user_id = ${req.body.userId} AND course_id = ${req.params.id} AND unenroll_date IS NULL;`
-    );
-
+    const sql = `SELECT * FROM enrollments WHERE user_id = ${req.body.userId} AND course_id = ${req.params.id} AND unenroll_date IS NULL;`;
+    const checkEnrollment = await enrollment.queryBuilder(sql);
     if (checkEnrollment.errors) return Helpers.dbError(res, checkEnrollment);
-
     if (checkEnrollment.count > 0) return Helpers.sendResponse(res, 400, ALREADY_ENROLLED);
 
     const _user = await user.getById(req.body.userId);
@@ -96,7 +92,7 @@ class CourseController {
     await sendEmail(
       _user.row.email,
       'Enrollment Confirmation',
-      `You have successfully enrolled in ${_course.row.title}`
+      `You have successfully enrolled in ${_course.row.title}`,
     );
     return Helpers.sendResponse(res, 200, SUCCESS);
   }
@@ -122,15 +118,14 @@ class CourseController {
     await sendEmail(
       _user.row.email,
       'Unenrollment Confirmation',
-      `You have successfully unenrolled in ${_course.row.title}`
+      `You have successfully unenrolled in ${_course.row.title}`,
     );
     return Helpers.sendResponse(res, 200, SUCCESS);
   }
 
   static async courseLearners(req, res) {
-    const _learners = await db.queryBuilder(
-      `SELECT users.fullname, users.email, users.phone, users.city, enrollments.enroll_date, enrollments.unenroll_date FROM users JOIN enrollments ON enrollments.user_id = users.id WHERE enrollments.course_id = ${req.params.id};`
-    );
+    const sql = `SELECT users.fullname, users.email, users.phone, users.city, enrollments.enroll_date, enrollments.unenroll_date FROM users JOIN enrollments ON enrollments.user_id = users.id WHERE enrollments.course_id = ${req.params.id};`;
+    const _learners = await db.queryBuilder(sql);
     if (_learners.errors) return Helpers.dbError(res, _learners);
     return Helpers.sendResponse(res, 200, SUCCESS, { learners: _learners.rows });
   }
@@ -166,11 +161,10 @@ class CourseController {
     if (_course.errors) return Helpers.dbError(res, _course);
 
     const currentuser = await Helpers.getLoggedInUser(req, res);
-
     if (currentuser.role === 2 || _course.row.author_id === currentuser.id) {
-      const _course = await course.update({ ...req.body }, { id: req.params.id });
-      if (_course.errors) return Helpers.dbError(res, _course);
-      return Helpers.sendResponse(res, 200, SUCCESS, { course: _course.rows[0] });
+      const _update = await course.update({ ...req.body }, { id: req.params.id });
+      if (_update.errors) return Helpers.dbError(res, _update);
+      return Helpers.sendResponse(res, 200, SUCCESS, { course: _update.rows[0] });
     }
     return Helpers.sendResponse(res, 404, NOT_AUTHORISED);
   }

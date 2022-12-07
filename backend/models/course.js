@@ -17,8 +17,8 @@ class Course extends Database {
     return await this.where('category_ids', '@>', categories);
   }
 
-  async all(limit, offset, orderBy, condition) {
-    return super.allWithOffset(limit, offset, orderBy, condition);
+  async all(limit, offset, orderBy) {
+    return super.allWithOffset(limit, offset, orderBy);
   }
 }
 
