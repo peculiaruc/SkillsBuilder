@@ -91,11 +91,10 @@ class AuthController {
   }
 
   static async passwordReset(req, res) {
-    const { email } = req.body;
-    const _user = await user.getByEmail(email);
+    const _user = await user.getByEmail(req.body.email);
     if (_user.errors) return Helpers.dbError(res, _user);
     if (_user.count > 0) {
-      const randomToken = await Helpers.createRandomToken();
+      const randomToken = Helpers.createRandomToken();
       const savedToken = await tokn.getTokenByUser(_user.row.id);
       if (savedToken.count > 0) {
         tokn.delete({ token: savedToken.row.id });
@@ -117,17 +116,18 @@ class AuthController {
   }
 
   static async passwordUpdate(req, res) {
-    const { resetToken, user_id, password } = req.body;
-
-    const _user = await user.getById(user_id);
+    const _user = await user.getById(req.body.user_id);
     if (_user.errors) return Helpers.dbError(res, _user);
     if (_user.count > 0) {
-      // check if token is valid
-      const savedToken = await tokn.allWhere({ user_id, token: resetToken, type: 'reset' });
+      const savedToken = await tokn.allWhere({
+        user_id: req.body.user_id,
+        token: req.body.resetToken,
+        type: 'reset',
+      });
       if (savedToken.errors) return Helpers.dbError(res, savedToken);
       if (savedToken.count > 0) {
-        const hashedPass = Helpers.hashPassword(password);
-        const update = await user.update({ password: hashedPass }, { id: user_id });
+        const hashedPass = Helpers.hashPassword(req.body.password);
+        const update = await user.update({ password: hashedPass }, { id: req.body.user_id });
         if (update.errors) return Helpers.dbError(res, update);
         if (update.count > 0) {
           await tokn.delete({ id: savedToken.rows[0].id });
@@ -139,14 +139,17 @@ class AuthController {
   }
 
   static async verifyEmail(req, res) {
-    const { id, token } = req.params;
-    const _user = await user.getById(id);
+    const _user = await user.getById(req.params.id);
     if (_user.errors) return Helpers.dbError(res, _user);
     if (_user.count > 0) {
-      const savedToken = await tokn.allWhere({ id, token, type: 'verify' });
+      const savedToken = await tokn.allWhere({
+        id: req.params.id,
+        token: req.params.token,
+        type: 'verify',
+      });
       if (savedToken.errors) return Helpers.dbError(res, savedToken);
       if (savedToken.count > 0) {
-        const update = await user.update({ verified: true }, { id });
+        const update = await user.update({ verified: true }, { id: req.params.id });
         if (update.errors) return Helpers.dbError(res, update);
         if (update.count > 0) {
           await tokn.delete({ id: savedToken.rows[0].id });
