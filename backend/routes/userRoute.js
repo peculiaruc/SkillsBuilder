@@ -1,22 +1,33 @@
 import express from 'express';
-import userController from '../controllers/userController';
+import { verifyToken } from '../middlewares/authCheck';
+import UserController from '../controllers/userController';
 
 const router = express.Router();
 
-router.post('/register', userController.createUser);
+router.use(verifyToken);
 
-router.post('/login', userController.login);
+router.get('/all', UserController.getAllUsers);
 
-router.post('/logout', userController.logout);
+router.post('/create', UserController.createUser);
 
-router.post('/password-reset', userController.passwordReset);
+router.get('/:id', UserController.getUserById);
 
-router.post('/password-update', userController.passwordUpdate);
+router.put('/:id', UserController.updateUser);
 
-router.get('/verify-email/:id/:token', userController.verifyEmail);
+router.delete('/:id', UserController.deleteUser);
 
-router.post('/refreshToken', userController.refreshToken);
+router.get('/:id/mycourses', UserController.getUserCourses);
 
-router.post('/verify-email/retry', userController.retryEmailVerification);
+router.get('/:id/mygroups', UserController.getUserGroups);
+
+// router.get('/:id/myassignments', userController.getUserAssignments);
+
+router.get('/:id/learners', UserController.getAuthorsLearners);
+
+router.get('/authors/all', UserController.getAllAuthors);
+
+router.get('/learners/all', UserController.getAllLearners);
+
+router.get('/admins/all', UserController.getAllAdmins);
 
 module.exports = router;
