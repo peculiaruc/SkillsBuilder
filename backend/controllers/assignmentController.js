@@ -2,6 +2,7 @@ import Helpers from '../helpers/helpers';
 import Assignment from '../models/assignment';
 import AssignmentSubmissions from '../models/assignmentSubmissions';
 import AssignmentQuestions from '../models/assignmentQuestions';
+import { NOT_AUTHORISED, SUCCESS } from '../utils/constants';
 
 const assignment = new Assignment();
 const submission = new AssignmentSubmissions();
@@ -11,7 +12,7 @@ class AssignmentController {
   static async createAssignment(req, res) {
     const currentuser = await Helpers.getLoggedInUser(req, res);
     if (currentuser.role === 0) {
-      return Helpers.sendResponse(res, 401, 'User not authorised to perform this task');
+      return Helpers.sendResponse(res, 401, NOT_AUTHORISED);
     }
     const newAss = {
       ...req.body,

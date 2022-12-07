@@ -4,3 +4,4 @@ export const SUCCESS = 'Process completed successfully!';
 export const INVALID_TOKEN = 'Token is invalid or expired!';
 export const INVALID_CREDENTIALS = 'Invalid user credentials!';
 export const ALREADY_ENROLLED = 'User already enrolled in course!';
+export const ALREADY_EXISTS = 'User with email already exists!';

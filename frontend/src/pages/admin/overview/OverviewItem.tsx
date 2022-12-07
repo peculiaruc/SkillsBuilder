@@ -12,7 +12,6 @@ export default function OverviewItem({ title, value, icon }:Props) {
       sx={{
         height: '100%',
         width: '100%',
-        bgcolor: 'common.background',
         p: 2,
       }}
     >
