@@ -23,8 +23,7 @@ const material = new Material();
 
 class CourseController {
   static async getAllCourses(req, res) {
-    const { offset, limit } = req.query;
-    const _courses = await course.all(limit || 5, offset || 0, 'id DESC', { status: 2 });
+    const _courses = await course.all({ status: 2 });
     if (_courses.errors) return Helpers.dbError(res, _courses);
     return Helpers.sendResponse(res, 200, 'success', { courses: _courses.rows });
   }

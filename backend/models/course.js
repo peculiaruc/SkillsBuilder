@@ -18,7 +18,7 @@ class Course extends Database {
   }
 
   async all(limit, offset, orderBy, condition) {
-    return super.allWithOffset(limit, offset, orderBy, condition);
+    return super.allWithOffset(limit, offset, orderBy);
   }
 }
 
