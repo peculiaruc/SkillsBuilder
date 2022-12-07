@@ -8,9 +8,9 @@ class UserMeta extends Model {
     this.validationSchema = Yup.object().shape({
       fullname: Yup.string().required(),
       email: Yup.string().email().required(),
-      phone: Yup.string(),
-      city: Yup.string(),
-      country: Yup.string(),
+      phone: Yup.string().nullable(),
+      city: Yup.string().nullable(),
+      country: Yup.string().nullable(),
     });
     this.fields = [
       { name: 'fullname', type: 'text' },

@@ -5,27 +5,28 @@ import { toast } from 'react-toastify';
 import { closeDialog, openDialog } from '../../store/dialogFormReducer';
 import FormBuilder from './FormBuilder';
 
-interface Props {
+interface FormProps {
   title: string;
   model: any;
-  useMutation: any;
+  mutation: any;
   dialog: boolean;
 }
+
+type Props = Required<FormProps>;
 
 export default function MixedForm({
   title = 'Add new model',
   model,
-  useMutation,
+  mutation,
   dialog,
-} : Required<Props>): JSX.Element {
+} : Props): JSX.Element {
   // const model = new Entity();
   const dispatch = useDispatch();
   const openForm = () => dispatch(openDialog());
   const onCancel = () => dispatch(closeDialog());
-  const [createModel] = useMutation();
   const onSubmit = async (values:FormikValues) => {
     const data = model.beforeSubmit(values) ?? values;
-    await createModel(data).unwrap();
+    await mutation(data);
     toast(`${model.name} created successfully`);
     onCancel();
   };

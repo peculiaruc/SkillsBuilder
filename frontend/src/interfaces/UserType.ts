@@ -87,7 +87,22 @@ export type GetAllAdminsResponse = ResponseType & {
 export type GetCourseLearnersResponse = GetAllUsersResponse;
 
 export type GetCourseAuthorResponse = ResponseType & {
-  data:{
+  data: {
     author: UserType,
   }
 };
+
+export type ResetPasswordResponse = ResponseType & {
+  data: {
+    user_id: number,
+    reset_token: string,
+  }
+};
+
+export type UpdatePasswordRequest = {
+  resetToken: string,
+  user_id: number,
+  password: string,
+};
+
+export type UpdatePasswordResponse = ResponseType;

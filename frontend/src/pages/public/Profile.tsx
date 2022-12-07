@@ -1,19 +1,35 @@
-import { Typography } from '@mui/material';
-import { useGetUserByIdQuery, useUpdateUserMutation } from '../../apiServices/userService';
+import { FormikValues } from 'formik';
+import { toast } from 'react-toastify';
+import {
+  useResetPasswordMutation,
+  useUpdatePasswordMutation,
+  useUpdateUserMutation,
+} from '../../apiServices/userService';
 import MixedForm from '../../components/forms/MixedForm';
-import Loader from '../../components/Loader';
 import TabView from '../../components/TabView';
-import { useAuth } from '../../store/authReducer';
-import EmptyView from '../errors/EmptyView';
 import UserMeta from '../../models/UserMeta';
+import UserPassword from '../../models/UserPassword';
 import UserSocialNetwork from '../../models/UserSocialNetwork';
+import { useAuth } from '../../store/authReducer';
 
 export default function Profile() {
-  const auth = useAuth();
-  const { data, isLoading } = useGetUserByIdQuery(auth.user.id);
-  if (isLoading) return <Loader />;
-  const user = data?.data.user;
-  if (!user) return <EmptyView title="User not found" code={404} />;
+  const { user } = useAuth();
+  const [updateUser] = useUpdateUserMutation();
+  const [resetPassword] = useResetPasswordMutation();
+  const [updatePassword] = useUpdatePasswordMutation();
+  const resetPasswordMutation = async ({ email, password }: FormikValues) => {
+    const resetResponse = await resetPassword(email).unwrap();
+    if (resetResponse.data.user_id) {
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      const { user_id, reset_token } = resetResponse.data;
+      const res = await updatePassword({
+        resetToken: reset_token,
+        password,
+        user_id,
+      }).unwrap();
+      toast(res.message);
+    }
+  };
 
   return (
     <TabView
@@ -23,23 +39,32 @@ export default function Profile() {
           name: 'Me',
           component: (
             <MixedForm
-              title="Update user info"
+              title="Update your personal info"
               model={new UserMeta(user)}
               dialog={false}
-              useMutation={useUpdateUserMutation}
+              mutation={updateUser}
             />),
         },
         {
           name: 'Social Networks',
           component: (
             <MixedForm
-              title="Update user social networks"
+              title="Update your social networks"
               model={new UserSocialNetwork(user)}
               dialog={false}
-              useMutation={useUpdateUserMutation}
+              mutation={updateUser}
             />),
         },
-        { name: 'Password Setting', component: <Typography>User Password reset</Typography> },
+        {
+          name: 'Password Setting',
+          component: (
+            <MixedForm
+              title="Reset your password"
+              model={new UserPassword({ email: user.email })}
+              dialog={false}
+              mutation={resetPasswordMutation}
+            />),
+        },
       ]}
     />
   );

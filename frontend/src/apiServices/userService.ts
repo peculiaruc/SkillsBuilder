@@ -8,6 +8,9 @@ import {
   GetMyAssignmentsResponse,
   GetUserPostsResponse,
   GetUserResponse,
+  ResetPasswordResponse,
+  UpdatePasswordRequest,
+  UpdatePasswordResponse,
   UpdateUserResponse,
   UserId,
   UserType,
@@ -59,6 +62,12 @@ const userService = api.injectEndpoints({
       // providesTags: (result, err, id) => (result ? [{ type: 'Users', id }] : [{ type: 'Users', id: 'LIST' }]),
       providesTags: ['LIST_ALL_USERS'],
     }),
+    resetPassword: builder.mutation<ResetPasswordResponse, string>({
+      query: (email) => ({ url: '/auth/password-reset', method: 'POST', data: { email } }),
+    }),
+    updatePassword: builder.mutation<UpdatePasswordResponse, UpdatePasswordRequest>({
+      query: (data) => ({ url: '/auth/password-update', method: 'POST', data }),
+    }),
   }),
 });
 
@@ -74,6 +83,8 @@ export const {
   useGetUserPostsQuery,
   useGetUsersByRoleQuery,
   useGetAuthorCoursesQuery,
+  useResetPasswordMutation,
+  useUpdatePasswordMutation,
 } = userService;
 
 export default userService;
