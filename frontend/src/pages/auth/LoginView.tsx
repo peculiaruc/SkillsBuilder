@@ -113,7 +113,7 @@ export default function LoginView() {
         }}
       >
         <span>
-          Don&apos;t have and account?
+          Don&apos;t have an account?
         </span>
         <Typography
           onClick={() => navigate('/signup')}
