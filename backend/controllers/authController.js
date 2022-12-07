@@ -3,6 +3,7 @@ import sendEmail from '../utils/sendEmails';
 import User from '../models/users';
 import Token from '../models/token';
 import Helpers from '../helpers/helpers';
+import { SUCCESS, ALREADY_EXISTS, INVALID_CREDENTIALS } from '../utils/constants';
 
 dotenv.config();
 
@@ -19,7 +20,7 @@ class AuthController {
     }
 
     if (checkEmail.count > 0) {
-      return Helpers.sendResponse(res, 400, 'A user with Email address already exists !');
+      return Helpers.sendResponse(res, 400, ALREADY_EXISTS);
     }
     const newUser = {
       email: req.body.email,
@@ -47,7 +48,7 @@ class AuthController {
       const token = Helpers.generateToken(saveUser.rows[0].id);
       const refreshToken = Helpers.generateRefreshToken(saveUser.rows[0].id);
 
-      return Helpers.sendResponse(res, 200, 'User created successfully', {
+      return Helpers.sendResponse(res, 200, SUCCESS, {
         token,
         refreshToken,
         user: saveUser.rows[0],
@@ -80,21 +81,20 @@ class AuthController {
       if (saveToken.errors) {
         return Helpers.dbError(res, saveToken);
       }
-      return Helpers.sendResponse(res, 200, 'User successfully logged in', {
+      return Helpers.sendResponse(res, 200, SUCCESS, {
         token,
         refreshToken,
         user: _user.row,
       });
     }
-    return Helpers.sendResponse(res, 400, 'Invalid credentials');
+    return Helpers.sendResponse(res, 400, INVALID_CREDENTIALS);
   }
 
   static async passwordReset(req, res) {
-    const { email } = req.body;
-    const _user = await user.getByEmail(email);
+    const _user = await user.getByEmail(req.body.email);
     if (_user.errors) return Helpers.dbError(res, _user);
     if (_user.count > 0) {
-      const randomToken = await Helpers.createRandomToken();
+      const randomToken = Helpers.createRandomToken();
       const savedToken = await tokn.getTokenByUser(_user.row.id);
       if (savedToken.count > 0) {
         tokn.delete({ token: savedToken.row.id });
@@ -107,7 +107,7 @@ class AuthController {
       const saveToken = await tokn.create(newToken);
       if (saveToken.errors) return Helpers.dbError(res, saveToken);
 
-      return Helpers.sendResponse(res, 200, 'User password reset details', {
+      return Helpers.sendResponse(res, 200, SUCCESS, {
         reset_token: saveToken.rows[0].token,
         user_id: saveToken.rows[0].user_id,
       });
@@ -116,21 +116,22 @@ class AuthController {
   }
 
   static async passwordUpdate(req, res) {
-    const { resetToken, user_id, password } = req.body;
-
-    const _user = await user.getById(user_id);
+    const _user = await user.getById(req.body.user_id);
     if (_user.errors) return Helpers.dbError(res, _user);
     if (_user.count > 0) {
-      // check if token is valid
-      const savedToken = await tokn.allWhere({ user_id, token: resetToken, type: 'reset' });
+      const savedToken = await tokn.allWhere({
+        user_id: req.body.user_id,
+        token: req.body.resetToken,
+        type: 'reset',
+      });
       if (savedToken.errors) return Helpers.dbError(res, savedToken);
       if (savedToken.count > 0) {
-        const hashedPass = Helpers.hashPassword(password);
-        const update = await user.update({ password: hashedPass }, { id: user_id });
+        const hashedPass = Helpers.hashPassword(req.body.password);
+        const update = await user.update({ password: hashedPass }, { id: req.body.user_id });
         if (update.errors) return Helpers.dbError(res, update);
         if (update.count > 0) {
           await tokn.delete({ id: savedToken.rows[0].id });
-          return Helpers.sendResponse(res, 200, 'password reset sucessfully', {});
+          return Helpers.sendResponse(res, 200, SUCCESS, {});
         }
       }
     }
@@ -138,18 +139,21 @@ class AuthController {
   }
 
   static async verifyEmail(req, res) {
-    const { id, token } = req.params;
-    const _user = await user.getById(id);
+    const _user = await user.getById(req.params.id);
     if (_user.errors) return Helpers.dbError(res, _user);
     if (_user.count > 0) {
-      const savedToken = await tokn.allWhere({ id, token, type: 'verify' });
+      const savedToken = await tokn.allWhere({
+        id: req.params.id,
+        token: req.params.token,
+        type: 'verify',
+      });
       if (savedToken.errors) return Helpers.dbError(res, savedToken);
       if (savedToken.count > 0) {
-        const update = await user.update({ verified: true }, { id });
+        const update = await user.update({ verified: true }, { id: req.params.id });
         if (update.errors) return Helpers.dbError(res, update);
         if (update.count > 0) {
           await tokn.delete({ id: savedToken.rows[0].id });
-          return Helpers.sendResponse(res, 200, 'email verified successfully', {});
+          return Helpers.sendResponse(res, 200, SUCCESS, {});
         }
       }
       return Helpers.sendResponse(res, 400, 'Link is invalid or expired');
@@ -162,7 +166,7 @@ class AuthController {
     if (deleteTokens.errors) {
       return Helpers.dbError(res, deleteTokens);
     }
-    return Helpers.sendResponse(res, 200, 'Logout Sucessfull!');
+    return Helpers.sendResponse(res, 200, SUCCESS);
   }
 
   static async refreshToken(req, res) {
@@ -193,7 +197,7 @@ class AuthController {
         return Helpers.dbError(res, saveToken);
       }
 
-      return Helpers.sendResponse(res, 200, 'token refreshed successfully', {
+      return Helpers.sendResponse(res, 200, SUCCESS, {
         token: newToken,
         refreshToken: newRefreshToken,
       });
@@ -225,7 +229,7 @@ class AuthController {
 
     const link = `${process.env.BASE_URL}/api/v1/auth/verify-email/${_user.row.id}/${saveToken.rows[0].token}`;
     await sendEmail(_user.row.email, 'Verify Email', link);
-    return Helpers.sendResponse(res, 200, 'Verification email sent!', {});
+    return Helpers.sendResponse(res, 200, SUCCESS);
   }
 }
 
