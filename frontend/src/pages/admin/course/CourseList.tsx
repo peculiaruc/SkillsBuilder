@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { useCreateCourseMutation, useGetAllCoursesQuery } from '../../../apiServices/courseService';
 import FormBuilder from '../../../components/forms/FormBuilder';
-import { CourseItem } from '../../../interfaces/Course';
+import { CourseType } from '../../../interfaces/CourseType';
 import Course from '../../../models/Course';
 import { useAuth } from '../../../store/authReducer';
 import { useCourses } from '../../../store/courseReducer';
@@ -17,7 +17,7 @@ function CourseList() {
   const auth = useAuth();
 
   const model = new Course();
-  const courses: CourseItem[] = useCourses();
+  const courses: CourseType[] = useCourses();
   const handleOpen = () => dispatch(openDialog());
   const onCancel = () => dispatch(closeDialog());
   const [createCourse] = useCreateCourseMutation();
@@ -27,13 +27,13 @@ function CourseList() {
 
   const onSubmit = async (values: FormikValues) => {
     const data = { ...values, author_id: auth.user.id } as unknown;
-    await createCourse(data as CourseItem).unwrap();
+    await createCourse(data as CourseType).unwrap();
     onCancel();
     toast('Course created successfully');
   };
   /*
   const onSubmit = async (values: FormikValues) => {
-    const course = values as CourseItem;
+    const course = values as CourseType;
     course.id = Math.round(Math.random() * 100);
     batch(
       () => {
@@ -60,7 +60,7 @@ function CourseList() {
           />
         </>
       )}
-      {courses.map((course: CourseItem) => <ListItemCourse course={course} key={course.name} />)}
+      {courses.map((course: CourseType) => <ListItemCourse course={course} key={course.title} />)}
     </Stack>
   );
 }

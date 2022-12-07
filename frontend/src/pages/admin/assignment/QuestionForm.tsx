@@ -4,7 +4,7 @@ import { FormikValues } from 'formik';
 import { useDispatch } from 'react-redux';
 import { useDeleteOneQuestionMutation } from '../../../apiServices/assignmentService';
 import FormBuilder from '../../../components/forms/FormBuilder';
-import { QuestionType } from '../../../interfaces/AssingmentType';
+import { QuestionType } from '../../../interfaces/AssignmentType';
 import Question from '../../../models/Question';
 import { removeQuestion, useQuestions } from '../../../store/assignmentReducer';
 

@@ -1,5 +1,5 @@
-import { ResetPasswordRequest } from '../interfaces/Course';
-import { CredentialsType, UserType, UserRegisterType } from '../interfaces/User';
+import { ResetPasswordRequest } from '../interfaces/CourseType';
+import { CredentialsType, UserType, UserRegisterType } from '../interfaces/UserType';
 import api from '.';
 
 export type LoginResponseType = {

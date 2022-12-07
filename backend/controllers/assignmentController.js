@@ -10,9 +10,9 @@ const assQuestions = new AssignmentQuestions();
 class AssignmentController {
   static async createAssignment(req, res) {
     const currentuser = await Helpers.getLoggedInUser(req, res);
-    if (currentuser.role === 0)
+    if (currentuser.role === 0) {
       return Helpers.sendResponse(res, 401, 'User not authorised to perform this task');
-
+    }
     const newAss = {
       ...req.body,
     };
@@ -60,6 +60,7 @@ class AssignmentController {
     if (qs.error) return Helpers.dbError(res, qs);
     return Helpers.sendResponse(res, 200, 'success', { assignments: qs.rows });
   }
+  
   static async getAssignmentSubmissions(req, res) {
     const currentuser = await Helpers.getLoggedInUser(req, res);
     const sub = await submission.allWhere({
