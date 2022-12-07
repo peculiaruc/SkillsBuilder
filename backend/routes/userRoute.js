@@ -24,10 +24,10 @@ router.get('/:id/mygroups', UserController.getUserGroups);
 
 router.get('/:id/learners', UserController.getAuthorsLearners);
 
-router.get('/authors/all', UserController.getAllAuthors);
+router.get('/authors', UserController.getAllAuthors);
 
-router.get('/learners/all', UserController.getAllLearners);
+router.get('/learners', UserController.getAllLearners);
 
-router.get('/admins/all', UserController.getAllAdmins);
+router.get('/admins', UserController.getAllAdmins);
 
 module.exports = router;
