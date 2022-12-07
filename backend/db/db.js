@@ -97,7 +97,7 @@ class Database {
   }
 
   async allWithOffset(limit = 5, offset = 0, orderBy = 'id DESC') {
-    const sql = `SELECT * FROM ${this.table} WHERE ${conditions} ORDER BY ${orderBy} LIMIT ${limit} OFFSET ${offset} `;
+    const sql = `SELECT * FROM ${this.table} ORDER BY ${orderBy} LIMIT ${limit} OFFSET ${offset} `;
     const query = await this.queryBuilder(sql, []);
     return !query.errors
       ? {

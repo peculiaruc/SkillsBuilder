@@ -60,7 +60,7 @@ class AssignmentController {
     if (qs.error) return Helpers.dbError(res, qs);
     return Helpers.sendResponse(res, 200, SUCCESS, { assignments: qs.rows });
   }
-  
+
   static async getAssignmentSubmissions(req, res) {
     const currentuser = await Helpers.getLoggedInUser(req, res);
     const sub = await submission.allWhere({
