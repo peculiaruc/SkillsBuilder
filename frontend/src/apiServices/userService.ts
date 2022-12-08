@@ -35,6 +35,7 @@ const userService = api.injectEndpoints({
     }),
     deleteUser: builder.mutation<DeleteUserResponse, UserId>({
       query: (id) => ({ url: `/user/${id}`, method: 'DELETE' }),
+      invalidatesTags: ['LIST_ALL_USERS'],
     }),
     getUserPosts: builder.query<GetUserPostsResponse, UserId>({
       query: (id) => ({ url: `/user/${id}/posts`, method: 'GET' }),
