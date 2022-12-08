@@ -1,3 +1,6 @@
+/* eslint-disable class-methods-use-this */
+/* eslint-disable @typescript-eslint/lines-between-class-members */
+import { FormikValues } from 'formik';
 import * as Yup from 'yup';
 import Model, { Field } from './Model';
 
@@ -25,6 +28,11 @@ class Post extends Model {
       },
     ];
     this.init(props);
+  }
+  beforeSubmit({
+    content, title, id,
+  }: FormikValues): FormikValues {
+    return { content, title, id };
   }
 }
 
