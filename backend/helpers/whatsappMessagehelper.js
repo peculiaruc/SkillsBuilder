@@ -40,7 +40,7 @@ function getEnrollmentTemplatedMessage(recipient, course, author) {
     to: recipient,
     type: 'template',
     template: {
-      name: 'course enrollment',
+      name: 'course_enrollment_template',
       language: {
         code: 'en_US',
       },
@@ -61,11 +61,15 @@ function getEnrollmentTemplatedMessage(recipient, course, author) {
           parameters: [
             {
               type: 'text',
-              text: course.title,
+              text: `Welcome to ${course.title}`,
             },
             {
               type: 'text',
               text: `By ${author.fullname}`,
+            },
+            {
+              type: 'text',
+              text: 'All the best!',
             },
           ],
         },
