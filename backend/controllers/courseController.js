@@ -99,14 +99,14 @@ class CourseController {
       'Enrollment Confirmation',
       `You have successfully enrolled in ${_course.row.title}`
     );
-    // if (_user.row.whatsapp) {
-    //   const _author = await user.getById(_course.row.author_id);
-    //   if (_author.errors) return Helpers.dbError(res, _author);
+    if (_user.row.whatsapp) {
+      const _author = await user.getById(_course.row.author_id);
+      if (_author.errors) return Helpers.dbError(res, _author);
 
-    //   const data = getEnrollmentTemplatedMessage(_user.row.whatsapp, _course.row, _author.row);
+      const data = getEnrollmentTemplatedMessage(_user.row.whatsapp, _course.row, _author.row);
 
-    //   await sendMessage(data, res);
-    // }
+      await sendMessage(data, res);
+    }
 
     return Helpers.sendResponse(res, 200, SUCCESS);
   }

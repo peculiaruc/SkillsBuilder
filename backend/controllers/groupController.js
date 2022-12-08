@@ -194,7 +194,7 @@ class GroupController {
   }
 
   static async groupMembers(req, res) {
-    const sql = `SELECT users.fullname, users.email, users.phone, users.city, user.picture, joined_groups.id, joined_groups.join_date FROM users JOIN joined_groups ON joined_groups.user_id = users.id WHERE joined_groups.group_id = ${req.params.id} AND joined_groups.leave_date IS NULL;`;
+    const sql = `SELECT users.fullname, users.email, users.phone, users.city, users.picture, joined_groups.id, joined_groups.join_date FROM users JOIN joined_groups ON joined_groups.user_id = users.id WHERE joined_groups.group_id = ${req.params.id} AND joined_groups.leave_date IS NULL;`;
     const _members = await db.queryBuilder(sql);
     if (_members.errors) return Helpers.dbError(res, _members);
 
