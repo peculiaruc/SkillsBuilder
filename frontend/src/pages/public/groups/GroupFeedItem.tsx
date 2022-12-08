@@ -61,7 +61,7 @@ export default function GroupFeedItem({ feed }: Props) {
             {owner.fullname}
           </Stack>
           <Stack alignItems="center" direction="row">
-            <IconButton color="primary">
+            <IconButton color="primary" onClick={() => setOpen(true)}>
               <Edit />
             </IconButton>
             { isLoading ? (<Loader />)
