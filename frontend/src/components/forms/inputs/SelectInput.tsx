@@ -25,7 +25,7 @@ function SelectInput({
   };
   return (
     <Autocomplete
-      value={value ?? options[0] ?? ''}
+      value={value ?? ''}
       options={options}
       filterSelectedOptions
       getOptionLabel={getOptionLabel}

@@ -27,6 +27,7 @@ class User extends Model {
       { name: 'password', type: 'password' },
       { name: 'confirm_password', type: 'password' },
     ];
+    this.init(props);
     this.data = {
       role: ['learner', 'author', 'admin'],
     };

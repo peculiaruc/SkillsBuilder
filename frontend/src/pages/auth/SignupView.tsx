@@ -145,7 +145,7 @@ export default function SignupView() {
               alignItems: 'center',
             }}
           >
-            <span>Already have an account ?</span>
+            <span>Already have an account?&nbsp;</span>
             <Typography
               onClick={() => navigate('/login')}
               style={{ cursor: 'pointer', fontWeight: 'bold' }}

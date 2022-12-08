@@ -113,9 +113,10 @@ export default function LoginView() {
         }}
       >
         <span>
-          Don&apos;t have an account?
+          Don&apos;t have an account? &nbsp;
         </span>
         <Typography
+          mr={1}
           onClick={() => navigate('/signup')}
           style={{ cursor: 'pointer', fontWeight: 'bold' }}
         >

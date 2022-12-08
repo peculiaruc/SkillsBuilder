@@ -1,4 +1,5 @@
 import { PostType } from './PostType';
+import { ResponseType } from './ResponseType';
 import { UserType } from './UserType';
 
 export type GroupId = number;
@@ -6,8 +7,8 @@ export type GroupAccessRequestId = number;
 
 export type GroupType = {
   id: GroupId,
-  name:string,
   owner_id:number,
+  name:string,
   description:string,
   type:string,
   status:string,
@@ -18,10 +19,23 @@ export type GroupType = {
 export type JoinGroupType = {
   id: GroupAccessRequestId,
   status:string,
+  name:string,
+  description:string,
   group_id: number,
-  user_id:number,
+  owner_id:number,
   join_date: Date,
   leave_date: Date,
+};
+
+export type GroupAccessRequestType = {
+  created_at: Date,
+  group_id: number,
+  id: number,
+  join_date: Date,
+  leave_date: Date,
+  status: string
+  updated_at: Date,
+  user_id: number
 };
 
 export type CreateGroupRequest = Omit<GroupType, 'id' | 'created_at' | 'updated_at'>;
@@ -62,12 +76,18 @@ export type LeaveGroupRequest = JoinGroupRequest;
 
 export type GetMyGroupsResponse = ResponseType & {
   data: {
+    groups: JoinGroupType[]
+  }
+};
+
+export type GetAllGroupsResponse = ResponseType & {
+  data: {
     groups: GroupType[]
   }
 };
 
 export type GetGroupAccessRequestsResponse = ResponseType & {
   data: {
-    requests: JoinGroupType[]
+    requests: GroupAccessRequestType[]
   }
 };

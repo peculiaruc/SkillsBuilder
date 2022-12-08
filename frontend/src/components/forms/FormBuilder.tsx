@@ -14,13 +14,11 @@ interface FormProps {
   title: string | React.ReactNode,
   dialog: boolean,
   model: Model,
-  data?: any,
   onSubmit: (values: FormikValues) => void,
-  onCancel: () => void,
 }
 function FormBuilder({
-  onSubmit, model, title, dialog, data, onCancel,
-} : Required<FormProps>) {
+  onSubmit, model, title, dialog, data, onCancel, cancelBtn = true,
+} : Required<FormProps> & { cancelBtn?: boolean, data?: any, onCancel?: () => void }) {
   const open = useFormState();
   const formik = useFormik({
     initialValues: data ?? model.initialValues,
@@ -56,7 +54,7 @@ function FormBuilder({
         </form>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onCancel}>Cancel</Button>
+        {cancelBtn && <Button onClick={onCancel}>Cancel</Button>}
         <Button onClick={handleSubmit}>Save</Button>
       </DialogActions>
     </>
@@ -76,9 +74,5 @@ function FormBuilder({
 
   return dialog ? DialogForm : NoDialogForm;
 }
-FormBuilder.defaultProps = {
-  data: undefined,
-  onCancel: () => {},
-};
 
 export default FormBuilder;
