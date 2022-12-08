@@ -105,15 +105,7 @@ class CourseController {
 
       const data = getEnrollmentTemplatedMessage(_user.row.whatsapp, _course.row, _author.row);
 
-      sendMessage(data)
-        .then(function (response) {
-          console.log('resp', response);
-          return Helpers.sendResponse(res, 200, SUCCESS);
-        })
-        .catch(function (error) {
-          console.log(error);
-          return Helpers.sendResponse(res, 400, 'error sending message', { error: error.message });
-        });
+      await sendMessage(data, res);
     }
 
     return Helpers.sendResponse(res, 200, SUCCESS);
