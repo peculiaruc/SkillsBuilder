@@ -1,17 +1,24 @@
 import axios from 'axios';
+import Helpers from './helpers';
 
-function sendMessage(data) {
-  var config = {
-    method: 'post',
-    url: `https://graph.facebook.com/${process.env.VERSION}/${process.env.PHONE_NUMBER_ID}/messages`,
-    headers: {
-      Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
-      'Content-Type': 'application/json',
-    },
-    data: data,
-  };
-
-  return axios(config);
+async function sendMessage(data, res) {
+  try {
+    const response = await axios.post(
+      `https://graph.facebook.com/${process.env.VERSION}/${process.env.PHONE_NUMBER_ID}/messages`,
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    console, log(response.data);
+    Helpers.sendResponse(res, 200, SUCCESS);
+  } catch (e) {
+    console.log(e);
+    return Helpers.sendResponse(res, 400, e.message);
+  }
 }
 
 function getTextMessageInput(recipient, text) {
