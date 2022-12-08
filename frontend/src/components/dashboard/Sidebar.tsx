@@ -33,7 +33,7 @@ function Sidebar() {
         <Stack>
           {auth.user.role < 1 && (
           <>
-            <MenuItem path="" name="Learning Center" icon={<School fontSize="large" sx={{ color: 'common.white' }} />} />
+            <MenuItem path="" name="Learners" icon={<School fontSize="large" sx={{ color: 'common.white' }} />} />
             <MenuItem path="/" name="Home" active={location.pathname === '/'} />
             <MenuItem path="/my-courses" name="My Courses" active={location.pathname === '/my-courses'} />
             <MenuItem path="/my-assignments" name="My Assignments" active={location.pathname === '/my-assignments'} />
@@ -44,7 +44,7 @@ function Sidebar() {
           {auth.user.role > 0 && (
           <>
             <Divider />
-            <MenuItem path="" name="Creation Center" icon={<EmojiObjects fontSize="large" sx={{ color: 'common.white' }} />} />
+            <MenuItem path="" name={auth.user.role === 1 ? 'Authors' : 'Admin'} icon={<EmojiObjects fontSize="large" sx={{ color: 'common.white' }} />} />
             <MenuItem path="/admin/overview" name="Overview" active={location.pathname === '/admin/overview'} />
             {
               auth.user.role === 1 ? (
