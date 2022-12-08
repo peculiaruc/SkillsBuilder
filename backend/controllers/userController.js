@@ -6,12 +6,16 @@ import Helpers from '../helpers/helpers';
 import Enrollment from '../models/enrollments';
 import Database from '../db/db';
 import { NOT_AUTHORISED, SUCCESS, ALREADY_EXISTS } from '../utils/constants';
+import Post from '../models/posts';
+import Course from '../models/course';
 
 dotenv.config();
 
 const user = new User();
 const tokn = new Token();
 const enroll = new Enrollment();
+const post = new Post();
+const course = new Course();
 const db = new Database();
 class UserController {
   static async getAllUsers(req, res) {
@@ -179,6 +183,18 @@ class UserController {
     const _users = await user.allWhere({ role: 2 });
     if (_users.errors) return Helpers.dbError(res, _users);
     return Helpers.sendResponse(res, 200, SUCCESS, { authors: _users.rows });
+  }
+
+  static async getUserPosts(req, res) {
+    const _posts = post.allWhere({ owner_id: req.params.id });
+    if (_posts.errror) return Helpers.dbError(res, _posts);
+    return Helpers.sendResponse(200, SUCCESS, { posts: _posts.rows });
+  }
+
+  static async getAuthorsCourses(req, res) {
+    const _courses = course.allWhere({ author_id: req.params.id });
+    if (_courses.errror) return Helpers.dbError(res, _courses);
+    return Helpers.sendResponse(200, SUCCESS, { posts: _courses.rows });
   }
 }
 
