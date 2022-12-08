@@ -7,13 +7,19 @@ import {
 } from '../../apiServices/userService';
 import MixedForm from '../../components/forms/MixedForm';
 import TabView from '../../components/TabView';
+import { UserType } from '../../interfaces/UserType';
 import UserMeta from '../../models/UserMeta';
 import UserPassword from '../../models/UserPassword';
 import UserSocialNetwork from '../../models/UserSocialNetwork';
 import { useAuth } from '../../store/authReducer';
 
-export default function Profile() {
-  const { user } = useAuth();
+type Props = {
+  user?: UserType
+};
+
+export default function Profile({ user: _user } : Props) {
+  const auth = useAuth();
+  const user = _user ?? auth.user;
   const [updateUser] = useUpdateUserMutation();
   const [resetPassword] = useResetPasswordMutation();
   const [updatePassword] = useUpdatePasswordMutation();
@@ -43,6 +49,7 @@ export default function Profile() {
               model={new UserMeta(user)}
               dialog={false}
               mutation={updateUser}
+              cancelBtn={false}
             />),
         },
         {
@@ -53,6 +60,7 @@ export default function Profile() {
               model={new UserSocialNetwork(user)}
               dialog={false}
               mutation={updateUser}
+              cancelBtn={false}
             />),
         },
         {
@@ -63,6 +71,7 @@ export default function Profile() {
               model={new UserPassword({ email: user.email })}
               dialog={false}
               mutation={resetPasswordMutation}
+              cancelBtn={false}
             />),
         },
       ]}

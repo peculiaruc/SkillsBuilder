@@ -35,7 +35,7 @@ function Sidebar() {
           <>
             <MenuItem path="" name="Learning Center" icon={<School fontSize="large" sx={{ color: 'common.white' }} />} />
             <MenuItem path="/" name="Home" active={location.pathname === '/'} />
-            <MenuItem path="/my-courses" name="My Cources" active={location.pathname === '/my-courses'} />
+            <MenuItem path="/my-courses" name="My Courses" active={location.pathname === '/my-courses'} />
             <MenuItem path="/my-assignments" name="My Assignments" active={location.pathname === '/my-assignments'} />
             <MenuItem path="/my-study-plan" name="My Study plan" active={location.pathname === '/my-study-plan'} />
             <MenuItem path="/my-groups" name="My Groups" active={location.pathname === '/my-groups'} />

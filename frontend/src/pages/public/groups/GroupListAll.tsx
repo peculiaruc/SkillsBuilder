@@ -10,10 +10,10 @@ import CreateGroupItem from './CreateGroupItem';
 import GroupItem from './GroupItem';
 
 export default function GroupListAll() {
-  const auth = useAuth();
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { data, isLoading } = auth.user.role > 1 ? useGetAllGroupsQuery() : useGetUserGroupsQuery(auth.user.id);
-  if (isLoading) return <Loader />;
+  const { user } = useAuth();
+  const { data, isLoading } = useGetAllGroupsQuery();
+  const { isLoading: u } = useGetUserGroupsQuery(Number(user.id));
+  if (isLoading || u) return <Loader />;
 
   const groups = data?.data.groups;
 

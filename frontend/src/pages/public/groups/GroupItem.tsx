@@ -17,7 +17,7 @@ export default function GroupItem({ group }:Props) {
   const { name, id } = group;
   const navigate = useNavigate();
   const auth = useAuth();
-  const joinedIds = useJoinedGroups().map((g: GroupType) => g.id);
+  const joinedIds = useJoinedGroups();
   // console.log(joined);
   const req = {
     user_id: auth.user.id,
@@ -28,16 +28,16 @@ export default function GroupItem({ group }:Props) {
   const [joinGroup] = useJoinGroupMutation();
   const [deleteGroup] = useDeleteGroupMutation();
   const handleJoinGroup = async () => {
-    await joinGroup(req);
-    toast('You joined the group successfully');
+    const res = await joinGroup(req).unwrap();
+    toast(res.message);
   };
   const handleDeleteGroup = async () => {
-    await deleteGroup(id);
-    toast('Group deleted successfully');
+    const res = await deleteGroup(id).unwrap();
+    toast(res.message);
   };
   const handleLeaveGroup = async () => {
-    await leaveGroup(req);
-    toast('You leaved the group successfully');
+    const res = await leaveGroup(req).unwrap();
+    toast(res.message);
   };
   const openGroup = () => navigate(`/group/${id}`);
   return (

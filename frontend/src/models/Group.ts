@@ -1,9 +1,9 @@
 import * as Yup from 'yup';
-import Model from './Model';
+import Model, { Field } from './Model';
 
 class Group extends Model {
-  constructor() {
-    super();
+  constructor(props: Field = {}) {
+    super(props);
     this.name = 'group';
     this.validationSchema = Yup.object().shape({
       name: Yup.string().required().min(3),
@@ -20,8 +20,20 @@ class Group extends Model {
         rows: 5,
         multiline: true,
       },
+      {
+        name: 'type',
+        type: 'select',
+      },
+      {
+        name: 'status',
+        type: 'select',
+      },
     ];
-    this.setInitialValues();
+    this.init(props);
+    this.data = {
+      type: ['private', 'public'],
+      status: ['active', 'inactive'],
+    };
   }
 }
 

@@ -1,45 +1,30 @@
-import { Delete, Edit, RemoveRedEye } from '@mui/icons-material';
+/* eslint-disable @typescript-eslint/naming-convention */
+import { Delete, RemoveRedEye } from '@mui/icons-material';
 import {
   Avatar, List, ListItem, ListItemAvatar, ListItemText, Stack,
 } from '@mui/material';
 import { useState } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useLeaveGroupMutation } from '../../../apiServices/groupService';
-import { useDeleteUserMutation } from '../../../apiServices/userService';
 import { UserType } from '../../../interfaces/UserType';
 import { useAuth } from '../../../store/authReducer';
-import UserProfile from './UserProfile';
+import { useGroup } from '../../../store/groupReducer';
+import UserProfile from '../../admin/user/UserProfile';
 
 type Props = {
-  user: UserType
+  user: UserType,
 };
 
-export default function UserItem({ user }:Props) {
-  const {
-    fullname, email, id,
-  } = user;
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  const { id: group_id } = useParams();
+export default function MemberItem({ user }: Props) {
+  const group = useGroup();
+  const { fullname, email, id } = user;
   const [open, setOpen] = useState<boolean>(false);
-  const navigate = useNavigate();
-  const location = useLocation();
   const auth = useAuth();
-  const editUser = () => navigate(`/admin/users/${id}/edit`, { state: location });
-
   const handleOpen = () => setOpen(true);
-
-  const [deleteUser] = useDeleteUserMutation();
   const [leaveGroup] = useLeaveGroupMutation();
-
-  const handleDeleteUser = async () => {
-    const res = await deleteUser(id).unwrap();
-    toast(res.message);
-  };
-
   const removeUserFromGroup = async () => {
     const res = await leaveGroup({
-      group_id: Number(group_id),
+      group_id: group.id,
       user_id: id,
     }).unwrap();
     toast(res.message);
@@ -68,23 +53,17 @@ export default function UserItem({ user }:Props) {
               onClick={handleOpen}
               sx={{ cursor: 'pointer' }}
             />
-            {auth.user.id === 2 && (
-              <Edit onClick={editUser} sx={{ cursor: 'pointer' }} color="success" />
-            )}
             {
-               (auth.user.id !== id) && (
-               <Delete
-                 color="error"
-                 sx={{ cursor: 'pointer' }}
-                 onClick={
-                (location.pathname.includes('users') && !group_id) ? handleDeleteUser : removeUserFromGroup
-              }
-               />
-               )
-
-             }
+              (auth.user.id !== id && (auth.user.role > 1 || group.owner_id === auth.user.id)) && (
+                <Delete
+                  color="error"
+                  sx={{ cursor: 'pointer' }}
+                  onClick={removeUserFromGroup}
+                />
+              )
+            }
           </Stack>
-      )}
+        )}
       >
         <ListItemAvatar sx={{ mr: 2 }}>
           <Avatar

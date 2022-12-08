@@ -1,6 +1,4 @@
-import {
-  Box, Divider, ListItem, ListItemText, Stack,
-} from '@mui/material';
+import { List, ListItem, ListItemText } from '@mui/material';
 import { useGetCourseMaterialsQuery } from '../../../apiServices/courseService';
 import Loader from '../../../components/Loader';
 import { CourseType } from '../../../interfaces/CourseType';
@@ -20,23 +18,12 @@ export default function CourseMaterial({ course } : Required<Props>) {
   if (!materials) return <EmptyView title="Course Materials not found" code={404} />;
 
   return (
-    <Stack
-      sx={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '100%',
-        bgcolor: 'background.paper',
-      }}
-    >
+    <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
       {materials.map((material) => (
-        <Box key={material.id}>
-          <ListItem>
-            <ListItemText>{material.name}</ListItemText>
-          </ListItem>
-          <Divider />
-        </Box>
+        <ListItem key={material.id}>
+          <ListItemText>{material.name}</ListItemText>
+        </ListItem>
       ))}
-    </Stack>
+    </List>
   );
 }

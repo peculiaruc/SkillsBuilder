@@ -1,4 +1,5 @@
 import Profile from '../../public/Profile';
+import EditUser from './EditUser';
 import UserTabs from './UserTabs';
 
 export default {
@@ -11,6 +12,10 @@ export default {
     {
       path: 'profile',
       element: <Profile />,
+    },
+    {
+      path: ':id/edit',
+      element: <EditUser />,
     },
   ],
 };
