@@ -8,6 +8,7 @@ const api = createApi({
     'Users',
     'Course',
     'Post',
+    'Question',
     'AllEnrolledCourses',
     'LIST_ALL_COURSES',
     'LIST_ALL_GROUPS',

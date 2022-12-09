@@ -1,18 +1,18 @@
 import CourseDetails from '../../public/courses/CourseDetails';
-import AssignmentList from '../assignment/AssignmentList';
-import CourseList from './CourseList';
-import MyCourseList from './MyCourseList';
+import ViewAssignment from '../assignment/ViewAssignment';
+import AuthorCourse from './AuthorCourse';
+import PublicCourse from './PublicCourse';
 
 const courseRoutes = {
   path: 'courses',
   children: [
     {
       index: true,
-      element: <CourseList />,
+      element: <PublicCourse />,
     },
     {
       path: 'me',
-      element: <MyCourseList />,
+      element: <AuthorCourse />,
     },
     {
       path: ':id',
@@ -20,7 +20,7 @@ const courseRoutes = {
     },
     {
       path: ':id/assignments',
-      element: <AssignmentList />,
+      element: <ViewAssignment />,
     },
   ],
 };

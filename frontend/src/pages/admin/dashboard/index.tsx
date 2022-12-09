@@ -1,6 +1,6 @@
 import { Button, Paper } from '@mui/material';
 import TabView from '../../../components/TabView';
-import CourseList from '../course/CourseList';
+import CourseList from '../course/PublicCourse';
 
 function Dashboard() {
   return (

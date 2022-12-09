@@ -25,7 +25,7 @@ const courseService = api.injectEndpoints({
     }),
     updateOneCourse: builder.mutation<UpdateCourseResponse, UpdateCourseRequest>({
       query: (course) => ({ url: `/course/${course.id}`, method: 'PUT', data: course }),
-      invalidatesTags: [{ type: 'Course', id: 'Enrolled' }, 'LIST_ALL_COURSES'],
+      invalidatesTags: [{ type: 'Course', id: 'Enrolled' }, 'LIST_ALL_COURSES', 'USER_COURSES'],
     }),
     getCourseById: builder.query<GetCourseResponse, CourseId>({
       query: (id) => ({ url: `/course/${id}`, method: 'GET' }),

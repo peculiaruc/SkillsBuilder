@@ -1,8 +1,9 @@
 import {
-  Button, CircularProgress, Paper, Stack,
+  Button, Paper, Stack,
 } from '@mui/material';
 import { useGetAllCoursesQuery } from '../../../apiServices/courseService';
 import { useGetUserCoursesQuery } from '../../../apiServices/userService';
+import Loader from '../../../components/Loader';
 import TabView from '../../../components/TabView';
 import { useAuth } from '../../../store/authReducer';
 import CourseList from './CourseList';
@@ -14,7 +15,7 @@ function CourseView() {
 
   const { isLoading: isLoadingEnroll } = useGetUserCoursesQuery(auth.user.id);
 
-  if (isLoading || isLoadingEnroll) { return <CircularProgress />; }
+  if (isLoading || isLoadingEnroll) { return <Loader />; }
 
   return (
     <Stack spacing={2} width="100%">

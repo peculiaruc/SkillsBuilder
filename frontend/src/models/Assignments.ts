@@ -1,14 +1,16 @@
+/* eslint-disable class-methods-use-this */
+import { FormikValues } from 'formik';
 import * as Yup from 'yup';
-import Model from './Model';
+import Model, { Field } from './Model';
 
 class Assignment extends Model {
-  constructor() {
-    super();
+  constructor(props: Field = {}) {
+    super(props);
     this.name = 'assignments';
     this.validationSchema = Yup.object().shape({
-      course_id: Yup.string().min(3),
+      course_id: Yup.object().required(),
       passing_score: Yup.number().required(),
-      max_attemps: Yup.number().min(1).required(),
+      max_attempts: Yup.number().min(1).required(),
       deadline: Yup.date().required(),
       description: Yup.string().min(3),
     });
@@ -17,7 +19,8 @@ class Assignment extends Model {
         name: 'title',
         type: 'text',
         required: true,
-      }, {
+      },
+      {
         name: 'description',
         type: 'text',
         multiline: true,
@@ -25,11 +28,16 @@ class Assignment extends Model {
         required: true,
       },
       {
+        name: 'course',
+        type: 'select',
+        required: true,
+      },
+      {
         name: 'passing_score',
         type: 'number',
       },
       {
-        name: 'max_attemps',
+        name: 'max_attempts',
         type: 'number',
       },
       {
@@ -37,7 +45,11 @@ class Assignment extends Model {
         type: 'date',
       },
     ];
-    this.setInitialValues();
+    this.init(props);
+  }
+
+  beforeSubmit({ course, ...rest }: FormikValues): FormikValues {
+    return { ...rest, course_id: course.id };
   }
 }
 
