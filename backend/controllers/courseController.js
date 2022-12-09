@@ -23,7 +23,7 @@ const course = new Course();
 const enrollment = new Enrollment();
 const cat = new Categories();
 const user = new User();
-const materials = new CourseLesson();
+const lesson = new CourseLesson();
 const db = new Database();
 const assignment = new Assignment();
 const status = new CourseStatus();
@@ -99,7 +99,7 @@ class CourseController {
     await sendEmail(
       _user.row.email,
       'Enrollment Confirmation',
-      `You have successfully enrolled in ${_course.row.title}`
+      `You have successfully enrolled in ${_course.row.title}`,
     );
     // if (_user.row.whatsapp) {
     //   const _author = await user.getById(_course.row.author_id);
@@ -116,13 +116,13 @@ class CourseController {
   static async unEnrollUser(req, res) {
     const _user = await user.getById(req.body.userId);
     if (_user.errors) return Helpers.dbError(res, _user); // if (_user.row.whatsapp) {
-      //   const _author = await user.getById(_course.row.author_id);
-      //   if (_author.errors) return Helpers.dbError(res, _author);
-  
-      //   const data = getEnrollmentTemplatedMessage(_user.row.whatsapp, _course.row, _author.row);
-  
-      //   await sendMessage(data, res);
-      // }
+    //   const _author = await user.getById(_course.row.author_id);
+    //   if (_author.errors) return Helpers.dbError(res, _author);
+
+    //   const data = getEnrollmentTemplatedMessage(_user.row.whatsapp, _course.row, _author.row);
+
+    //   await sendMessage(data, res);
+    // }
 
     const _course = await course.getById(req.params.id);
     if (_course.errors) return Helpers.dbError(res, _course);
@@ -141,7 +141,7 @@ class CourseController {
     await sendEmail(
       _user.row.email,
       'Unenrollment Confirmation',
-      `You have successfully unenrolled in ${_course.row.title}`
+      `You have successfully unenrolled in ${_course.row.title}`,
     );
     return Helpers.sendResponse(res, 200, SUCCESS);
   }
@@ -166,9 +166,9 @@ class CourseController {
   }
 
   static async getCourseLessons(req, res) {
-    const _materials = await materials.allWhere({ course_id: req.params.id });
-    if (_materials.errors) return Helpers.dbError(res, _materials);
-    return Helpers.sendResponse(res, 200, SUCCESS, { materials: _materials.rows });
+    const _lessons = await lesson.allWhere({ course_id: req.params.id });
+    if (_lessons.errors) return Helpers.dbError(res, _lessons);
+    return Helpers.sendResponse(res, 200, SUCCESS, { lessons: _lessons.rows });
   }
 
   static async getCourseAuthor(req, res) {

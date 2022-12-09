@@ -1,6 +1,7 @@
 import CourseDetails from '../../public/courses/CourseDetails';
 import ViewAssignment from '../assignment/ViewAssignment';
 import AuthorCourse from './AuthorCourse';
+import CourseLessons from './CourseLessons';
 import PublicCourse from './PublicCourse';
 
 const courseRoutes = {
@@ -21,6 +22,10 @@ const courseRoutes = {
     {
       path: ':id/assignments',
       element: <ViewAssignment />,
+    },
+    {
+      path: ':id/lessons',
+      element: <CourseLessons />,
     },
   ],
 };
