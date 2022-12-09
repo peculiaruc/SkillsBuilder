@@ -13,6 +13,11 @@ import Assignment from '../models/assignment';
 import CourseStatus from '../models/courseStatus';
 import Material from '../models/courseMaterial';
 import { ALREADY_ENROLLED, NOT_AUTHORISED, SUCCESS } from '../utils/constants';
+import {
+  sendMessage,
+  getEnrollmentTemplatedMessage,
+  getAssignmentTemplatedMessage,
+} from '../helpers/whatsappMessagehelper';
 
 const course = new Course();
 const enrollment = new Enrollment();
@@ -94,14 +99,30 @@ class CourseController {
     await sendEmail(
       _user.row.email,
       'Enrollment Confirmation',
-      `You have successfully enrolled in ${_course.row.title}`,
+      `You have successfully enrolled in ${_course.row.title}`
     );
+    // if (_user.row.whatsapp) {
+    //   const _author = await user.getById(_course.row.author_id);
+    //   if (_author.errors) return Helpers.dbError(res, _author);
+
+    //   const data = getEnrollmentTemplatedMessage(_user.row.whatsapp, _course.row, _author.row);
+
+    //   await sendMessage(data, res);
+    // }
+
     return Helpers.sendResponse(res, 200, SUCCESS);
   }
 
   static async unEnrollUser(req, res) {
     const _user = await user.getById(req.body.userId);
-    if (_user.errors) return Helpers.dbError(res, _user);
+    if (_user.errors) return Helpers.dbError(res, _user); // if (_user.row.whatsapp) {
+      //   const _author = await user.getById(_course.row.author_id);
+      //   if (_author.errors) return Helpers.dbError(res, _author);
+  
+      //   const data = getEnrollmentTemplatedMessage(_user.row.whatsapp, _course.row, _author.row);
+  
+      //   await sendMessage(data, res);
+      // }
 
     const _course = await course.getById(req.params.id);
     if (_course.errors) return Helpers.dbError(res, _course);
@@ -120,7 +141,7 @@ class CourseController {
     await sendEmail(
       _user.row.email,
       'Unenrollment Confirmation',
-      `You have successfully unenrolled in ${_course.row.title}`,
+      `You have successfully unenrolled in ${_course.row.title}`
     );
     return Helpers.sendResponse(res, 200, SUCCESS);
   }
