@@ -58,11 +58,12 @@ module.exports = {
             user: user.row,
           },
         });
+      } else {
+        res.status(400).send({
+          status: 'error',
+          message: 'Invalid params',
+        });
       }
-      res.status(400).send({
-        status: 'error',
-        message: 'Invalid params',
-      });
     } catch (err) {
       // console.log(err);
       res.status(400).send({
@@ -126,11 +127,12 @@ module.exports = {
             user: user.row,
           },
         });
+      } else {
+        res.status(400).send({
+          status: 'error',
+          message: 'Invalid params',
+        });
       }
-      res.status(400).send({
-        status: 'error',
-        message: 'Invalid params',
-      });
     } catch (err) {
       // console.log(err);
       res.status(400).send({

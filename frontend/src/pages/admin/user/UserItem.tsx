@@ -3,9 +3,8 @@ import {
   Avatar, List, ListItem, ListItemAvatar, ListItemText, Stack,
 } from '@mui/material';
 import { useState } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useLeaveGroupMutation } from '../../../apiServices/groupService';
 import { useDeleteUserMutation } from '../../../apiServices/userService';
 import { UserType } from '../../../interfaces/UserType';
 import { useAuth } from '../../../store/authReducer';
@@ -20,7 +19,6 @@ export default function UserItem({ user }:Props) {
     fullname, email, id,
   } = user;
   // eslint-disable-next-line @typescript-eslint/naming-convention
-  const { id: group_id } = useParams();
   const [open, setOpen] = useState<boolean>(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -30,20 +28,12 @@ export default function UserItem({ user }:Props) {
   const handleOpen = () => setOpen(true);
 
   const [deleteUser] = useDeleteUserMutation();
-  const [leaveGroup] = useLeaveGroupMutation();
 
   const handleDeleteUser = async () => {
     const res = await deleteUser(id).unwrap();
     toast(res.message);
   };
 
-  const removeUserFromGroup = async () => {
-    const res = await leaveGroup({
-      group_id: Number(group_id),
-      user_id: id,
-    }).unwrap();
-    toast(res.message);
-  };
   return (
     <List
       sx={{
@@ -68,21 +58,16 @@ export default function UserItem({ user }:Props) {
               onClick={handleOpen}
               sx={{ cursor: 'pointer' }}
             />
-            {auth.user.id === 2 && (
-              <Edit onClick={editUser} sx={{ cursor: 'pointer' }} color="success" />
+            {auth.user.role === 2 && (
+              <>
+                <Edit onClick={editUser} sx={{ cursor: 'pointer' }} color="success" />
+                <Delete
+                  color="error"
+                  sx={{ cursor: 'pointer' }}
+                  onClick={handleDeleteUser}
+                />
+              </>
             )}
-            {
-               (auth.user.id !== id) && (
-               <Delete
-                 color="error"
-                 sx={{ cursor: 'pointer' }}
-                 onClick={
-                (location.pathname.includes('users') && !group_id) ? handleDeleteUser : removeUserFromGroup
-              }
-               />
-               )
-
-             }
           </Stack>
       )}
       >

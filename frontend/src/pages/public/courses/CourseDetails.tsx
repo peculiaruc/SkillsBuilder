@@ -88,10 +88,6 @@ function CourseDetails() {
         tabs={
             [
               {
-                name: 'Course Information',
-                component: <>.</>,
-              },
-              {
                 name: 'Course Outline',
                 component: <>.</>,
               },

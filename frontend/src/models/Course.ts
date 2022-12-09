@@ -1,14 +1,14 @@
 import * as Yup from 'yup';
-import Model from './Model';
+import Model, { Field } from './Model';
 
 class Course extends Model {
-  constructor() {
-    super();
-    this.name = 'courses';
+  constructor(props: Field = {}) {
+    super(props);
+    this.name = 'course';
     this.validationSchema = Yup.object().shape({
-      title: Yup.string().min(3, 'The Name must be at least 3 characters').required('Please, provide a summary.'),
+      title: Yup.string().min(3),
       description: Yup.string().min(3),
-      content: Yup.string().min(3, 'The summary must be at least 3 characters').required('Please, provide a summary.'),
+      content: Yup.string().min(3),
     });
     this.fields = [
       {
@@ -33,7 +33,7 @@ class Course extends Model {
         required: true,
       },
     ];
-    this.setInitialValues();
+    this.init(props);
   }
 }
 

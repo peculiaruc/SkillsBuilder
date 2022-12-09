@@ -37,16 +37,16 @@ export default function Overview() {
           icon={<Person fontSize="large" />}
         />
       </Grid>
-      <Grid item xs={1}>
+      {/* <Grid item xs={1}>
         <OverviewItem
           title="Lessons"
           value="10"
           icon={<School fontSize="large" />}
         />
-      </Grid>
+      </Grid> */}
       <Grid item xs={1}>
         <OverviewItem
-          title="Authors"
+          title="Course Authors"
           value="15"
           icon={<Person fontSize="large" />}
         />
@@ -58,13 +58,13 @@ export default function Overview() {
           icon={<School fontSize="large" />}
         />
       </Grid>
-      <Grid item xs={1}>
+      {/* <Grid item xs={1}>
         <OverviewItem
           title="Assignments"
           value="17"
           icon={<School fontSize="large" />}
         />
-      </Grid>
+      </Grid> */}
     </Grid>
   );
 }

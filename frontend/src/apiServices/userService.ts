@@ -1,4 +1,5 @@
 import api from '.';
+import { GetAllAssignmentsResponse } from '../interfaces/AssignmentType';
 import { GetMyCoursesResponse } from '../interfaces/CourseType';
 import { GetMyGroupsResponse } from '../interfaces/GroupTypes';
 import {
@@ -35,6 +36,7 @@ const userService = api.injectEndpoints({
     }),
     deleteUser: builder.mutation<DeleteUserResponse, UserId>({
       query: (id) => ({ url: `/user/${id}`, method: 'DELETE' }),
+      invalidatesTags: ['LIST_ALL_USERS'],
     }),
     getUserPosts: builder.query<GetUserPostsResponse, UserId>({
       query: (id) => ({ url: `/user/${id}/posts`, method: 'GET' }),
@@ -55,6 +57,10 @@ const userService = api.injectEndpoints({
     getAuthorCourses: builder.query<GetMyCoursesResponse, UserId>({
       query: (id) => ({ url: `/user/authors/${id}/mycourses`, method: 'GET' }),
       providesTags: ['USER_COURSES'],
+    }),
+    getAuthorAssignments: builder.query<GetAllAssignmentsResponse, UserId>({
+      query: (id) => ({ url: `/user/authors/${id}/assignments`, method: 'GET' }),
+      providesTags: ['USER_ASSIGNMENTS'],
     }),
     getUsersByRole: builder.query<GetAllUsersResponse, string>({
       query: (role) => ({ url: role !== 'all' ? `/user/${role}/all` : '/user/all', method: 'GET' }),
@@ -85,6 +91,7 @@ export const {
   useGetAuthorCoursesQuery,
   useResetPasswordMutation,
   useUpdatePasswordMutation,
+  useGetAuthorAssignmentsQuery,
 } = userService;
 
 export default userService;

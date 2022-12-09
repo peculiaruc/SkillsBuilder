@@ -9,17 +9,21 @@ import {
   UpdateAssignmentRequest,
 } from '../interfaces/AssignmentType';
 import { CourseId } from '../interfaces/CourseType';
+import { ResponseType } from '../interfaces/ResponseType';
 
 const assignmentService = api.injectEndpoints({
   endpoints: (builder) => ({
     createAssignment: builder.mutation<GetAssignmentResponse, CreateAssignmentRequest>({
       query: (assignment) => ({ url: '/assignment/create', method: 'POST', data: assignment }),
+      invalidatesTags: ['USER_ASSIGNMENTS'],
     }),
-    updateOneAssignment: builder.mutation<GetAssignmentResponse, UpdateAssignmentRequest>({
-      query: (assignment) => ({ url: `/assignment/${assignment.id}`, method: 'PUT', data: assignment }),
+    updateAssignment: builder.mutation<GetAssignmentResponse, UpdateAssignmentRequest>({
+      query: ({ id, ...data }) => ({ url: `/assignment/${id}`, method: 'PUT', data }),
+      invalidatesTags: ['USER_ASSIGNMENTS'],
     }),
     getAssignmentById: builder.query<GetAssignmentResponse, number>({
       query: (id) => ({ url: `/assignment/${id}`, method: 'GET' }),
+      providesTags: ['USER_ASSIGNMENTS'],
     }),
     getCourseAssignments: builder.query<GetAllAssignmentsResponse, CourseId>({
       query: (id) => ({ url: `/course/${id}/assignments`, method: 'DELETE' }),
@@ -28,10 +32,10 @@ const assignmentService = api.injectEndpoints({
       .query<GetAssignmentQuestionsResponse, number>({
       query: (id) => ({ url: `/assignment/${id}/questions`, method: 'GET' }),
     }),
-    deleteOneAssignment: builder.mutation<void, number>({
+    deleteAssignment: builder.mutation<ResponseType, number>({
       query: (id) => ({ url: `/assignment/${id}`, method: 'DELETE' }),
     }),
-    deleteOneQuestion: builder.mutation<void, number>({
+    deleteQuestion: builder.mutation<ResponseType, number>({
       query: (question_id) => ({ url: `/questions/${question_id}`, method: 'DELETE' }),
     }),
     submitAssignment: builder.mutation<void, SubmitAssignmentRequest>({
@@ -47,13 +51,13 @@ const assignmentService = api.injectEndpoints({
 export const {
   useCreateAssignmentMutation,
   useGetAssignmentByIdQuery,
-  useDeleteOneAssignmentMutation,
-  useUpdateOneAssignmentMutation,
+  useDeleteAssignmentMutation,
   useGetCourseAssignmentsQuery,
   useGetAssignmentQuestionsQuery,
   useSubmitAssignmentMutation,
   useGetAssignmentSubmissionsQuery,
-  useDeleteOneQuestionMutation,
+  useDeleteQuestionMutation,
+  useUpdateAssignmentMutation,
 } = assignmentService;
 
 export default assignmentService;

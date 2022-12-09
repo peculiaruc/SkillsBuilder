@@ -1,4 +1,5 @@
 import { CourseId } from './CourseType';
+import { QuestionType } from './QuestionType';
 import { ResponseType } from './ResponseType';
 
 export type AssignmentId = number;
@@ -9,7 +10,7 @@ export interface AssignmentType {
   description: string;
   title: string;
   passing_score: number;
-  max_attemps: number;
+  max_attempts: number;
   deadline: Date;
   created_at: Date;
   updated_at: Date;
@@ -36,17 +37,6 @@ export interface QuestionType {
 } 7
 
 */
-
-export interface QuestionType {
-  id:number;
-  question: string;
-  mark: number;
-  assignment_id: number;
-  choices: ChoiceType[];
-  type: string,
-  created_at: Date;
-  updated_at: Date;
-}
 
 /**
  * When a user submit an answer

@@ -1,18 +1,15 @@
 import {
-  Box, Button, Grid, Paper, Stack, Typography,
+  Box, Grid, Paper, Typography,
 } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import { CourseType } from '../../../interfaces/CourseType';
+import { AssignmentType } from '../../../interfaces/AssignmentType';
 
 type Props = {
-  course: CourseType
+  assignment: AssignmentType
 };
 
-function ListItemCourse({ course }: Props) {
-  const { title, description, id } = course;
+function AssignmentOverView({ assignment }: Props) {
+  const { title, description } = assignment;
   const style = { display: 'flex', justifyContent: 'center', alignItems: 'center' };
-
-  const navigate = useNavigate();
 
   return (
     <Paper sx={{
@@ -41,15 +38,9 @@ function ListItemCourse({ course }: Props) {
         <Grid item xs={1} sm={1} md={2} sx={{ ...style, justifyContent: 'flex-start' }}>
           <p>{description.substring(0, 250)}</p>
         </Grid>
-        <Grid item xs={1} sm={1} md={1} sx={style}>
-          <Stack spacing={2}>
-            <Button onClick={() => navigate(`/admin/courses/${id}`)}>View Details</Button>
-            <Button onClick={() => navigate(`/admin/courses/${id}/assignments`)}>Assignments</Button>
-          </Stack>
-        </Grid>
       </Grid>
     </Paper>
   );
 }
 
-export default ListItemCourse;
+export default AssignmentOverView;

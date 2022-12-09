@@ -2,9 +2,10 @@ import { RemoveCircle } from '@mui/icons-material';
 import { IconButton, Stack } from '@mui/material';
 import { FormikValues } from 'formik';
 import { useDispatch } from 'react-redux';
-import { useDeleteOneQuestionMutation } from '../../../apiServices/assignmentService';
+import { toast } from 'react-toastify';
+import { useDeleteQuestionMutation } from '../../../apiServices/assignmentService';
 import FormBuilder from '../../../components/forms/FormBuilder';
-import { QuestionType } from '../../../interfaces/AssignmentType';
+import { QuestionType } from '../../../interfaces/QuestionType';
 import Question from '../../../models/Question';
 import { removeQuestion, useQuestions } from '../../../store/assignmentReducer';
 
@@ -15,7 +16,7 @@ export default function QuestionForm() {
 
   const questions = useQuestions();
 
-  const [deleteOneQuestion] = useDeleteOneQuestionMutation();
+  const [deleteOneQuestion] = useDeleteQuestionMutation();
 
   const onSubmit = async (values: FormikValues) => {
     // eslint-disable-next-line no-console
@@ -24,7 +25,8 @@ export default function QuestionForm() {
 
   const deleteQuestion = async (question: QuestionType, index:number) => {
     if (question.id) {
-      await deleteOneQuestion(question.id).unwrap();
+      const res = await deleteOneQuestion(question.id).unwrap();
+      toast(res.message);
     } else dispatch(removeQuestion(index));
   };
 

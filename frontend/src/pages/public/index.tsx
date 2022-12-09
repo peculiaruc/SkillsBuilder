@@ -1,24 +1,29 @@
+import PublicCourse from '../admin/course/PublicCourse';
 import AssignmentList from './AssignmentIndex';
 import CourseDetails from './courses/CourseDetails';
-import CourseView from './courses/CourseView';
+import MyCourse from './courses/MyCourse';
 import GroupDetails from './groups/GroupDetails';
 import MyGroupList from './groups/MyGroupList';
-import MyStudyPlan from './groups/MyStudyPlan';
+// import MyStudyPlan from './groups/MyStudyPlan';
 import Profile from './Profile';
 
 export default [
   {
+    path: '/courses',
+    element: <PublicCourse />,
+  },
+  {
     path: '/my-courses',
-    element: <CourseView />,
+    element: <MyCourse />,
   },
   {
     path: '/my-assignments',
     element: <AssignmentList />,
-  },
+  }, /*
   {
     path: '/my-study-plan',
-    element: <MyStudyPlan />,
-  },
+    element: <Editor />,
+  }, */
   {
     path: '/my-groups',
     element: <MyGroupList />,
