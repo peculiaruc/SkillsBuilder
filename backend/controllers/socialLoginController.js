@@ -58,7 +58,7 @@ module.exports = {
             user: user.row,
           },
         });
-      } else{
+      } else {
         res.status(400).send({
           status: 'error',
           message: 'Invalid params',
@@ -127,7 +127,7 @@ module.exports = {
             user: user.row,
           },
         });
-      } else{
+      } else {
         res.status(400).send({
           status: 'error',
           message: 'Invalid params',
