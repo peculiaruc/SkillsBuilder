@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 import sendEmail from '../utils/sendEmails';
 import Course from '../models/course';
 import Helpers from '../helpers/helpers';
@@ -5,7 +7,7 @@ import Enrollment from '../models/enrollments';
 import Categories from '../models/categories';
 import User from '../models/users';
 import CourseLesson from '../models/courseLesson';
-import moment from 'moment';
+
 import Database from '../db/db';
 import Assignment from '../models/assignment';
 import CourseStatus from '../models/courseStatus';
