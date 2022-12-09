@@ -3,10 +3,12 @@ import Assignment from '../models/assignment';
 import AssignmentSubmissions from '../models/assignmentSubmissions';
 import AssignmentQuestions from '../models/assignmentQuestions';
 import { NOT_AUTHORISED, SUCCESS } from '../utils/constants';
+import Course from '../models/course';
 
 const assignment = new Assignment();
 const submission = new AssignmentSubmissions();
 const assQuestions = new AssignmentQuestions();
+const course = new Course();
 
 class AssignmentController {
   static async createAssignment(req, res) {
@@ -67,6 +69,20 @@ class AssignmentController {
     const sub = await submission.allWhere({
       assignment_id: req.params.id,
       user_id: currentuser.id,
+    });
+    if (sub.errors) return Helpers.dbError(res, sub);
+    return Helpers.sendResponse(res, 200, 'success', { submissions: sub.rows });
+  }
+
+  static async getAuthorAssignmentSubmissions(req, res) {
+    const currentuser = await Helpers.getLoggedInUser(req, res);
+    const _course = await course.getById(req.body.course_id);
+    if (_course.errors) return Helpers.dbError(res, _course);
+    if (_course.row.id !== currentuser.id) return Helpers.sendResponse(res, 400, NOT_AUTHORISED);
+
+    const sub = await submission.allWhere({
+      assignment_id: req.params.id,
+      course_id: req.body.course_id,
     });
     if (sub.errors) return Helpers.dbError(res, sub);
     return Helpers.sendResponse(res, 200, 'success', { submissions: sub.rows });

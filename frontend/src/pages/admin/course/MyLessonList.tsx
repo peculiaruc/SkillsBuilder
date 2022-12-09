@@ -2,11 +2,14 @@ import { Button, CircularProgress, Stack } from '@mui/material';
 import { FormikValues } from 'formik';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
+import { useParams } from 'react-router-dom';
 import { useCreateCourseMutation } from '../../../apiServices/courseService';
-import { useGetAuthorCoursesQuery } from '../../../apiServices/userService';
+// import { useGetAuthorCoursesQuery } from '../../../apiServices/userService';
+import { useGetCourseLessonsQuery } from '../../../apiServices/lessonService';
 import FormBuilder from '../../../components/forms/FormBuilder';
 import { CourseType } from '../../../interfaces/CourseType';
-import Course from '../../../models/Course';
+import { CourseLessonType } from '../../../interfaces/LessonType';
+import Lesson from '../../../models/Lesson';
 import { useAuth } from '../../../store/authReducer';
 import { closeDialog, openDialog } from '../../../store/dialogFormReducer';
 // import ListItemCourse from './ListItemCourse';
@@ -14,25 +17,31 @@ import ListItemLesson from './ListItemLesson';
 
 function LessonList() {
   const dispatch = useDispatch();
+  const { id } = useParams();
 
   const auth = useAuth();
 
-  const model = new Course();
+  const model = new Lesson();
 
   const handleOpen = () => dispatch(openDialog());
   const onCancel = () => dispatch(closeDialog());
-  const [createCourse] = useCreateCourseMutation();
-  const { data: resp, isLoading } = useGetAuthorCoursesQuery(auth.user.id);
+  // const [createCourse] = useCreateCourseMutation();
+  const resp = useGetCourseLessonsQuery(Number(id));
 
-  if (isLoading) { return <CircularProgress />; }
+  console.log('resp', resp);
 
-  const onSubmit = async (values: FormikValues) => {
-    const data = { ...values, author_id: auth.user.id } as unknown;
-    await createCourse(data as CourseType).unwrap();
-    onCancel();
-    toast('Course created successfully');
-  };
-  const courses = resp?.data.courses ?? [];
+  if (resp.isLoading) {
+    return <CircularProgress />;
+  }
+  const lessons = resp?.data?.lessons ?? [];
+
+  //   const onSubmit = async (values: FormikValues) => {
+  //     const data = { ...values, author_id: auth.user.id } as unknown;
+  //     await createCourse(data as CourseType).unwrap();
+  //     onCancel();
+  //     toast('Course created successfully');
+  //   };
+  //
   /*
   const onSubmit = async (values: FormikValues) => {
     const course = values as CourseType;
@@ -52,17 +61,21 @@ function LessonList() {
     <Stack spacing={2} display="flex" sx={{ width: '100%' }}>
       {auth.user.role > 0 && (
         <>
-          <Button sx={{ alignSelf: 'flex-end' }} onClick={handleOpen}>Create Course</Button>
+          <Button sx={{ alignSelf: 'flex-end' }} onClick={handleOpen}>
+            Create lesson
+          </Button>
           <FormBuilder
             dialog
-            title="Create a course"
-            onSubmit={onSubmit}
+            title="Create Lesson"
+            // onSubmit={onSubmit}
             onCancel={onCancel}
             model={model}
           />
         </>
       )}
-      {courses.map((course: CourseType) => <ListItemCourse course={course} key={course.title} />)}
+      {lessons.map((lesson: CourseLessonType) => (
+        <ListItemLesson lesson={lesson} key={lesson.id} />
+      ))}
     </Stack>
   );
 }

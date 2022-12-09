@@ -168,6 +168,7 @@ class CourseController {
   static async getCourseLessons(req, res) {
     const _lessons = await lesson.allWhere({ course_id: req.params.id });
     if (_lessons.errors) return Helpers.dbError(res, _lessons);
+    console.log(_lessons);
     return Helpers.sendResponse(res, 200, SUCCESS, { lessons: _lessons.rows });
   }
 
