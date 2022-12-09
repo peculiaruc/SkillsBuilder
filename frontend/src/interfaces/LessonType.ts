@@ -19,7 +19,7 @@ export type CreateCourseLessonResponse = ResponseType & {
     lessons: CourseLessonType[],
   }
 };
-export type GetLessonResponse = CreateCourseLessonResponse;
+export type GetLessonResponse = CourseLessonType[];
 export type GetCourseLessonRequest = CourseId;
 export type DeleteLessonResponse = ResponseType;
 export type UpdateLessonRequest = CourseLessonType;

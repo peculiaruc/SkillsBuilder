@@ -1,4 +1,6 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { Box, Button, Grid, Paper, Stack, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 // import { useNavigate } from 'react-router-dom';
 import { CourseLessonType } from '../../../interfaces/LessonType';
 
@@ -7,7 +9,9 @@ type Props = {
 };
 
 function ListItemLesson({ lesson }: Props) {
+  console.log('lesson', lesson);
   const {
+    id,
     lesson_content,
     lesson_content_type,
     lesson_summary,
@@ -21,7 +25,7 @@ function ListItemLesson({ lesson }: Props) {
     alignItems: 'center',
   };
 
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   return (
     <Paper
@@ -61,7 +65,9 @@ function ListItemLesson({ lesson }: Props) {
         </Grid>
         <Grid item xs={1} sm={1} md={1} sx={style}>
           <Stack spacing={2}>
-            <Button>View Lesson</Button>
+            <Button onClick={() => navigate(`/admin/courses/lesson/${id}`)}>
+              View Lesson
+            </Button>
             {/* <Button
               onClick={() => navigate(`/admin/courses/${id}/assignments`)}
             >

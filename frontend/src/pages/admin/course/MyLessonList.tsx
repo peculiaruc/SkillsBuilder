@@ -8,7 +8,10 @@ import { useCreateCourseMutation } from '../../../apiServices/courseService';
 import { useGetCourseLessonsQuery } from '../../../apiServices/lessonService';
 import FormBuilder from '../../../components/forms/FormBuilder';
 import { CourseType } from '../../../interfaces/CourseType';
-import { CourseLessonType } from '../../../interfaces/LessonType';
+import {
+  CourseLessonType,
+  GetLessonResponse,
+} from '../../../interfaces/LessonType';
 import Lesson from '../../../models/Lesson';
 import { useAuth } from '../../../store/authReducer';
 import { closeDialog, openDialog } from '../../../store/dialogFormReducer';
@@ -26,14 +29,13 @@ function LessonList() {
   const handleOpen = () => dispatch(openDialog());
   const onCancel = () => dispatch(closeDialog());
   // const [createCourse] = useCreateCourseMutation();
-  const resp = useGetCourseLessonsQuery(Number(id));
+  const { data: resp, isLoading } = useGetCourseLessonsQuery(Number(id));
 
   console.log('resp', resp);
 
-  if (resp.isLoading) {
+  if (isLoading) {
     return <CircularProgress />;
   }
-  const lessons = resp?.data?.lessons ?? [];
 
   //   const onSubmit = async (values: FormikValues) => {
   //     const data = { ...values, author_id: auth.user.id } as unknown;
@@ -67,13 +69,13 @@ function LessonList() {
           <FormBuilder
             dialog
             title="Create Lesson"
-            // onSubmit={onSubmit}
+            onSubmit={() => console.log('create lesson')}
             onCancel={onCancel}
             model={model}
           />
         </>
       )}
-      {lessons.map((lesson: CourseLessonType) => (
+      {resp?.data?.lessons.map((lesson: CourseLessonType) => (
         <ListItemLesson lesson={lesson} key={lesson.id} />
       ))}
     </Stack>
