@@ -186,15 +186,16 @@ class UserController {
   }
 
   static async getUserPosts(req, res) {
-    const _posts = post.allWhere({ owner_id: req.params.id });
+    const _posts = await post.allWhere({ owner_id: req.params.id });
     if (_posts.errror) return Helpers.dbError(res, _posts);
-    return Helpers.sendResponse(200, SUCCESS, { posts: _posts.rows });
+    return Helpers.sendResponse(res, 200, SUCCESS, { posts: _posts.rows });
   }
 
   static async getAuthorsCourses(req, res) {
-    const _courses = course.allWhere({ author_id: req.params.id });
+    const _courses = await course.allWhere({ author_id: req.params.id });
+    console.log('author courses', _courses);
     if (_courses.errror) return Helpers.dbError(res, _courses);
-    return Helpers.sendResponse(200, SUCCESS, { posts: _courses.rows });
+    return Helpers.sendResponse(res, 200, SUCCESS, { courses: _courses.rows });
   }
 }
 
