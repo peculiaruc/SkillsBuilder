@@ -8,6 +8,7 @@ import Database from '../db/db';
 import { NOT_AUTHORISED, SUCCESS, ALREADY_EXISTS } from '../utils/constants';
 import Post from '../models/posts';
 import Course from '../models/course';
+import Assignment from '../models/assignment';
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ const tokn = new Token();
 const enroll = new Enrollment();
 const post = new Post();
 const course = new Course();
+const assignment = new Assignment();
 const db = new Database();
 class UserController {
   static async getAllUsers(req, res) {
@@ -189,6 +191,12 @@ class UserController {
     const _posts = await post.allWhere({ owner_id: req.params.id });
     if (_posts.errror) return Helpers.dbError(res, _posts);
     return Helpers.sendResponse(res, 200, SUCCESS, { posts: _posts.rows });
+  }
+
+  static async getAuthorAssignments(req, res) {
+    const _assignment = await assignment.allWhere({ author_id: req.params.id });
+    if (_assignment.errror) return Helpers.dbError(res, _assignment);
+    return Helpers.sendResponse(res, 200, SUCCESS, { assignments: _assignment.rows });
   }
 
   static async getAuthorsCourses(req, res) {
