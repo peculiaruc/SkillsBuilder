@@ -14,6 +14,7 @@ import {
   submissionRoute,
   postsRoute,
   materialRoute,
+  lessonRoute,
 } from './routes';
 
 dotenv.config();
@@ -28,17 +29,18 @@ app.use(morgan('short'));
 app.use('/home', (req, res) => {
   res.status(200).send('Welcome to this awesome API!!');
 });
-
-app.use('/api/v1/auth', authRoute);
-app.use('/api/v1/social', socialLoginRoute);
-app.use('/api/v1/course', courseRoute);
-app.use('/api/v1/assignment', assignmentRoute);
-app.use('/api/v1/submission', submissionRoute);
-app.use('/api/v1/question', questionRoute);
-app.use('/api/v1/group', groupRoute);
-app.use('/api/v1/user', userRoute);
-app.use('/api/v1/post', postsRoute);
-app.use('/api/v1/material', materialRoute);
+const apiPath = '/api/v1';
+app.use(`${apiPath}/auth`, authRoute);
+app.use(`${apiPath}/social`, socialLoginRoute);
+app.use(`${apiPath}/course`, courseRoute);
+app.use(`${apiPath}/assignment`, assignmentRoute);
+app.use(`${apiPath}/submission`, submissionRoute);
+app.use(`${apiPath}/question`, questionRoute);
+app.use(`${apiPath}/group`, groupRoute);
+app.use(`${apiPath}/user`, userRoute);
+app.use(`${apiPath}/post`, postsRoute);
+app.use(`${apiPath}/material`, materialRoute);
+app.use(`${apiPath}/lesson`, lessonRoute);
 
 app.use((req, res) => {
   res.status(404).send({
