@@ -61,10 +61,7 @@ class AssignmentController {
   static async getAssignmentQuestions(req, res) {
     const qs = await assQuestions.getByAssignment(req.params.id);
     if (qs.error) return Helpers.dbError(res, qs);
-    // const newRes = qs.rows.map((q) => ({ ...q, choices: JSON.parse(q.choices) }));
-    return Helpers.sendResponse(res, 200, 'success', {
-      assignments: qs.rows.map((q) => ({ ...q, choices: JSON.parse(q.choices) })),
-    });
+    return Helpers.sendResponse(res, 200, 'success', { assignments: qs.rows.map((q) => ({ ...q, choices: JSON.parse(q.choices) })) });
   }
 
   static async getAssignmentSubmissions(req, res) {
@@ -76,15 +73,6 @@ class AssignmentController {
     if (sub.errors) return Helpers.dbError(res, sub);
     return Helpers.sendResponse(res, 200, 'success', { submissions: sub.rows });
   }
-
-  // static async getAssignmentSubmissionsById(req, res) {
-  //   const currentuser = await Helpers.getLoggedInUser(req, res);
-  //   const sub = await submission.allWhere({
-  //     assignment_id: req.params.id,
-  //   });
-  //   if (sub.errors) return Helpers.dbError(res, sub);
-  //   return Helpers.sendResponse(res, 200, 'success', { submissions: sub.rows });
-  // }
 
   static async getAuthorAssignmentSubmissions(req, res) {
     const currentuser = await Helpers.getLoggedInUser(req, res);
@@ -100,5 +88,3 @@ class AssignmentController {
     return Helpers.sendResponse(res, 200, 'success', { submissions: sub.rows });
   }
 }
-
-export default AssignmentController;
