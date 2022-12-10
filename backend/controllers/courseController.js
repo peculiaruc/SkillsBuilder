@@ -29,7 +29,7 @@ const db = new Database();
 const assignment = new Assignment();
 const status = new CourseStatus();
 const material = new Material();
-const progress = new CourseProgress(i);
+const progress = new CourseProgress();
 
 class CourseController {
   static async getAllCourses(req, res) {
