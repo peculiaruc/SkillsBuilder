@@ -18,6 +18,7 @@ import {
   getEnrollmentTemplatedMessage,
   getAssignmentTemplatedMessage,
 } from '../helpers/whatsappMessagehelper';
+import CourseProgress from '../models/courseProgress';
 
 const course = new Course();
 const enrollment = new Enrollment();
@@ -28,6 +29,7 @@ const db = new Database();
 const assignment = new Assignment();
 const status = new CourseStatus();
 const material = new Material();
+const progress = new CourseProgress(i);
 
 class CourseController {
   static async getAllCourses(req, res) {
@@ -234,6 +236,29 @@ class CourseController {
       return Helpers.dbError(res, _status);
     }
     return Helpers.sendResponse(res, 200, SUCCESS, { status: _status.rows });
+  }
+
+  static async getCourseProgress(req, res) {
+    const currentuser = await Helpers.getLoggedInUser(req, res);
+    const _progress = await progress.allWhere({
+      course_id: req.params.id,
+      user_id: currentuser.id,
+    });
+    if (_progress.errors) return Helpers.dbError(res, _progress);
+    return Helpers.sendResponse(res, 200, SUCCESS, { progress: _progress.rows });
+  }
+
+  static async updateCourseProgress(req, res) {
+    const currentuser = await Helpers.getLoggedInUser(req, res);
+    const _progress = await progress.update(
+      { progress_value: req.body.progress_value },
+      {
+        course_id: req.params.id,
+        user_id: currentuser.id,
+      },
+    );
+    if (_progress.errors) return Helpers.dbError(res, _progress);
+    return Helpers.sendResponse(res, 200, SUCCESS, { progress: _progress.rows });
   }
 }
 

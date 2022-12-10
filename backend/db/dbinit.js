@@ -15,6 +15,7 @@ import {
   courseStatus,
   posts,
   courseMaterial,
+  courseProgress,
 } from '../migrations';
 
 export default async () => {
@@ -41,6 +42,7 @@ export default async () => {
     await db.queryBuilder(courseStatus);
     await db.queryBuilder(posts);
     await db.queryBuilder(courseMaterial);
+    await db.queryBuilder(courseProgress);
     return true;
   } catch (e) {
     console.log('db init err', e);

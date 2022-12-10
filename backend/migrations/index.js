@@ -13,6 +13,7 @@ import { choiceType } from './create_table_choice_type';
 import { courseStatus } from './create_table_course_status';
 import { posts } from './create_table_posts';
 import { courseMaterial } from './create_course_material_table';
+import { courseProgress } from './create_table_course_progres';
 
 export {
   users,
@@ -30,4 +31,5 @@ export {
   courseStatus,
   posts,
   courseMaterial,
+  courseProgress,
 };
