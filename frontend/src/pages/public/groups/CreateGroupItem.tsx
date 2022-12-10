@@ -1,21 +1,20 @@
 import { GroupAddSharp } from '@mui/icons-material';
 import { Button, Paper, Stack } from '@mui/material';
 import { FormikValues } from 'formik';
-import { useDispatch } from 'react-redux';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { useCreateGroupMutation } from '../../../apiServices/groupService';
 import FormBuilder from '../../../components/forms/FormBuilder';
 import { CreateGroupRequest } from '../../../interfaces/GroupTypes';
 import Group from '../../../models/Group';
 import { useAuth } from '../../../store/authReducer';
-import { closeDialog, openDialog } from '../../../store/dialogFormReducer';
 
 export default function CreateGroupItem() {
   const auth = useAuth();
-  const dispatch = useDispatch();
+  const [open, setOpen] = useState(false);
   const [createGroup] = useCreateGroupMutation();
-  const onCancel = () => dispatch(closeDialog());
-  const handleCreateGroup = () => dispatch(openDialog());
+  const onCancel = () => setOpen(false);
+  const handleCreateGroup = () => setOpen(true);
   const onSubmit = async (group: FormikValues) => {
     const request = { ...group, owner_id: auth.user.id } as CreateGroupRequest;
     await createGroup(request).unwrap();
@@ -44,6 +43,7 @@ export default function CreateGroupItem() {
         }}
       >
         <FormBuilder
+          open={open}
           title="Create a group"
           dialog
           model={model}

@@ -30,9 +30,11 @@ class Post extends Model {
     this.init(props);
   }
   beforeSubmit({
-    content, title, id,
+    content, title, id, group_id,
   }: FormikValues): FormikValues {
-    return { content, title, id };
+    return {
+      content, title, id, group_id,
+    };
   }
 }
 

@@ -25,7 +25,7 @@ function AuthorAssignment() {
   } = useGetAuthorCoursesQuery(user.id);
   if (isLoadingAssignments || isLoadingCourses) return <Loader />;
   const assignments = resAssignments?.data.assignments as AssignmentType[];
-  const course = resCourses?.data.courses;
+  const course = resCourses?.data.courses ?? [];
   const model = new Assignment({ author_id: user.id });
   model.data = { ...model.data, course };
 

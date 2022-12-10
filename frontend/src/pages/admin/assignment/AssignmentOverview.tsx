@@ -1,20 +1,15 @@
 import {
   Box, Grid, Paper, Typography,
 } from '@mui/material';
-import { AssignmentType } from '../../../interfaces/AssignmentType';
+import { useAssignment } from '../../../store/assignmentReducer';
 
-type Props = {
-  assignment: AssignmentType
-};
-
-function AssignmentOverView({ assignment }: Props) {
-  const { title, description } = assignment;
+function AssignmentOverView() {
+  const { title, description } = useAssignment();
   const style = { display: 'flex', justifyContent: 'center', alignItems: 'center' };
 
   return (
     <Paper sx={{
       width: '100%',
-      height: '100%',
       p: 2,
       borderRadius: 2,
       maxHeight: 200,
@@ -31,7 +26,7 @@ function AssignmentOverView({ assignment }: Props) {
             // backgroundImage: `url(${thumbnail})`,
           }}
           >
-            <Typography fontWeight="bold">{title}</Typography>
+            <Typography fontWeight="bold" color="common.white">{title}</Typography>
           </Box>
 
         </Grid>

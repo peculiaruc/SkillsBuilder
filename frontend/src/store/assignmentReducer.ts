@@ -5,17 +5,22 @@ import { useSelector } from 'react-redux';
 import { RootState } from '.';
 import assignmentService from '../apiServices/assignmentService';
 import {
-  AssignmentType, GetAllAssignmentsResponse, GetAssignmentQuestionsResponse,
+  AssignmentType,
+  GetAllAssignmentsResponse,
+  GetAssignmentQuestionsResponse,
+  GetAssignmentResponse,
 } from '../interfaces/AssignmentType';
 import { QuestionType } from '../interfaces/QuestionType';
 
 type InitialStateType = {
   assignments: AssignmentType[],
+  assignment: AssignmentType,
   questions: QuestionType[]
 };
 
 const initialState:InitialStateType = {
   assignments: [],
+  assignment: {} as AssignmentType,
   questions: [],
 };
 
@@ -35,7 +40,13 @@ const assignmentReducer = createSlice({
       .addMatcher(
         assignmentService.endpoints.getAssignmentQuestions.matchFulfilled,
         (state: InitialStateType, action: PayloadAction<GetAssignmentQuestionsResponse>) => {
-          state.questions = action.payload.data.questions ?? [];
+          state.questions = action.payload.data.assignments ?? [];
+        },
+      )
+      .addMatcher(
+        assignmentService.endpoints.getAssignmentById.matchFulfilled,
+        (state: InitialStateType, action: PayloadAction<GetAssignmentResponse>) => {
+          state.assignment = action.payload.data.assignments;
         },
       ).addMatcher(
         assignmentService.endpoints.getCourseAssignments.matchFulfilled,
@@ -46,9 +57,9 @@ const assignmentReducer = createSlice({
   },
 });
 
+export const useAssignment = () => useSelector((state: RootState) => state.assignments.assignment);
 export const useQuestions = () => useSelector((state: RootState) => state.assignments.questions);
-export const useAssignments = () => useSelector(
-  (state: RootState) => state.assignments.assignments,
-);
+// eslint-disable-next-line max-len
+export const useAssignments = () => useSelector((state: RootState) => state.assignments.assignments);
 export const { addQuestion, removeQuestion } = assignmentReducer.actions;
 export default assignmentReducer;

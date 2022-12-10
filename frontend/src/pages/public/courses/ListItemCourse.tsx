@@ -1,16 +1,17 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import {
   Box, Button, Grid, Paper, Typography,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { CourseType } from '../../../interfaces/CourseType';
+import { EnrolledCourseType } from '../../../interfaces/CourseType';
 
 type Props = {
-  course: CourseType
+  course: EnrolledCourseType
 };
 
 function ListItemCourse({ course }: Props) {
   const {
-    title, description, id,
+    title, description, course_id, id,
   } = course;
   const navigate = useNavigate();
   const style = { display: 'flex', justifyContent: 'center', alignItems: 'center' };
@@ -42,7 +43,7 @@ function ListItemCourse({ course }: Props) {
           <p>{description.substring(0, 250)}</p>
         </Grid>
         <Grid item xs={1} sm={1} md={1} sx={style}>
-          <Button onClick={() => navigate(`/course/${id}`)}>View Details</Button>
+          <Button onClick={() => navigate(`/course/${course_id ?? id}`)}>View Details</Button>
         </Grid>
       </Grid>
     </Paper>

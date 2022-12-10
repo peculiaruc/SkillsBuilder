@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import {
   Box, Divider, Drawer, Stack, Toolbar,
 } from '@mui/material';
@@ -36,8 +37,8 @@ function Sidebar() {
             <MenuItem path="" name="Learners" icon={<School fontSize="large" sx={{ color: 'common.white' }} />} />
             <MenuItem path="/" name="Home" active={location.pathname === '/'} />
             <MenuItem path="/my-courses" name="My Courses" active={location.pathname === '/my-courses'} />
-            <MenuItem path="/my-assignments" name="My Assignments" active={location.pathname === '/my-assignments'} />
-            <MenuItem path="/my-study-plan" name="My Study plan" active={location.pathname === '/my-study-plan'} />
+            {/* <MenuItem path="/my-assignments" name="My Assignments" active={location.pathname === '/my-assignments'} /> */}
+            {/* <MenuItem path="/my-study-plan" name="My Study plan" active={location.pathname === '/my-study-plan'} /> */}
             <MenuItem path="/my-groups" name="My Groups" active={location.pathname === '/my-groups'} />
           </>
           )}
@@ -48,7 +49,10 @@ function Sidebar() {
             <MenuItem path="/admin/overview" name="Overview" active={location.pathname === '/admin/overview'} />
             {
               auth.user.role === 1 ? (
-                <MenuItem path="/admin/courses/me" name="Courses" active={location.pathname === '/admin/courses/me'} />
+                <>
+                  <MenuItem path="/admin/courses/me" name="Courses" active={location.pathname === '/admin/courses/me'} />
+                  <MenuItem path="/admin/learners" name="Learners" active={location.pathname === '/admin/learners'} />
+                </>
               )
                 : (<MenuItem path="/admin/courses" name="Courses" active={location.pathname === '/admin/courses'} />)
             }

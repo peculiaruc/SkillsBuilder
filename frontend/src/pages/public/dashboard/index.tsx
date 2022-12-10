@@ -1,12 +1,12 @@
-import { Button, CircularProgress, Paper } from '@mui/material';
 import { useGetAllCoursesQuery } from '../../../apiServices/courseService';
+import Loader from '../../../components/Loader';
 import TabView from '../../../components/TabView';
 import PublicCoursesList from '../courses/PublicCourseList';
 
 function Dashboard() {
   const { isLoading } = useGetAllCoursesQuery();
 
-  if (isLoading) { return <CircularProgress />; }
+  if (isLoading) { return <Loader />; }
 
   return (
     <TabView
@@ -16,22 +16,6 @@ function Dashboard() {
         {
           name: 'All Courses',
           component: <PublicCoursesList />,
-        },
-        {
-          name: 'Courses Categories',
-          component: (
-            <Paper sx={{
-              height: '300px',
-              width: '100%',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              borderRadius: 2,
-            }}
-            >
-              <Button size="large">All Courses in progress</Button>
-            </Paper>
-          ),
         },
       ]
      }

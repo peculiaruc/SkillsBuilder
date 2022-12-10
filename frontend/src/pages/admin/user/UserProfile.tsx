@@ -5,7 +5,7 @@ import {
   Avatar, List, ListItem, ListItemAvatar, ListItemText, SwipeableDrawer,
 } from '@mui/material';
 import { useGetUserByIdQuery } from '../../../apiServices/userService';
-import Loader from '../../../components/Loader';
+import { LoaderButton } from '../../../components/Loader';
 import { UserType } from '../../../interfaces/UserType';
 import EmptyView from '../../errors/EmptyView';
 
@@ -15,7 +15,7 @@ export default function UserProfile({
   open, onClose, onOpen, userId,
 } : Props) {
   const { data, isLoading } = useGetUserByIdQuery(userId);
-  if (isLoading) <Loader />;
+  if (isLoading) <LoaderButton />;
   const user = data?.data.user as UserType;
   if (!user) return <EmptyView title="User not found" code={404} />;
   const {

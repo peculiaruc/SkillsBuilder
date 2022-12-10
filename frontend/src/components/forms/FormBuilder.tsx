@@ -6,24 +6,32 @@ import {
 import { FormikValues, useFormik } from 'formik';
 import React from 'react';
 import Model from '../../models/Model';
-import { useFormState } from '../../store/dialogFormReducer';
+// import { useFormState } from '../../store/dialogFormReducer';
+import { LoaderButton } from '../Loader';
 import MixedInput from './inputs/MixedInput';
 
 type SelectOptions = Record<string, unknown>;
 interface FormProps {
   title: string | React.ReactNode,
   dialog: boolean,
+  open: boolean,
   model: Model,
   onSubmit: (values: FormikValues) => void,
 }
 function FormBuilder({
-  onSubmit, model, title, dialog, data, onCancel, cancelBtn = true,
-} : Required<FormProps> & { cancelBtn?: boolean, data?: any, onCancel?: () => void }) {
-  const open = useFormState();
+  onSubmit, model, title, open, dialog, data, onCancel, cancelBtn = true, loading = false,
+} : Required<FormProps> & {
+  cancelBtn?: boolean,
+  data?: any,
+  onCancel?: () => void,
+  closeForm?: () => void,
+  loading?:boolean }) {
+  // const open = useFormState();
   const formik = useFormik({
     initialValues: data ?? model.initialValues,
     validationSchema: model.validationSchema,
     onSubmit,
+    enableReinitialize: true,
   });
   const handleSubmit = () => formik.submitForm();
 
@@ -54,8 +62,12 @@ function FormBuilder({
         </form>
       </DialogContent>
       <DialogActions>
-        {cancelBtn && <Button onClick={onCancel}>Cancel</Button>}
-        <Button onClick={handleSubmit}>Save</Button>
+        {loading ? <LoaderButton /> : (
+          <>
+            {cancelBtn && <Button onClick={onCancel}>Cancel</Button>}
+            <Button onClick={handleSubmit}>Save</Button>
+          </>
+        )}
       </DialogActions>
     </>
   );

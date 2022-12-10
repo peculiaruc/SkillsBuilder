@@ -8,7 +8,6 @@ class Assignment extends Model {
     super(props);
     this.name = 'assignments';
     this.validationSchema = Yup.object().shape({
-      course_id: Yup.object().required(),
       passing_score: Yup.number().required(),
       max_attempts: Yup.number().min(1).required(),
       deadline: Yup.date().required(),

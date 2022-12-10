@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { Chip, Stack, Typography } from '@mui/material';
+import moment from 'moment';
 import { AssignmentType } from '../../../interfaces/AssignmentType';
 
 export default function AssignmentDescription(props:Partial<AssignmentType>) {
   const {
-    title, description, max_attempts, passing_score,
+    title, description, max_attempts, passing_score, deadline,
   } = props;
   return (
     <Stack p={2}>
@@ -14,9 +15,9 @@ export default function AssignmentDescription(props:Partial<AssignmentType>) {
         {description ?? 'Evaluate the basic knowedge of cloud computing models and providers.'}
       </Typography>
       <Typography fontWeight="bold">
-        <Chip label={`Max Score : ${passing_score ?? '82'}`} variant="outlined" />
-        <Chip label={`Attempts : 2/${max_attempts ?? '5'}`} variant="outlined" />
-        <Chip label={`Date : ${new Date().toLocaleString()}`} variant="outlined" />
+        <Chip label={`Max Score : ${passing_score}`} variant="outlined" />
+        <Chip label={`Max Attempts : ${max_attempts}`} variant="outlined" />
+        <Chip label={`Due ${moment(deadline).fromNow()}`} variant="outlined" />
       </Typography>
     </Stack>
   );

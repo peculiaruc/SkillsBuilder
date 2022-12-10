@@ -4,36 +4,30 @@ import { Grid } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useGetAllCoursesQuery } from '../../../apiServices/courseService';
 import { useGetAllGroupsQuery } from '../../../apiServices/groupService';
-import Loader from '../../../components/Loader';
+import { useGetAuthorLearnersQuery, useGetUsersByRoleQuery } from '../../../apiServices/userService';
 import { useAuth } from '../../../store/authReducer';
-import OverviewItem from './OverviewItem';
+import CountOverviewItem from './CountOverview';
 
 export default function Overview() {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const { data: allG, isLoading: ag } = useGetAllGroupsQuery();
   // const { data: allMc, isLoading: mg } = useGetGroupByIdQuery(user.id);
-  const { data: allC, isLoading: ac } = useGetAllCoursesQuery();
   // const { data: allMyC, isLoading: mc } = useGetUserCoursesQuery(user.id);
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  if (ag || ac) return <Loader />;
-  const aGroup = allG?.data.groups ?? [];
-  // const mGroup = allMc?.data.groups ?? [];
-  const aCourses = allC?.data.courses ?? [];
-  // const mCourses = allMyC?.data.courses ?? [];
   return (
     <Grid container columns={[1, 2, 3, 4]} spacing={2}>
       <Grid item xs={1} onClick={() => navigate('/admin/groups')} sx={{ cursor: 'pointer' }}>
-        <OverviewItem
+        <CountOverviewItem
           title="Groups"
-          value={`${aGroup.length}`}
+          query={useGetAllGroupsQuery}
+          index="groups"
           icon={<Group fontSize="large" />}
         />
       </Grid>
       <Grid item xs={1} onClick={() => navigate(user.role !== 2 ? '/admin/courses/me' : '/admin/courses')} sx={{ cursor: 'pointer' }}>
-        <OverviewItem
+        <CountOverviewItem
           title="Courses"
-          value={`${aCourses.length}`}
+          query={useGetAllCoursesQuery}
+          index="courses"
           icon={<Person fontSize="large" />}
         />
       </Grid>
@@ -44,20 +38,40 @@ export default function Overview() {
           icon={<School fontSize="large" />}
         />
       </Grid> */}
-      <Grid item xs={1}>
-        <OverviewItem
-          title="Course Authors"
-          value="15"
-          icon={<Person fontSize="large" />}
-        />
-      </Grid>
-      <Grid item xs={1}>
-        <OverviewItem
-          title="Learners"
-          value="20"
-          icon={<School fontSize="large" />}
-        />
-      </Grid>
+      {
+        user.role === 1 && (
+          <Grid item xs={1} onClick={() => navigate('/admin/learners')} sx={{ cursor: 'pointer' }}>
+            <CountOverviewItem
+              title="Learners"
+              query={() => useGetAuthorLearnersQuery(user.id)}
+              index="learners"
+              icon={<School fontSize="large" />}
+            />
+          </Grid>
+        )
+      }
+      {
+        user.role > 1 && (
+          <>
+            <Grid item xs={1} onClick={() => navigate('/admin/users')} sx={{ cursor: 'pointer' }}>
+              <CountOverviewItem
+                title="Course Authors"
+                query={() => useGetUsersByRoleQuery('authors')}
+                index="users"
+                icon={<School fontSize="large" />}
+              />
+            </Grid>
+            <Grid item xs={1} onClick={() => navigate('/admin/users')} sx={{ cursor: 'pointer' }}>
+              <CountOverviewItem
+                title="Learners"
+                query={() => useGetUsersByRoleQuery('learners')}
+                index="users"
+                icon={<School fontSize="large" />}
+              />
+            </Grid>
+          </>
+        )
+      }
       {/* <Grid item xs={1}>
         <OverviewItem
           title="Assignments"

@@ -11,7 +11,7 @@ import {
 const questionService = api.injectEndpoints({
   endpoints: (builder) => ({
     createQuestion: builder.mutation<CreateQuestionResponse, CreateQuestionRequest>({
-      query: (question) => ({ url: '/question/create', method: 'QUESTION', data: question }),
+      query: (data) => ({ url: '/question/create', method: 'POST', data }),
       invalidatesTags: [{ type: 'Question', id: 'LIST' }],
     }),
     updateQuestion: builder.mutation<UpdateQuestionResponse, QuestionType>({

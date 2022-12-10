@@ -44,10 +44,6 @@ class Model {
   }
 
   init(values: Field = {}) {
-    this.setInitialValues(values);
-  }
-
-  setInitialValues(values: Field = {}) {
     this.fields.forEach((field: FieldProps) => {
       if (!Object.keys(values).includes(field.name)) {
         values[field.name] = FieldType[field.type || 'text'];
@@ -55,8 +51,12 @@ class Model {
       // eslint-disable-next-line no-param-reassign
       field.label = field.label ?? `${this.name.charAt(0).toUpperCase().concat(this.name.slice(1))} ${field.name.charAt(0).toUpperCase().concat(field.name.slice(1))}`;
     });
-    this.initialValues = values;
     this.data = {};
+    this.setInitialValues(values);
+  }
+
+  setInitialValues(values: Field = {}) {
+    this.initialValues = { ...this.initialValues, ...values };
   }
 
   // eslint-disable-next-line class-methods-use-this

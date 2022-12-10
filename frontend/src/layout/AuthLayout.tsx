@@ -5,9 +5,12 @@ import { usePalette } from '../theme/theme';
 
 export default function AuthLayout() {
   const palette = usePalette();
-  const auth = useAuth();
+  const { token, user } = useAuth();
 
-  return auth.token ? <Navigate to="/" /> : (
+  if (token) {
+    return user.role > 0 ? <Navigate to="/admin/overview" /> : <Navigate to="/" />;
+  }
+  return (
     <Container
       maxWidth="lg"
       sx={{

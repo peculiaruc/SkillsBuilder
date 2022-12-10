@@ -7,7 +7,9 @@ const api = createApi({
   tagTypes: [
     'Users',
     'Course',
+    'Lesson',
     'Post',
+    'COURSE_LESSONS',
     'Question',
     'AllEnrolledCourses',
     'LIST_ALL_COURSES',

@@ -5,10 +5,10 @@ import {
 } from '@mui/material';
 import { ChoiceType } from '../../../interfaces/AssignmentType';
 
-type OptionInputProps = {
+type OptionInputProps = TextFieldProps & {
   value: ChoiceType[];
   name:string,
-} & TextFieldProps;
+};
 
 function QuestionChoiceInput(props: OptionInputProps) {
   const {
@@ -54,7 +54,7 @@ function QuestionChoiceInput(props: OptionInputProps) {
 
   return (
     <Stack spacing={2} paddingLeft={2}>
-      {choices.map((choice:ChoiceType, index) => (
+      {Array.isArray(choices) && choices.map((choice:ChoiceType, index) => (
         // eslint-disable-next-line react/no-array-index-key
         <Stack direction="row" spacing={0.25} alignItems="center" key={`key${index}`} sx={{ width: '100%' }}>
           <TextField
@@ -69,6 +69,7 @@ function QuestionChoiceInput(props: OptionInputProps) {
                 <InputAdornment position="end">
                   <Switch
                     name="isAnswer"
+                    checked={choice.isAnswer}
                     value={choice.isAnswer ? 'on' : 'off'}
                     onChange={(e, checked) => handleChangeSwitch(checked, index)}
                   />

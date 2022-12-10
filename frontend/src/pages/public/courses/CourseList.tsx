@@ -1,5 +1,5 @@
 import { Stack } from '@mui/material';
-import { CourseType } from '../../../interfaces/CourseType';
+import { CourseType, EnrolledCourseType } from '../../../interfaces/CourseType';
 import { useCourses, useEnrolledCourses } from '../../../store/courseReducer';
 import ListItemCourse from './ListItemCourse';
 
@@ -15,7 +15,7 @@ function CourseList() {
     <Stack spacing={2}>
       {courses && courses.map((course:CourseType) => (
         <ListItemCourse
-          course={course}
+          course={course as EnrolledCourseType}
           key={course.id}
         />
       ))}

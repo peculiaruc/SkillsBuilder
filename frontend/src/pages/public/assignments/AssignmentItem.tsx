@@ -1,12 +1,13 @@
 import styled from '@emotion/styled';
 import {
-  Button, Grid, Paper, Typography, Stack,
+  Button, Grid, Paper, Typography, Dialog, DialogContent,
 } from '@mui/material';
+import { useState } from 'react';
 import theme from '../../../theme/theme';
 import CourseTitle from './CourseTitle';
-import courseImage from '../../../assets/images/Group.png';
-import AssignmentDescription from './AssignmentDescription';
 import { AssignmentType } from '../../../interfaces/AssignmentType';
+import AssignmentDescription from '../../admin/assignment/AssignmentDescription';
+import TakeAssignment from './TakeAssignment';
 
 const SlyledPaper = styled(Paper)({
   width: '100%',
@@ -19,42 +20,39 @@ const SlyledPaper = styled(Paper)({
   },
 });
 
-function AssignmentItem(props : Partial<AssignmentType> & { status:string }) {
-  const { title, status } = props;
+type Props = {
+  assignment: AssignmentType
+};
+
+function AssignmentItem({ assignment } : Props) {
+  const { title } = assignment;
+  const [open, setOpen] = useState<boolean>(false);
+  const startAssignment = () => setOpen(true);
+  const closeAssigment = () => setOpen(false);
   return (
     <SlyledPaper>
+      {open && (
+        <Dialog fullScreen open={open}>
+          <DialogContent sx={{ justifyContent: 'center', alignItems: 'center', display: 'flex' }}>
+            <TakeAssignment assignment={assignment} onClose={closeAssigment} />
+          </DialogContent>
+        </Dialog>
+      )}
       <Grid container columns={4} sx={{ width: '100%' }}>
         <Grid item xs={4} sm={4} lg={1}>
-          <CourseTitle sx={{ backgroundImage: courseImage }}>
+          <CourseTitle>
             <Typography fontWeight="bold" color="common.white">
-              {title ?? 'Course:  Cloud Computing Basic Test'}
+              {title}
             </Typography>
           </CourseTitle>
         </Grid>
         <Grid item xs={4} sm={4} lg={2}>
-          <AssignmentDescription {...props} />
+          <AssignmentDescription {...assignment} />
         </Grid>
         <Grid item xs={4} sm={4} lg={1}>
-          <Stack spacing={2}>
-            <Button>View Details</Button>
-            {status === 'failed' && (
-            <>
-              <Button>Retake exam</Button>
-              <Button color="error">
-                Exam
-                {' '}
-                {status}
-              </Button>
-            </>
-            )}
-            {status === 'passed' && (
-              <Button color="success">
-                Exam
-                {' '}
-                {status}
-              </Button>
-            )}
-          </Stack>
+          <Button onClick={startAssignment}>
+            Take Assignment
+          </Button>
         </Grid>
       </Grid>
     </SlyledPaper>

@@ -42,8 +42,19 @@ export interface QuestionType {
  * When a user submit an answer
  */
 export interface AnswerType {
-  id:number;
+  id?:number;
   question_id: number;
+  answers: ChoiceType[];
+  created_at?: Date;
+  updated_at?: Date;
+}
+export interface SubmissionType {
+  id:number;
+  course_id: number,
+  user_id: number,
+  assignment_id: number,
+  grade: string,
+  status: string,
   answers: ChoiceType[];
   created_at: Date;
   updated_at: Date;
@@ -62,7 +73,11 @@ export type CreateAssignmentResponse = ResponseType & {
 };
 
 export type GetAssignmentRequest = AssignmentId;
-export type GetAssignmentResponse = CreateAssignmentResponse;
+export type GetAssignmentResponse = ResponseType & {
+  data: {
+    assignments: AssignmentType
+  }
+};
 export type GetAllAssignmentsResponse = ResponseType & {
   data: {
     assignments: AssignmentType[]
@@ -78,6 +93,8 @@ export type GetCourseAssignmentRequest = CourseId;
 export type SubmitAssignmentRequest = {
   assignment_id: number,
   user_id: number,
+  course_id: number,
+  grade: string,
   answers: Omit<AnswerType, 'id' | 'created_at' | 'updated_at'>[],
 };
 /*
@@ -92,13 +109,20 @@ export type GetAssignmentQuestionsRequest = AssignmentId;
 
 export type GetAssignmentQuestionsResponse = ResponseType & {
   data: {
-    questions: QuestionType[]
+    assignments: QuestionType[]
+    choices: QuestionType[]
   }
 };
 
 export type GetAssignmentAnswersResponse = ResponseType & {
   data: {
     answers: QuestionType[]
+  }
+};
+
+export type GetAssignmentSubmissionsResponse = ResponseType & {
+  data: {
+    submissions: SubmissionType[]
   }
 };
 

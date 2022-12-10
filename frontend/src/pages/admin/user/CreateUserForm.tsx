@@ -1,11 +1,10 @@
 import { Button, Paper, Stack } from '@mui/material';
 import { FormikValues } from 'formik';
-import { useDispatch } from 'react-redux';
+import { useState } from 'react';
 import { useCreateUserMutation } from '../../../apiServices/userService';
 import FormBuilder from '../../../components/forms/FormBuilder';
 import { CreateUserRequest } from '../../../interfaces/UserType';
 import User from '../../../models/User';
-import { closeDialog, openDialog } from '../../../store/dialogFormReducer';
 
 type Props = {
   title: string
@@ -13,9 +12,9 @@ type Props = {
 
 export default function CreateUserForm({ title = 'Add new user' } : Props) {
   const model = new User();
-  const dispatch = useDispatch();
-  const openForm = () => dispatch(openDialog());
-  const onCancel = () => dispatch(closeDialog());
+  const [open, setOpen] = useState(false);
+  const openForm = () => setOpen(true);
+  const onCancel = () => setOpen(false);
   const [createUser] = useCreateUserMutation();
   const onSubmit = async (values:FormikValues) => {
     const user = { ...values, role: model.data.role.indexOf(values.role) } as CreateUserRequest;
@@ -41,6 +40,7 @@ export default function CreateUserForm({ title = 'Add new user' } : Props) {
         }}
       >
         <FormBuilder
+          open={open}
           title={title}
           dialog
           model={model}

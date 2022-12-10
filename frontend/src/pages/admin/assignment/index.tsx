@@ -1,5 +1,4 @@
 import AuthorAssignment from './AuthorAssigment';
-import CreateAssignmentQuestionView from './CreateAssignmentQuestionView';
 import ViewAssignment from './ViewAssignment';
 
 const assignmentRoutes = {
@@ -12,10 +11,6 @@ const assignmentRoutes = {
     {
       path: ':id',
       element: <ViewAssignment />,
-    },
-    {
-      path: 'courses/:id',
-      element: <CreateAssignmentQuestionView />,
     },
   ],
 };

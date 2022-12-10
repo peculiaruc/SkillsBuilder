@@ -7,9 +7,11 @@ import dialogFormReducer from './dialogFormReducer';
 import groupReducer from './groupReducer';
 import userReducer from './userReducer';
 import api from '../apiServices';
+import answerReducer from './answerReducer';
 
 export default combineReducers(
   {
+    [answerReducer.name]: answerReducer.reducer,
     [groupReducer.name]: groupReducer.reducer,
     [userReducer.name]: userReducer.reducer,
     [assignmentReducer.name]: assignmentReducer.reducer,

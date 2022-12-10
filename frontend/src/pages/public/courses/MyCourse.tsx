@@ -1,7 +1,7 @@
 import { Stack } from '@mui/material';
 import { useGetUserCoursesQuery } from '../../../apiServices/userService';
 import Loader from '../../../components/Loader';
-import { CourseType } from '../../../interfaces/CourseType';
+import { EnrolledCourseType } from '../../../interfaces/CourseType';
 import { useAuth } from '../../../store/authReducer';
 import ListItemCourse from './ListItemCourse';
 
@@ -13,7 +13,14 @@ function MyCourse() {
 
   return (
     <Stack spacing={2} display="flex" sx={{ width: '100%' }}>
-      {courses.map((course: CourseType) => <ListItemCourse course={course} key={course.id} />)}
+      {courses.map(
+        (course: EnrolledCourseType) => (
+          <ListItemCourse
+            course={course}
+            key={course.course_id}
+          />
+        ),
+      )}
     </Stack>
   );
 }

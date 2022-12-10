@@ -1,3 +1,4 @@
+import { FormikValues } from 'formik';
 import * as Yup from 'yup';
 import Model, { Field } from './Model';
 
@@ -32,8 +33,23 @@ class Course extends Model {
         rows: 4,
         required: true,
       },
+      {
+        name: 'status',
+        type: 'select',
+      },
     ];
     this.init(props);
+    this.data = {
+      status: ['unpublished', 'published'],
+    };
+  }
+
+  beforeSubmit({
+    status, title, content, description, author_id, id,
+  }: FormikValues): FormikValues {
+    return {
+      id, title, content, description, author_id, status: this.data.status.indexOf(status) + 1,
+    };
   }
 }
 

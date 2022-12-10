@@ -3,13 +3,15 @@ import {
 } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useEnrollInCourseMutation, useGetCourseByIdQuery } from '../../../apiServices/courseService';
+import { useEnrollInCourseMutation, useGetCourseByIdQuery, useUnEnrollInCourseMutation } from '../../../apiServices/courseService';
 import { useGetUserCoursesQuery } from '../../../apiServices/userService';
 import TabView from '../../../components/TabView';
 import { CourseType, EnrolledCourseType } from '../../../interfaces/CourseType';
 import { useAuth } from '../../../store/authReducer';
 import EmptyView from '../../errors/EmptyView';
 import CourseMaterial from './CourseMaterialList';
+import CourseAssignments from './lessons/CourseAssignments';
+import CourseLessonList from './lessons/CourseLessonList';
 
 function CourseDetails() {
   const params = useParams();
@@ -21,6 +23,7 @@ function CourseDetails() {
   const { data: enrolled, isLoading } = useGetUserCoursesQuery(auth.user.id);
 
   const [enroleInCourse] = useEnrollInCourseMutation();
+  const [unEnroleInCourse] = useUnEnrollInCourseMutation();
 
   if (isLoading || CourseLoading) return <CircularProgress />;
 
@@ -34,12 +37,20 @@ function CourseDetails() {
 
   const { title, description } = course;
 
-  const handdleEnroll = async (cours: CourseType) => {
-    await enroleInCourse({
+  const handdleEnroll = async () => {
+    const res = await enroleInCourse({
       userId: auth.user.id,
-      courseId: cours.id,
+      courseId: course.id,
     }).unwrap();
-    toast('Successfully enrolled');
+    toast(res.message);
+  };
+
+  const handleUnEnroll = async () => {
+    const res = await unEnroleInCourse({
+      userId: auth.user.id,
+      courseId: course.id,
+    }).unwrap();
+    toast(res.message);
   };
 
   const style = { display: 'flex', justifyContent: 'center', alignItems: 'center' };
@@ -72,10 +83,17 @@ function CourseDetails() {
               <Typography fontWeight="bold">Overview</Typography>
               <p>{description}</p>
               {!isEnrolled ? (
-                <Button onClick={() => handdleEnroll(course)}>
+                <Button color="success" onClick={handdleEnroll}>
                   Enroll now
                 </Button>
-              ) : <Button>Start Course</Button>}
+              ) : (
+                <Typography paragraph>
+                  Your are enrolled in this course
+                  <Button color="error" onClick={handleUnEnroll} sx={{ ml: 2 }}>
+                    Unenroll now
+                  </Button>
+                </Typography>
+              )}
             </Stack>
           </Grid>
 
@@ -88,12 +106,16 @@ function CourseDetails() {
         tabs={
             [
               {
-                name: 'Course Outline',
-                component: <>.</>,
+                name: 'Course lessons',
+                component: <CourseLessonList course={course} />,
               },
               {
                 name: 'Course Materials',
                 component: <CourseMaterial course={course} />,
+              },
+              {
+                name: 'Assigments',
+                component: <CourseAssignments course={course} />,
               },
             ]
         }

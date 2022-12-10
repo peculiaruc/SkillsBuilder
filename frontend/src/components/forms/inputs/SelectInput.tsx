@@ -4,7 +4,7 @@ import React from 'react';
 import { MuiInputProps } from './InputType';
 
 function SelectInput({
-  onChange, value, name, options, label, error, helperText,
+  onChange, value = [], name, options = [], label, error, helperText,
 }:MuiInputProps) {
   const onChangeSelect = (event: React.SyntheticEvent, val: any) => {
     const ev = { target: { name, value: val } } as React.ChangeEvent<HTMLInputElement>;
@@ -23,9 +23,10 @@ function SelectInput({
     }
     return false;
   };
+
   return (
     <Autocomplete
-      value={value ?? ''}
+      value={Array.isArray(value) && value.length === 0 ? '' : value}
       options={options}
       filterSelectedOptions
       getOptionLabel={getOptionLabel}

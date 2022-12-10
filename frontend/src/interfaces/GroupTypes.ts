@@ -19,10 +19,11 @@ export type GroupType = {
 export type JoinGroupType = {
   id: GroupAccessRequestId,
   status:string,
-  name:string,
+  title:string,
   description:string,
   group_id: number,
   owner_id:number,
+  course_id:number,
   join_date: Date,
   leave_date: Date,
 };

@@ -5,7 +5,7 @@ import { GetMyGroupsResponse } from '../interfaces/GroupTypes';
 import {
   CreateUserRequest,
   CreateUserResponse,
-  DeleteUserResponse, GetAllUsersResponse,
+  DeleteUserResponse, GetAllLearnersResponse, GetAllUsersResponse,
   GetMyAssignmentsResponse,
   GetUserPostsResponse,
   GetUserResponse,
@@ -62,6 +62,10 @@ const userService = api.injectEndpoints({
       query: (id) => ({ url: `/user/authors/${id}/assignments`, method: 'GET' }),
       providesTags: ['USER_ASSIGNMENTS'],
     }),
+    getAuthorLearners: builder.query<GetAllLearnersResponse, UserId>({
+      query: (id) => ({ url: `/user/${id}/learners`, method: 'GET' }),
+      providesTags: ['USER_ASSIGNMENTS'],
+    }),
     getUsersByRole: builder.query<GetAllUsersResponse, string>({
       query: (role) => ({ url: role !== 'all' ? `/user/${role}/all` : '/user/all', method: 'GET' }),
       // eslint-disable-next-line max-len
@@ -92,6 +96,7 @@ export const {
   useResetPasswordMutation,
   useUpdatePasswordMutation,
   useGetAuthorAssignmentsQuery,
+  useGetAuthorLearnersQuery,
 } = userService;
 
 export default userService;

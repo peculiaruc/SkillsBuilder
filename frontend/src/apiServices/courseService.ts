@@ -15,6 +15,7 @@ import {
   UpdateCourseRequest,
   UpdateCourseResponse,
 } from '../interfaces/CourseType';
+import { GetLessonsResponse } from '../interfaces/LessonType';
 import { GetCourseAuthorResponse, GetCourseLearnersResponse } from '../interfaces/UserType';
 
 const courseService = api.injectEndpoints({
@@ -61,6 +62,10 @@ const courseService = api.injectEndpoints({
     getCourseAuthor: builder.query<GetCourseAuthorResponse, CourseId>({
       query: (id) => ({ url: `/course/${id}/author`, method: 'GET' }),
     }),
+    getCourseLessons: builder.query<GetLessonsResponse, CourseId>({
+      query: (id) => ({ url: `/course/${id}/lessons`, method: 'GET' }),
+      providesTags: [{ type: 'Lesson', id: 'LIST' }],
+    }),
   }),
 });
 
@@ -76,6 +81,7 @@ export const {
   useGetCourseMaterialsQuery,
   useUnEnrollInCourseMutation,
   useEnrollInCourseMutation,
+  useGetCourseLessonsQuery,
 } = courseService;
 
 export default courseService;

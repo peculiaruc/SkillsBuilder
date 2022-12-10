@@ -4,7 +4,7 @@ import { ResponseType } from './ResponseType';
 export interface QuestionType {
   id:number;
   question: string;
-  mark: number;
+  marks: number;
   assignment_id: number;
   choices: ChoiceType[];
   type: string,

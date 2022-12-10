@@ -1,5 +1,4 @@
 import PublicCourse from '../admin/course/PublicCourse';
-import AssignmentList from './AssignmentIndex';
 import CourseDetails from './courses/CourseDetails';
 import MyCourse from './courses/MyCourse';
 import GroupDetails from './groups/GroupDetails';
@@ -15,10 +14,6 @@ export default [
   {
     path: '/my-courses',
     element: <MyCourse />,
-  },
-  {
-    path: '/my-assignments',
-    element: <AssignmentList />,
   }, /*
   {
     path: '/my-study-plan',

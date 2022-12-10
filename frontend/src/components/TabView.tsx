@@ -9,7 +9,7 @@ type TabItem = {
 };
 
 type TabViewProps = {
-  title: string,
+  title: React.ReactNode,
   tabs: TabItem[]
 };
 function TabView(props: TabViewProps) {

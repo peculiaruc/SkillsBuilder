@@ -1,5 +1,4 @@
 import { FormikValues } from 'formik';
-import { toast } from 'react-toastify';
 import {
   useResetPasswordMutation,
   useUpdatePasswordMutation,
@@ -28,13 +27,13 @@ export default function Profile({ user: _user } : Props) {
     if (resetResponse.data.user_id) {
       // eslint-disable-next-line @typescript-eslint/naming-convention
       const { user_id, reset_token } = resetResponse.data;
-      const res = await updatePassword({
+      return updatePassword({
         resetToken: reset_token,
         password,
         user_id,
-      }).unwrap();
-      toast(res.message);
+      });
     }
+    return resetResponse;
   };
 
   return (

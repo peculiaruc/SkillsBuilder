@@ -6,6 +6,7 @@ export type CourseId = number;
 export type CourseType = {
   id: CourseId,
   title: string,
+  status: number,
   description: string,
   content: string,
   author_id: number,

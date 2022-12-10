@@ -1,19 +1,23 @@
 import { Button, Stack } from '@mui/material';
 import { FormikValues } from 'formik';
-import { useDispatch } from 'react-redux';
+import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { closeDialog, openDialog } from '../../store/dialogFormReducer';
 import FormBuilder from './FormBuilder';
 
 interface FormProps {
-  title: string;
+  title: React.ReactNode,
   model: any;
   mutation: any;
   dialog: boolean;
 }
 
-type Props = Required<FormProps> & { cancelBtn?: boolean, onCancel?: () => void };
+type Props = Required<FormProps> & {
+  cancelBtn?: boolean,
+  onCancel?: () => void,
+  location?: boolean,
+  loading?: boolean
+};
 
 export default function MixedForm({
   title = 'Add new model',
@@ -21,24 +25,30 @@ export default function MixedForm({
   mutation,
   dialog,
   cancelBtn = true,
+  location = false,
+  loading = false,
   onCancel,
 } : Props): JSX.Element {
   // const model = new Entity();
   const { state } = useLocation();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const openForm = () => dispatch(openDialog());
+  // const dispatch = useDispatch();
+  const [open, setOpen] = useState(false);
+  const openForm = () => setOpen(true);
+  const closeForm = () => setOpen(false);
+  // const openForm = () => dispatch(openDialog());
   const handleCancel = () => {
-    dispatch(closeDialog());
-    if (state) navigate(state.pathname);
+    // dispatch(closeDialog());
+    closeForm();
+    if (state && location) navigate(state.pathname);
     if (onCancel) {
       onCancel();
     }
   };
   const onSubmit = async (values:FormikValues) => {
     const data = model.beforeSubmit(values) ?? values;
-    await mutation(data);
-    toast(`${model.name} created successfully`);
+    const res = await mutation(data)?.unwrap();
+    toast(res.message);
     handleCancel();
   };
   return (
@@ -54,11 +64,13 @@ export default function MixedForm({
       {dialog && (<Button size="large" onClick={openForm}>{title}</Button>)}
       <FormBuilder
         dialog={dialog}
+        open={open}
         title={title}
         model={model}
         onSubmit={onSubmit}
         onCancel={handleCancel}
-        cancelBtn={state ?? cancelBtn}
+        cancelBtn={cancelBtn}
+        loading={loading}
       />
     </Stack>
   );

@@ -1,6 +1,6 @@
 import { Button, CircularProgress, Stack } from '@mui/material';
 import { FormikValues } from 'formik';
-import { useDispatch } from 'react-redux';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { useCreateCourseMutation } from '../../../apiServices/courseService';
 import { useGetAuthorCoursesQuery } from '../../../apiServices/userService';
@@ -8,18 +8,15 @@ import FormBuilder from '../../../components/forms/FormBuilder';
 import { CourseType } from '../../../interfaces/CourseType';
 import Course from '../../../models/Course';
 import { useAuth } from '../../../store/authReducer';
-import { closeDialog, openDialog } from '../../../store/dialogFormReducer';
 import ListItemCourse from './ListItemCourse';
 
 function CourseList() {
-  const dispatch = useDispatch();
-
   const auth = useAuth();
 
   const model = new Course();
-
-  const handleOpen = () => dispatch(openDialog());
-  const onCancel = () => dispatch(closeDialog());
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const onCancel = () => setOpen(false);
   const [createCourse] = useCreateCourseMutation();
   const { data: resp, isLoading } = useGetAuthorCoursesQuery(auth.user.id);
 
@@ -32,27 +29,14 @@ function CourseList() {
     toast('Course created successfully');
   };
   const courses = resp?.data.courses ?? [];
-  /*
-  const onSubmit = async (values: FormikValues) => {
-    const course = values as CourseType;
-    course.id = Math.round(Math.random() * 100);
-    batch(
-      () => {
-        dispatch(addCourse(course));
-        onCancel();
-      },
-    );
-    Toastify({
-      text: 'Course created successfully',
-    });
-  };
-*/
+
   return (
     <Stack spacing={2} display="flex" sx={{ width: '100%' }}>
       {auth.user.role > 0 && (
         <>
           <Button sx={{ alignSelf: 'flex-end' }} onClick={handleOpen}>Create Course</Button>
           <FormBuilder
+            open={open}
             dialog
             title="Create a course"
             onSubmit={onSubmit}

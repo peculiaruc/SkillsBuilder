@@ -3,9 +3,7 @@ import {
   CreateAssignmentRequest,
   GetAllAssignmentsResponse,
   GetAssignmentQuestionsResponse,
-  GetAssignmentResponse,
-  GetAssignmentSubmissionsRequest,
-  SubmitAssignmentRequest,
+  GetAssignmentResponse, GetAssignmentSubmissionsResponse, SubmitAssignmentRequest,
   UpdateAssignmentRequest,
 } from '../interfaces/AssignmentType';
 import { CourseId } from '../interfaces/CourseType';
@@ -27,23 +25,23 @@ const assignmentService = api.injectEndpoints({
     }),
     getCourseAssignments: builder.query<GetAllAssignmentsResponse, CourseId>({
       query: (id) => ({ url: `/course/${id}/assignments`, method: 'DELETE' }),
+      providesTags: ['USER_ASSIGNMENTS'],
     }),
     getAssignmentQuestions: builder
       .query<GetAssignmentQuestionsResponse, number>({
       query: (id) => ({ url: `/assignment/${id}/questions`, method: 'GET' }),
+      providesTags: [{ type: 'Question', id: 'LIST' }],
     }),
     deleteAssignment: builder.mutation<ResponseType, number>({
       query: (id) => ({ url: `/assignment/${id}`, method: 'DELETE' }),
+      invalidatesTags: ['USER_ASSIGNMENTS'],
     }),
-    deleteQuestion: builder.mutation<ResponseType, number>({
-      query: (question_id) => ({ url: `/questions/${question_id}`, method: 'DELETE' }),
-    }),
-    submitAssignment: builder.mutation<void, SubmitAssignmentRequest>({
-      query: (data) => ({ url: '/assignment/submit', method: 'POST', data }),
+    submitAssignment: builder.mutation<ResponseType, SubmitAssignmentRequest>({
+      query: (data) => ({ url: '/submission/create', method: 'POST', data }),
     }),
     getAssignmentSubmissions: builder
-      .query<GetAllAssignmentsResponse, GetAssignmentSubmissionsRequest>({
-      query: (data) => ({ url: '/assignment/submissions', method: 'POST', data }),
+      .query<GetAssignmentSubmissionsResponse, number>({
+      query: (id) => ({ url: `/assignment/${id}/submissions`, method: 'GET' }),
     }),
   }),
 });
@@ -56,7 +54,6 @@ export const {
   useGetAssignmentQuestionsQuery,
   useSubmitAssignmentMutation,
   useGetAssignmentSubmissionsQuery,
-  useDeleteQuestionMutation,
   useUpdateAssignmentMutation,
 } = assignmentService;
 
