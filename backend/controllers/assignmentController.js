@@ -61,7 +61,7 @@ class AssignmentController {
   static async getAssignmentQuestions(req, res) {
     const qs = await assQuestions.getByAssignment(req.params.id);
     if (qs.error) return Helpers.dbError(res, qs);
-    console.log('resp', qs.rows[0], typeof qs.rows[0].choices);
+    console.log('resp', qs.rows, qs.rows[0].choices, typeof qs.rows[0].choices);
     return Helpers.sendResponse(res, 200, 'success', {
       assignments: qs.rows.map((q) => ({ ...q, choices: JSON.parse(q.choices) })),
     });
@@ -91,3 +91,5 @@ class AssignmentController {
     return Helpers.sendResponse(res, 200, 'success', { submissions: sub.rows });
   }
 }
+
+export default AssignmentController;
