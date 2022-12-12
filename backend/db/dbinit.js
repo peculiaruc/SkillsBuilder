@@ -20,7 +20,7 @@ import {
 
 export default async () => {
   let date;
-  let db = new Database();
+  const db = new Database();
   try {
     date = await db.queryBuilder('SELECT NOW()');
     if (process.env.NODE_ENV !== 'production') {

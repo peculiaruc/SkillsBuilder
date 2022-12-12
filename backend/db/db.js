@@ -37,7 +37,7 @@ class Database {
     });
     chunks.push(`(${values.join(', ')})`);
     const sql = `INSERT INTO ${this.table}(${keys.join(', ')}) values${chunks.join(
-      ', '
+      ', ',
     )} RETURNING *`;
     const query = await this.queryBuilder(sql, params);
     if (query.errors) return query;
@@ -78,9 +78,9 @@ class Database {
     const query = await this.queryBuilder(sql, []);
     return !query.errors
       ? {
-          rows: query.rows,
-          count: query.count,
-        }
+        rows: query.rows,
+        count: query.count,
+      }
       : query;
   }
 
@@ -90,9 +90,9 @@ class Database {
     const query = await this.queryBuilder(sql, []);
     return !query.errors
       ? {
-          rows: query.rows,
-          count: query.count,
-        }
+        rows: query.rows,
+        count: query.count,
+      }
       : query;
   }
 
@@ -101,9 +101,9 @@ class Database {
     const query = await this.queryBuilder(sql, []);
     return !query.errors
       ? {
-          rows: query.rows,
-          count: query.count,
-        }
+        rows: query.rows,
+        count: query.count,
+      }
       : query;
   }
 
@@ -124,9 +124,9 @@ class Database {
       const query = await this.queryBuilder(sql);
       return !query.errors
         ? {
-            rows: query.rows,
-            count: query.count,
-          }
+          rows: query.rows,
+          count: query.count,
+        }
         : query;
     }
     return { error: 'provide data & condition' };

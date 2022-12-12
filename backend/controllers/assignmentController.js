@@ -63,7 +63,7 @@ class AssignmentController {
     if (qs.error) return Helpers.dbError(res, qs);
     console.log('resp', qs.rows, qs.rows[0].choices, typeof qs.rows[0].choices);
     return Helpers.sendResponse(res, 200, 'success', {
-      assignments: qs.rows.map((q) => ({ ...q, choices: JSON.parse(q.choices) })),
+      assignments: qs.rows,
     });
   }
 
