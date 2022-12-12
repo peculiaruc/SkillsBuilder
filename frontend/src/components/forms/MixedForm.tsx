@@ -1,4 +1,5 @@
-import { Button, Stack } from '@mui/material';
+import { RemoveRedEyeRounded } from '@mui/icons-material';
+import { Button, IconButton, Stack } from '@mui/material';
 import { FormikValues } from 'formik';
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -16,7 +17,8 @@ type Props = Required<FormProps> & {
   cancelBtn?: boolean,
   onCancel?: () => void,
   location?: boolean,
-  loading?: boolean
+  loading?: boolean,
+  useIcon?: React.ReactNode,
 };
 
 export default function MixedForm({
@@ -27,6 +29,7 @@ export default function MixedForm({
   cancelBtn = true,
   location = false,
   loading = false,
+  useIcon,
   onCancel,
 } : Props): JSX.Element {
   // const model = new Entity();
@@ -61,7 +64,11 @@ export default function MixedForm({
         borderRadius: 2,
       }}
     >
-      {dialog && (<Button size="large" onClick={openForm}>{title}</Button>)}
+      {dialog && (useIcon ? (
+        <IconButton onClick={openForm} sx={{ bgcolor: 'primary.main' }}>
+          {useIcon}
+        </IconButton>
+      ) : (<Button size="large" onClick={openForm}>{title}</Button>))}
       <FormBuilder
         dialog={dialog}
         open={open}

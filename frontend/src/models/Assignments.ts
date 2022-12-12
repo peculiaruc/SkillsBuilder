@@ -47,8 +47,8 @@ class Assignment extends Model {
     this.init(props);
   }
 
-  beforeSubmit({ course, ...rest }: FormikValues): FormikValues {
-    return { ...rest, course_id: course.id };
+  beforeSubmit({ course, course_id, ...rest }: FormikValues): FormikValues {
+    return { ...rest, course_id: course_id ?? course.id };
   }
 }
 

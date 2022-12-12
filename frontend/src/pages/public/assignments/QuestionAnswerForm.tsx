@@ -95,8 +95,10 @@ export default function QuestionAnswerForm({ question: q, handleNext, handleBack
         )
         }
       </FormControl>
-      <Button onClick={handleBack}>Back</Button>
-      <Button onClick={handleNext}>Next</Button>
+      <Stack spacing={2} justifyContent="space-between" direction="row">
+        <Button onClick={handleBack}>Back</Button>
+        <Button onClick={handleNext}>Next</Button>
+      </Stack>
     </Stack>
   );
 }

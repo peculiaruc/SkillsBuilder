@@ -1,18 +1,17 @@
 import styled from '@emotion/styled';
-import {
-  Button, Grid, Paper, Typography, Stack,
-} from '@mui/material';
-import { toast } from 'react-toastify';
+import { DeleteForeverRounded, Edit, RemoveRedEyeRounded } from '@mui/icons-material';
+import { Grid, IconButton, Paper, Stack, Typography } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
-import theme from '../../../theme/theme';
-import CourseTitle from './CourseTitle';
-import courseImage from '../../../assets/images/Group.png';
-import AssignmentDescription from './AssignmentDescription';
-import { AssignmentType } from '../../../interfaces/AssignmentType';
+import { toast } from 'react-toastify';
 import { useDeleteAssignmentMutation, useUpdateAssignmentMutation } from '../../../apiServices/assignmentService';
-import Assignment from '../../../models/Assignments';
+import courseImage from '../../../assets/images/Group.png';
 import MixedForm from '../../../components/forms/MixedForm';
 import { LoaderButton } from '../../../components/Loader';
+import { AssignmentType } from '../../../interfaces/AssignmentType';
+import Assignment from '../../../models/Assignments';
+import theme from '../../../theme/theme';
+import AssignmentDescription from './AssignmentDescription';
+import CourseTitle from './CourseTitle';
 
 const SlyledPaper = styled(Paper)({
   width: '100%',
@@ -55,16 +54,23 @@ function AssignmentItem({ assignment } : Props) {
           <AssignmentDescription {...assignment} />
         </Grid>
         <Grid item xs={4} sm={4} lg={1}>
-          <Stack spacing={2}>
-            <Button onClick={viewAssigment}>View</Button>
+          <Stack spacing={2} alignItems="flex-end">
+            <IconButton onClick={viewAssigment} sx={{ bgcolor: 'secondary.main' }}>
+              <RemoveRedEyeRounded htmlColor="white" />
+            </IconButton>
             <MixedForm
               dialog
               title="Edit"
               mutation={updateAssignment}
               model={new Assignment({ ...assignment })}
+              useIcon={<Edit color="success" />}
             />
             {!isLoading
-              ? <Button color="error" onClick={handleDelete}> Delete </Button>
+              ? (
+                <IconButton sx={{ bgcolor: 'error.main' }} onClick={handleDelete}>
+                  <DeleteForeverRounded htmlColor="white" />
+                </IconButton>
+              )
               : <LoaderButton /> }
           </Stack>
         </Grid>
