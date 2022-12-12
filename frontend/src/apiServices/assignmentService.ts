@@ -1,5 +1,6 @@
 import api from '.';
 import {
+  ChoiceType,
   CreateAssignmentRequest,
   GetAllAssignmentsResponse,
   GetAssignmentQuestionsResponse,
@@ -7,6 +8,7 @@ import {
   UpdateAssignmentRequest,
 } from '../interfaces/AssignmentType';
 import { CourseId } from '../interfaces/CourseType';
+import { QuestionType } from '../interfaces/QuestionType';
 import { ResponseType } from '../interfaces/ResponseType';
 
 const assignmentService = api.injectEndpoints({
@@ -30,6 +32,15 @@ const assignmentService = api.injectEndpoints({
     getAssignmentQuestions: builder
       .query<GetAssignmentQuestionsResponse, number>({
       query: (id) => ({ url: `/assignment/${id}/questions`, method: 'GET' }),
+      transformResponse(res: GetAssignmentQuestionsResponse, _meta, _arg) {
+        const assignments = res.data.assignments.map(
+          (assignment: QuestionType) => ({
+            ...assignment,
+            choices: JSON.parse(assignment.choices as unknown as string) as ChoiceType[],
+          }),
+        );
+        return { data: { ...res.data, assignments } } as unknown as GetAssignmentQuestionsResponse;
+      },
       providesTags: [{ type: 'Question', id: 'LIST' }],
     }),
     deleteAssignment: builder.mutation<ResponseType, number>({

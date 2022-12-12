@@ -52,12 +52,12 @@ function Sidebar() {
                 <>
                   <MenuItem path="/admin/courses/me" name="Courses" active={location.pathname === '/admin/courses/me'} />
                   <MenuItem path="/admin/learners" name="Learners" active={location.pathname === '/admin/learners'} />
+                  <MenuItem path="/admin/assignments" name="Assignments" active={location.pathname === '/admin/assignments'} />
                 </>
               )
                 : (<MenuItem path="/admin/courses" name="Courses" active={location.pathname === '/admin/courses'} />)
             }
 
-            <MenuItem path="/admin/assignments" name="Assignments" active={location.pathname === '/admin/assignments'} />
             <MenuItem path="/admin/groups" name="Groups" active={location.pathname === '/admin/groups'} />
             {auth.user.role > 1 && (
               <MenuItem path="/admin/users" name="Users" active={location.pathname === '/admin/users'} />

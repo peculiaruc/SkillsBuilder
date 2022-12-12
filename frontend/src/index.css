@@ -3,7 +3,7 @@
 html,
 #root {
   font-family: 'Inter', sans-serif;
-  height: auto;
+  height: 100%;
 }
 
 body {
