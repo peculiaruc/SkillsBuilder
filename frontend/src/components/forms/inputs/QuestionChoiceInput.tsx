@@ -39,7 +39,7 @@ function QuestionChoiceInput(props: OptionInputProps) {
     event:React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     index:number,
   ) => {
-    const allChoices = choices;
+    const allChoices = [...choices];
     allChoices[index] = { ...choices[index], name: event.target.value };
     send(allChoices);
   };
@@ -47,7 +47,7 @@ function QuestionChoiceInput(props: OptionInputProps) {
     checked: boolean,
     index:number,
   ) => {
-    const allChoices = choices;
+    const allChoices = [...choices];
     allChoices[index] = { ...choices[index], isAnswer: checked };
     send(allChoices);
   };

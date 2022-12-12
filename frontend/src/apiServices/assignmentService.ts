@@ -36,7 +36,9 @@ const assignmentService = api.injectEndpoints({
         const assignments = res.data.assignments.map(
           (assignment: QuestionType) => ({
             ...assignment,
-            choices: JSON.parse(assignment.choices as unknown as string) as ChoiceType[],
+            choices: Array.isArray(assignment.choices) ? assignment.choices : JSON.parse(
+              assignment.choices as unknown as string,
+            ) as ChoiceType[],
           }),
         );
         return { data: { ...res.data, assignments } } as unknown as GetAssignmentQuestionsResponse;

@@ -19,14 +19,14 @@ export default function AssigmentQusetionsList() {
   return (
     <Stack width="100%" justifyContent="center" alignItems="center">
       <Container maxWidth="md">
-        <MixedForm
-          dialog
-          model={new Question({ assignment_id: id })}
-          mutation={createQuestion}
-          title="Create Question"
-          loading={createStatus}
-        />
         <Stack spacing={2}>
+          <MixedForm
+            dialog
+            model={new Question({ assignment_id: id })}
+            mutation={createQuestion}
+            title="Add Question"
+            loading={createStatus}
+          />
           {questions && questions.map((question: QuestionType) => (
             <MixedForm
               dialog={false}

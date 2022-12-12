@@ -26,7 +26,7 @@ export default function ViewAssignment() {
             component: <AssigmentQusetionsList />,
           },
           {
-            name: 'submissions',
+            name: 'Submissions',
             component: <SubmissionGrid />,
           },
         ]}

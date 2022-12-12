@@ -6,7 +6,7 @@ export default function Loader() {
   const palette = usePalette();
   return (
     <Box sx={{
-      width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center',
+      width: '100%', height: 'inherit', display: 'flex', justifyContent: 'center', alignItems: 'center',
     }}
     >
       <ThreeDots
