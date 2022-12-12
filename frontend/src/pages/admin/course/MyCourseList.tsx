@@ -46,7 +46,7 @@ function CourseList() {
       text: 'Course created successfully',
     });
   };
-  */
+*/
   return (
     <Stack spacing={2} display="flex" sx={{ width: '100%' }}>
       {auth.user.role > 0 && (
