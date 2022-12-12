@@ -5,6 +5,7 @@ import {
   Stack,
 } from '@mui/material';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useDeleteLessonMutation, useUpdateLessonMutation } from '../../../../apiServices/lessonService';
 import MixedForm from '../../../../components/forms/MixedForm';
@@ -22,6 +23,8 @@ export default function LessonItem({ lesson } : Props) {
   } = lesson;
 
   const [edit, setEdit] = useState(false);
+
+  const navigate = useNavigate();
 
   const [updateLesson, { isLoading }] = useUpdateLessonMutation();
   const [deleteLesson, { isLoading: isDeleting }] = useDeleteLessonMutation();
@@ -47,7 +50,7 @@ export default function LessonItem({ lesson } : Props) {
       sx={{ bgcolor: 'background.paper', width: '100%', borderRadius: 2 }}
       secondaryAction={(
         <Stack>
-          <Edit onClick={() => setEdit(true)} sx={{ cursor: 'pointer' }} color="success" />
+          <Edit onClick={() => navigate(`/admin/lesson/${id}/edit`)} sx={{ cursor: 'pointer' }} color="success" />
           {isDeleting ? <LoaderButton /> : (
             <Delete
               color="error"

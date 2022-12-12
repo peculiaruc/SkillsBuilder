@@ -1,4 +1,3 @@
-import { RemoveRedEyeRounded } from '@mui/icons-material';
 import { Button, IconButton, Stack } from '@mui/material';
 import { FormikValues } from 'formik';
 import { useState } from 'react';
@@ -15,7 +14,7 @@ interface FormProps {
 
 type Props = Required<FormProps> & {
   cancelBtn?: boolean,
-  onCancel?: () => void,
+  onCancel?: (values?:FormikValues) => void,
   location?: boolean,
   loading?: boolean,
   useIcon?: React.ReactNode,
@@ -40,19 +39,19 @@ export default function MixedForm({
   const openForm = () => setOpen(true);
   const closeForm = () => setOpen(false);
   // const openForm = () => dispatch(openDialog());
-  const handleCancel = () => {
+  const handleCancel = (values?:FormikValues) => {
     // dispatch(closeDialog());
     closeForm();
-    if (state && location) navigate(state.pathname);
     if (onCancel) {
-      onCancel();
+      onCancel(values);
     }
+    if (state && location) navigate(state.pathname);
   };
   const onSubmit = async (values:FormikValues) => {
     const data = model.beforeSubmit(values) ?? values;
     const res = await mutation(data)?.unwrap();
     toast(res.message);
-    handleCancel();
+    handleCancel(res.data);
   };
   return (
     <Stack

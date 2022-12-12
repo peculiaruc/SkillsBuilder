@@ -3,6 +3,7 @@ import CourseDetails from './courses/CourseDetails';
 import MyCourse from './courses/MyCourse';
 import GroupDetails from './groups/GroupDetails';
 import MyGroupList from './groups/MyGroupList';
+import lesson from './courses/lessons';
 // import MyStudyPlan from './groups/MyStudyPlan';
 import Profile from './Profile';
 
@@ -35,4 +36,5 @@ export default [
     path: '/profile',
     element: <Profile />,
   },
+  lesson,
 ];

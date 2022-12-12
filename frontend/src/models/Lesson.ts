@@ -4,7 +4,7 @@ import Model, { Field } from './Model';
 class Lesson extends Model {
   constructor(props: Field = {}) {
     super(props);
-    this.name = 'course';
+    this.name = 'lesson';
     this.validationSchema = Yup.object().shape({
       lesson_title: Yup.string().required().min(3),
       lesson_summary: Yup.string().required().min(3),
