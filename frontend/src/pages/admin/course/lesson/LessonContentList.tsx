@@ -4,20 +4,21 @@ import {
 import AddMediaButton from '../../../../components/forms/AddMediaButton';
 import { MediaType } from '../../../../interfaces/MediaType';
 import { useAuth } from '../../../../store/authReducer';
+import { useContents } from '../../../../store/lessonReducer';
 import LessonContentItem from './LessonContentItem';
 
-type Props = {
-  contents: MediaType[]
-};
-
-export default function LessonContentList({ contents } : Props) {
+export default function LessonContentList() {
   const { user } = useAuth();
+  const medias = [...useContents()].sort(
+    (a: MediaType, b: MediaType) => a.content_position - b.content_position,
+  );
+
   return (
 
     <Stack width="100%" justifyContent="center">
       <Container maxWidth="lg">
         <Stack spacing={2}>
-          {contents && contents.map(
+          {medias.map(
             (content: MediaType) => <LessonContentItem key={content.id} content={content} />,
           )}
         </Stack>
