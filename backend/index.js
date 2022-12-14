@@ -2,8 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
-import { Telegraf } from 'telegraf';
 
+import { bot } from './services/telegramBot';
 import initializeDb from './db/dbinit';
 import {
   authRoute,
@@ -24,7 +24,6 @@ import TelegramController from './controllers/telegramController';
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
-const bot = new Telegraf(process.env.BOT_TOKEN);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

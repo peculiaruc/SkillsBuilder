@@ -1,11 +1,10 @@
-import axios from 'axios';
 import dotenv from 'dotenv';
-import { Telegraf } from 'telegraf';
 
 import Course from '../models/course';
 import Enrollment from '../models/enrollments';
 import TelegramuUsers from '../models/telegram';
 import User from '../models/users';
+import { bot } from '../services/telegramBot';
 
 dotenv.config();
 
@@ -13,7 +12,6 @@ const user = new User();
 const telegramUser = new TelegramuUsers();
 const enrollments = new Enrollment();
 const _course = new Course();
-const bot = new Telegraf(process.env.BOT_TOKEN);
 
 class TelegramController {
   static async updateUser(data) {
