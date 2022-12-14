@@ -8,8 +8,6 @@ class Lesson extends Model {
     this.validationSchema = Yup.object().shape({
       lesson_title: Yup.string().required().min(3),
       lesson_summary: Yup.string().required().min(3),
-      lesson_content: Yup.string().required().min(3),
-      lesson_content_type: Yup.string().required().min(3),
       lesson_no: Yup.number().required().min(1),
     });
     this.fields = [
@@ -26,25 +24,11 @@ class Lesson extends Model {
         rows: 4,
       },
       {
-        name: 'lesson_content',
-        label: 'Lesson Content',
-        type: 'textarea',
-        multiline: true,
-        rows: 4,
-      },
-      {
         name: 'lesson_no',
         type: 'number',
       },
-      {
-        name: 'lesson_content_type',
-        type: 'select',
-      },
     ];
     this.init(props);
-    this.data = {
-      lesson_content_type: ['image', 'video', 'text'],
-    };
   }
 /*
   beforeSubmit({
