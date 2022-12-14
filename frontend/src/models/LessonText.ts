@@ -6,9 +6,9 @@ class LessonText extends Model {
     super(props);
     this.name = 'lesson';
     this.validationSchema = Yup.object().shape({
-      content: Yup.object().required(),
+      content: Yup.string().required(),
       content_title: Yup.string().required(),
-      content_type: Yup.string().required(),
+      content_type: Yup.string(),
     });
     this.fields = [
       {

@@ -11,12 +11,10 @@ import MixedForm from './MixedForm';
 export default function AddMediaButton() {
   const { id } = useParams();
   const [createContent, { isLoading }] = useCreateMediaMutation();
-  const createMedia = async (_err: unknown, {
-    public_id,
-    resource_type,
-    secure_url,
-  }: Record<string, string>) => {
-    if (public_id) {
+  const createMedia = async (_err: unknown, { info, event }: Record<string, unknown>) => {
+    if (event === 'success') {
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      const { public_id, resource_type, secure_url } = info as Record<string, unknown>;
       const res = await createContent({
         content_title: public_id,
         content_type: resource_type,
