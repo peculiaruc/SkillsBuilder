@@ -16,11 +16,11 @@ const assignmentService = api.injectEndpoints({
   endpoints: (builder) => ({
     createAssignment: builder.mutation<GetAssignmentResponse, CreateAssignmentRequest>({
       query: (assignment) => ({ url: '/assignment/create', method: 'POST', data: assignment }),
-      invalidatesTags: ['USER_ASSIGNMENTS'],
+      invalidatesTags: ['USER_ASSIGNMENTS', 'COURSE_ASSIGNMENTS'],
     }),
     updateAssignment: builder.mutation<GetAssignmentResponse, UpdateAssignmentRequest>({
       query: ({ id, ...data }) => ({ url: `/assignment/${id}`, method: 'PUT', data }),
-      invalidatesTags: ['USER_ASSIGNMENTS'],
+      invalidatesTags: ['USER_ASSIGNMENTS', 'COURSE_ASSIGNMENTS'],
     }),
     getAssignmentById: builder.query<GetAssignmentResponse, number>({
       query: (id) => ({ url: `/assignment/${id}`, method: 'GET' }),
@@ -48,7 +48,7 @@ const assignmentService = api.injectEndpoints({
     }),
     deleteAssignment: builder.mutation<ResponseType, number>({
       query: (id) => ({ url: `/assignment/${id}`, method: 'DELETE' }),
-      invalidatesTags: ['USER_ASSIGNMENTS'],
+      invalidatesTags: ['USER_ASSIGNMENTS', 'COURSE_ASSIGNMENTS'],
     }),
     submitAssignment: builder.mutation<ResponseType, SubmitAssignmentRequest>({
       query: (data) => ({ url: '/submission/create', method: 'POST', data }),

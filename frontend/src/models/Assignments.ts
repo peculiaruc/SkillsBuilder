@@ -48,7 +48,7 @@ class Assignment extends Model {
   }
 
   beforeSubmit({ course, course_id, ...rest }: FormikValues): FormikValues {
-    return { ...rest, course_id: course_id ?? course.id };
+    return { ...rest, course_id: course_id.id ?? course.id ?? course_id };
   }
 }
 
