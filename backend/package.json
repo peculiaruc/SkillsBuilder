@@ -29,7 +29,8 @@
     "pg": "^8.8.0",
     "sinon": "^7.5.0",
     "sinon-chai": "^3.3.0",
-    "sinon-express-mock": "^2.2.1"
+    "sinon-express-mock": "^2.2.1",
+    "telegraf": "^4.11.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.6.0",
