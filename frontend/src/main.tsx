@@ -12,7 +12,6 @@ import './index.css';
 import 'react-toastify/dist/ReactToastify.css';
 import { GOOGLE_CLIENT_ID } from './configs/app';
 
-
 const Router = () => useRoutes(routes);
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(

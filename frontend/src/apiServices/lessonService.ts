@@ -1,4 +1,3 @@
-import { GetMediasResponse } from './../interfaces/MediaType';
 import api from '.';
 import {
   CreateLessonRequest,
@@ -6,7 +5,7 @@ import {
   DeleteLessonResponse,
   GetLessonResponse,
   LessonId,
-  LessonType, UpdateLessonResponse,
+  LessonType, UpdateLessonResponse
 } from '../interfaces/LessonType';
 
 const lessonService = api.injectEndpoints({
@@ -27,7 +26,7 @@ const lessonService = api.injectEndpoints({
       query: (id) => ({ url: `/lesson/${id}`, method: 'DELETE' }),
       invalidatesTags: [{ type: 'Lesson', id: 'LIST' }],
     }),
-    getLessonContent: builder.query<GetMediasResponse, LessonId>({
+    getLessonContent: builder.query<GetLessonResponse, LessonId>({
       query: (id) => ({ url: `/lesson/${id}/content`, method: 'GET' }),
       providesTags: [{ type: 'Media', id: 'LIST' }],
     }),

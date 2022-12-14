@@ -1,3 +1,4 @@
+import { MediaType } from './MediaType';
 import { ResponseType } from './ResponseType';
 
 export type LessonType = {
@@ -8,6 +9,7 @@ export type LessonType = {
   lesson_content:string,
   lesson_content_type:string,
   course_id: number,
+  contents?: MediaType[],
   created_at: Date,
   updated_at: Date
 };

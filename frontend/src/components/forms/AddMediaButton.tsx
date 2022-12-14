@@ -1,4 +1,4 @@
-import { Button, Stack } from '@mui/material';
+import { Button } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useCreateMediaMutation } from '../../apiServices/mediaService';
@@ -32,7 +32,7 @@ export default function AddMediaButton() {
   const handleUpload = () => widget.open();
   return (
     isLoading ? <LoaderButton /> : (
-      <Stack spacing={2} direction="row">
+      <>
         <Button onClick={handleUpload}>Add Media</Button>
         <MixedForm
           dialog
@@ -40,7 +40,7 @@ export default function AddMediaButton() {
           mutation={createContent}
           model={new LessonText({ lesson_id: id })}
         />
-      </Stack>
+      </>
     )
   );
 }
