@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "export NODE_ENV=test && npm run migrate && nyc --reporter=text mocha --exit --require @babel/register --require @babel/polyfill server/tests/*",
-    "startdev": "nodemon --exec babel-node ./index.js",
-    "start": "yarn run --exec babel-node ./index.js"
+    "start": "nodemon --exec babel-node ./index.js",
+    "startdev": "yarn run --exec babel-node ./index.js"
   },
   "keywords": [],
   "author": "",
