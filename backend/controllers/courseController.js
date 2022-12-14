@@ -20,6 +20,7 @@ import {
 } from '../helpers/whatsappMessagehelper';
 import CourseProgress from '../models/courseProgress';
 import TelegramController from './telegramController';
+import { newCourseUpdate } from '../services/telegramBot';
 
 const course = new Course();
 const enrollment = new Enrollment();
@@ -102,7 +103,7 @@ class CourseController {
     await sendEmail(
       _user.row.email,
       'Enrollment Confirmation',
-      `You have successfully enrolled in ${_course.row.title}`
+      `You have successfully enrolled in ${_course.row.title}`,
     );
     // if (_user.row.whatsapp) {
     //   const _author = await user.getById(_course.row.author_id);
@@ -144,7 +145,7 @@ class CourseController {
     await sendEmail(
       _user.row.email,
       'Unenrollment Confirmation',
-      `You have successfully unenrolled in ${_course.row.title}`
+      `You have successfully unenrolled in ${_course.row.title}`,
     );
     return Helpers.sendResponse(res, 200, SUCCESS);
   }
@@ -211,6 +212,7 @@ class CourseController {
       return Helpers.dbError(res, _course);
     }
     await TelegramController.newCourseUpdate(_course.rows[0]);
+    // await newCourseUpdate(_course.rows[0]);
     return Helpers.sendResponse(res, 200, SUCCESS, {
       course: _course.rows[0],
     });
@@ -257,7 +259,7 @@ class CourseController {
       {
         course_id: req.params.id,
         user_id: currentuser.id,
-      }
+      },
     );
     if (_progress.errors) return Helpers.dbError(res, _progress);
     return Helpers.sendResponse(res, 200, SUCCESS, { progress: _progress.rows });

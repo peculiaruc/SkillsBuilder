@@ -4,6 +4,7 @@ import AssignmentSubmissions from '../models/assignmentSubmissions';
 import AssignmentQuestions from '../models/assignmentQuestions';
 import { NOT_AUTHORISED, SUCCESS } from '../utils/constants';
 import Course from '../models/course';
+import TelegramController from './telegramController';
 
 const assignment = new Assignment();
 const submission = new AssignmentSubmissions();
@@ -20,8 +21,9 @@ class AssignmentController {
       ...req.body,
     };
     const _assignment = await assignment.create(newAss);
+    await TelegramController.newAssignmentUpdate(_assignment.rows[0]);
     if (_assignment.errors) return Helpers.dbError(res, _assignment);
-    return Helpers.sendResponse(res, 200, 'success', { assignment: _assignment.rows });
+    return Helpers.sendResponse(res, 200, 'success', { assignment: _assignment.rows[0] });
   }
 
   static async getAssignmentById(req, res) {
