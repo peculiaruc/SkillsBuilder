@@ -1,6 +1,6 @@
 import { List, Stack } from '@mui/material';
 import { FormikValues } from 'formik';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useGetCourseLessonsQuery } from '../../../../apiServices/courseService';
 import { useCreateLessonMutation } from '../../../../apiServices/lessonService';
 import MixedForm from '../../../../components/forms/MixedForm';

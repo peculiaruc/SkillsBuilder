@@ -66,7 +66,7 @@ class Database {
     const query = await this.where(column, op, value);
     if (!query.error) {
       return {
-        row: query.rows[0],
+        row: query.rows?.[0],
         count: query.count,
       };
     }

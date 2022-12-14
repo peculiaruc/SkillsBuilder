@@ -11,7 +11,7 @@ type Props = {
 
 export default function LessonItem({ lesson } : Props) {
   const {
-    lesson_title, lesson_summary, lesson_no, id
+    lesson_title, lesson_summary, lesson_no, id,
   } = lesson;
   const navigate = useNavigate();
   return (

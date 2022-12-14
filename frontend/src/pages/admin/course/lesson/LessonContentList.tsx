@@ -1,4 +1,6 @@
-import { Box, Button, Container, Stack } from '@mui/material';
+import {
+  Box, Button, Container, Stack,
+} from '@mui/material';
 import AddMediaButton from '../../../../components/forms/AddMediaButton';
 import { MediaType } from '../../../../interfaces/MediaType';
 import { useAuth } from '../../../../store/authReducer';

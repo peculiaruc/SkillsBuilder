@@ -5,7 +5,7 @@ import {
   DeleteLessonResponse,
   GetLessonResponse,
   LessonId,
-  LessonType, UpdateLessonResponse
+  LessonType, UpdateLessonResponse,
 } from '../interfaces/LessonType';
 
 const lessonService = api.injectEndpoints({

@@ -1,6 +1,8 @@
 import styled from '@emotion/styled';
 import { DeleteForeverRounded, Edit, RemoveRedEyeRounded } from '@mui/icons-material';
-import { Grid, IconButton, Paper, Stack, Typography } from '@mui/material';
+import {
+  Grid, IconButton, Paper, Stack, Typography,
+} from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useDeleteAssignmentMutation, useUpdateAssignmentMutation } from '../../../apiServices/assignmentService';

@@ -5,6 +5,7 @@ export const assignmentSubmission = `CREATE TABLE IF NOT EXISTS assignment_submi
     assignment_id INT NOT NULL,
     grade VARCHAR NOT NULL,
     status VARCHAR NOT NULL,
+    answers JSON NOT NULL,
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW()
 );`;

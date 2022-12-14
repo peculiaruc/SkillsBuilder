@@ -1,12 +1,12 @@
 import Database from '../db/db';
 
-class User extends Database {
+class Post extends Database {
   constructor() {
-    super('users');
+    super('posts');
   }
 
-  async getByEmail(email) {
-    return await this.first('email', '=', email);
+  async getByGroup(id) {
+    return await this.first('group_id', '=', id);
   }
 
   async getById(id) {
@@ -18,4 +18,4 @@ class User extends Database {
   }
 }
 
-export default User;
+export default Post;

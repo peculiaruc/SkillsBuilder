@@ -36,7 +36,7 @@ class Helpers {
   }
 
   static createRandomToken() {
-    crypto.randomBytes(32).toString('hex');
+    return crypto.randomBytes(32).toString('hex');
   }
 
   static validationResponse(validation, response) {
@@ -82,15 +82,15 @@ class Helpers {
         error: 'User is not Authenticated',
       });
     }
-    const verified = await jwt.verify(token, process.env.JWT_PRIVATE_KEY);
+    const verified = jwt.verify(token, process.env.JWT_PRIVATE_KEY);
     const userId = verified.id;
 
-    const response = await db.queryBuilder('SELECT * FROM users WHERE id = $1', [userId]);
+    const _user = await db.queryBuilder('SELECT * FROM users WHERE id = $1', [userId]);
     // console.log('response', response.rows);
-    if (response.errors) {
-      return Helpers.dbError(res, response);
+    if (_user.errors) {
+      return Helpers.dbError(res, _user);
     }
-    const user = response.rows[0];
+    const user = _user.rows[0];
     return user;
   }
 }

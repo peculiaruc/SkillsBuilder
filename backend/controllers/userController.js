@@ -3,223 +3,207 @@ import sendEmail from '../utils/sendEmails';
 import User from '../models/users';
 import Token from '../models/token';
 import Helpers from '../helpers/helpers';
+import Enrollment from '../models/enrollments';
+import Database from '../db/db';
+import { NOT_AUTHORISED, SUCCESS, ALREADY_EXISTS } from '../utils/constants';
+import Post from '../models/posts';
+import Course from '../models/course';
+import Assignment from '../models/assignment';
 
 dotenv.config();
 
 const user = new User();
 const tokn = new Token();
-
+const enroll = new Enrollment();
+const post = new Post();
+const course = new Course();
+const assignment = new Assignment();
+const db = new Database();
 class UserController {
+  static async getAllUsers(req, res) {
+    const currentuser = await Helpers.getLoggedInUser(req, res);
+    if (currentuser.role !== 2) {
+      return Helpers.sendResponse(res, 401, NOT_AUTHORISED);
+    }
+    const _users = await user.all();
+    if (_users.errors) return Helpers.dbError(res, _users);
+    return Helpers.sendResponse(res, 200, SUCCESS, { users: _users.rows });
+  }
+
   static async createUser(req, res) {
-    const hashedPassword = Helpers.hashPassword(req.body.password);
-    const checkEmail = await user.getByEmail(req.body.email);
-
-    if (checkEmail.errors) {
-      return Helpers.dbError(res, checkEmail);
+    const currentuser = await Helpers.getLoggedInUser(req, res);
+    if (currentuser.role !== 2) {
+      return Helpers.sendResponse(res, 401, NOT_AUTHORISED);
     }
 
-    if (checkEmail.count > 0) {
-      return Helpers.sendResponse(res, 400, 'A user with Email address already exists !');
+    const password = Helpers.generateRandomPassword();
+    const hashedPass = Helpers.hashPassword(password);
+
+    const emailCheck = await user.getByEmail(req.body.email);
+
+    if (emailCheck.errors) {
+      return Helpers.dbError(res, emailCheck);
     }
+
+    if (emailCheck.count > 0) {
+      return Helpers.sendResponse(res, 400, ALREADY_EXISTS);
+    }
+
     const newUser = {
       email: req.body.email,
-      password: hashedPassword,
+      password: hashedPass,
       fullname: req.body.fullname,
       city: req.body.city,
       auth_method: 'emailpassword',
+      role: req.body.role,
     };
 
-    const saveUser = await user.create(newUser);
+    const _user = await user.create(newUser);
     const randomToken = Helpers.createRandomToken();
-    if (saveUser.errors) return Helpers.dbError(res, saveUser);
-    if (saveUser.count > 0) {
+    if (_user.errors) return Helpers.dbError(res, _user);
+    if (_user.count > 0) {
       const newToken = {
-        user_id: saveUser.rows[0].id,
+        user_id: _user.rows[0].id,
         token: randomToken,
         type: 'verify',
       };
       const saveToken = await tokn.create(newToken);
       if (saveToken.errors) return Helpers.dbError(res, saveToken);
 
-      const link = `${process.env.BASE_URL}/api/v1/auth/verify-email/${saveUser.rows[0].id}/${saveToken.rows[0].token}`;
-      await sendEmail(saveUser.rows[0].email, 'Verify Email', link);
+      const link = `${process.env.BASE_URL}/api/v1/auth/verify-email/${_user.rows[0].id}/${saveToken.rows[0].token}`;
+      const credentials = `
+      Welcome to skillBuddy
+      Log in to your account using the following credentials
+      email: ${_user.rows[0].email}
+      password: ${password}`;
 
-      const token = Helpers.generateToken(saveUser.rows[0].id);
-      const refreshToken = Helpers.generateRefreshToken(saveUser.rows[0].id);
+      await sendEmail(_user.rows[0].email, 'Verify Email', link);
 
-      return Helpers.sendResponse(res, 200, 'User created successfully', {
+      await sendEmail(_user.rows[0].email, 'Account Details', credentials);
+
+      const token = Helpers.generateToken(_user.rows[0].id);
+      const refreshToken = Helpers.generateRefreshToken(_user.rows[0].id);
+
+      return Helpers.sendResponse(res, 200, SUCCESS, {
         token,
         refreshToken,
-        user: saveUser.rows[0],
+        user: _user.rows[0],
       });
     }
   }
 
-  static async login(req, res) {
-    const { email, password } = req.body;
-
-    const _user = await user.getByEmail(email);
-
-    if (_user.error) return Helpers.dbError(res, _user);
-
-    if (_user.count > 0 && Helpers.comparePassword(_user.row.password, password)) {
-      const token = Helpers.generateToken(_user.row.id);
-      const refreshToken = Helpers.generateRefreshToken(_user.row.id);
-      const newToken = {
-        user_id: _user.row.id,
-        token: refreshToken,
-        type: 'refresh',
-      };
-      const saveToken = await tokn.create(newToken);
-      if (saveToken.errors) {
-        return Helpers.dbError(res, saveToken);
-      }
-      return Helpers.sendResponse(res, 200, 'User is successfully logged in', {
-        token,
-        refreshToken,
-        user: _user.row,
-      });
-    }
-    return Helpers.sendResponse(res, 400, 'Invalid credentials');
-  }
-
-  static async passwordReset(req, res) {
-    const { email } = req.body;
-    const _user = await user.getByEmail(email);
+  static async getUserById(req, res) {
+    const _user = await user.getById(req.params.id);
     if (_user.errors) return Helpers.dbError(res, _user);
-    if (_user.count > 0) {
-      const randomToken = Helpers.createRandomToken();
-      const savedToken = await tokn.getTokenByUser(_user.row.id);
-      if (savedToken.count > 0) {
-        tokn.delete({ token: savedToken.row.id });
-      }
-      const newToken = {
-        user_id: _user.row.id,
-        token: randomToken,
-        type: 'reset',
-      };
-      const saveToken = await tokn.create(newToken);
-      if (saveToken.errors) return Helpers.dbError(res, saveToken);
-
-      return Helpers.sendResponse(res, 200, 'User password reset details', {
-        reset_token: saveToken.rows[0].token,
-        user_id: saveToken.rows[0].user_id,
-      });
-    }
-    return Helpers.sendResponse(res, 400, 'User with email does not exist');
+    return Helpers.sendResponse(res, 200, SUCCESS, { user: _user.row });
   }
 
-  static async passwordUpdate(req, res) {
-    const { resetToken, user_id, password } = req.body;
+  static async updateUser(req, res) {
+    const currentuser = await Helpers.getLoggedInUser(req, res);
 
-    const _user = await user.getById(user_id);
+    const _user = await user.getById(req.params.id);
     if (_user.errors) return Helpers.dbError(res, _user);
-    if (_user.count > 0) {
-      // check if token is valid
-      const savedToken = await tokn.allWhere({ id, token: resetToken, type: 'reset' });
-      if (savedToken.errors) return Helpers.dbError(res, savedToken);
-      if (savedToken.count > 0) {
-        const hashedPass = Helpers.hashPassword(password);
-        const update = await user.update({ password: hashedPass }, { id: user_id });
-        if (update.errors) return Helpers.dbError(res, update);
-        if (update.count > 0) {
-          await tokn.delete({ id: savedToken.rows[0].id });
-          return Helpers.sendResponse(res, 200, 'password reset sucessfully', {});
-        }
-      }
-    }
-    return Helpers.sendResponse(res, 400, 'User does not exist');
-  }
+    if (_user.count === 0) return Helpers.sendResponse(res, 400, 'User with Id not found!');
 
-  static async verifyEmail(req, res) {
-    const { id, token } = req.params;
-    const _user = await user.getById(id);
-    if (_user.errors) return Helpers.dbError(res, _user);
-    if (_user.count > 0) {
-      const savedToken = await tokn.allWhere({ id, token, type: 'verify' });
-      if (savedToken.errors) return Helpers.dbError(res, savedToken);
-      if (savedToken.count > 0) {
-        const update = await user.update({ verified: true }, { id });
-        if (update.errors) return Helpers.dbError(res, update);
-        if (update.count > 0) {
-          await tokn.delete({ id: savedToken.rows[0].id });
-          return Helpers.sendResponse(res, 200, 'email verified successfully', {});
-        }
-      }
-      return Helpers.sendResponse(res, 400, 'Link is invalid or expired');
-    }
-    return Helpers.sendResponse(res, 400, 'User does not exist');
-  }
-
-  static async logout(req, res) {
-    const deleteTokens = await tokn.delete({ user_id: req.body.userId });
-    if (deleteTokens.errors) {
-      return Helpers.dbError(res, deleteTokens);
-    }
-    return Helpers.sendResponse(res, 200, 'Logout Sucessfull!');
-  }
-
-  static async refreshToken(req, res) {
-    const savedToken = await tokn.allWhere({
-      user_id: req.body.userId,
-      token: req.body.refreshToken,
-      type: 'refresh',
-    });
-    if (savedToken.errors) {
-      return Helpers.dbError(res, savedToken);
-    }
-    if (savedToken.count > 0) {
-      const newToken = Helpers.generateToken(req.body.userId);
-      const newRefreshToken = Helpers.generateRefreshToken(req.body.userId);
-
-      const deleteOld = await tokn.delete({ id: savedToken.rows[0].id });
-      if (deleteOld.errors) {
-        return Helpers.dbError(res, deleteOld);
-      }
-      const newTokenToSave = {
-        user_id: req.body.userId,
-        token: newRefreshToken,
-        type: 'refresh',
+    if (currentuser.role === 2 || currentuser.id === _user.row.id) {
+      const newUpdate = {
+        ...req.body,
       };
+      const updateduser = await user.update(newUpdate, { id: req.params.id });
+      if (updateduser.errors) return Helpers.dbError(res, updateduser);
 
-      const saveToken = await tokn.create(newTokenToSave);
-      if (saveToken.errors) {
-        return Helpers.dbError(res, saveToken);
-      }
-
-      return Helpers.sendResponse(res, 200, 'token refreshed successfully', {
-        token: newToken,
-        refreshToken: newRefreshToken,
-      });
+      return Helpers.sendResponse(res, 200, SUCCESS, { user: updateduser.rows[0] });
     }
+
+    return Helpers.sendResponse(res, 401, NOT_AUTHORISED);
   }
 
-  static async retryEmailVerification(req, res) {
-    const savedToken = await tokn.allWhere({ user_id: req.body.userId, type: 'verify' });
-    if (savedToken.errors) return Helpers.dbError(res, savedToken);
-    if (savedToken.count > 0) {
-      const del = await tokn.delete({ id: savedToken.rows[0].id });
-      if (del.errors) {
-        return Helpers.dbError(res, del);
-      }
+  static async deleteUser(req, res) {
+    const currentuser = await Helpers.getLoggedInUser(req, res);
+    if (currentuser.role !== 2) {
+      return Helpers.sendResponse(res, 401, NOT_AUTHORISED);
     }
-    const randomToken = Helpers.createRandomToken();
-    const newToken = {
-      user_id: req.body.userId,
-      token: randomToken,
-      type: 'verify',
-    };
-    const saveToken = await tokn.create(newToken);
-    if (saveToken.errors) return Helpers.dbError(res, saveToken);
-
-    const _user = await user.getById(req.body.userId);
-    if (_user.errors) {
-      return Helpers.dbError(res, _user);
+    const _deletedUser = await user.delete({ id: req.params.id });
+    if (_deletedUser.errors) {
+      return Helpers.dbError(res, _deletedUser);
     }
+    const _deleteEnroll = await enroll.delete({ user_id: req.params.id });
+    if (_deleteEnroll.errors) {
+      return Helpers.dbError(res, _deleteEnroll);
+    }
+    return Helpers.sendResponse(res, 200, SUCCESS);
+  }
 
-    const link = `${process.env.BASE_URL}/api/v1/auth/verify-email/${_user.row.id}/${saveToken.rows[0].token}`;
-    await sendEmail(_user.row.email, 'Verify Email', link);
-    return Helpers.sendResponse(res, 200, 'Verification email sent!', {});
+  static async getUserCourses(req, res) {
+    const sql = `SELECT courses.title, courses.author_id, courses.description, enrollments.id, enrollments.course_id, enrollments.enroll_date, enrollments.unenroll_date FROM courses JOIN enrollments ON enrollments.course_id = courses.id WHERE enrollments.user_id = ${req.params.id};`;
+    const _course = await db.queryBuilder(sql);
+    if (_course.errors) return Helpers.dbError(res, _course);
+    return Helpers.sendResponse(res, 200, SUCCESS, { courses: _course.rows });
+  }
+
+  static async getUserGroups(req, res) {
+    const sql = `SELECT groups.name, groups.description, groups.owner_id, joined_groups.id, joined_groups.group_id, joined_groups.status, joined_groups.join_date, joined_groups.leave_date FROM groups JOIN joined_groups ON joined_groups.group_id = groups.id WHERE joined_groups.user_id = ${req.params.id} AND joined_groups.leave_date IS NULL;`;
+    const _group = await db.queryBuilder(sql);
+    if (_group.errors) {
+      return Helpers.dbError(res, _group);
+    }
+    return Helpers.sendResponse(res, 200, SUCCESS, { groups: _group.rows });
+  }
+
+  static async getAuthorsLearners(req, res) {
+    const sql = `SELECT users.fullname, users.email, users.phone, users.city, enrollments.enroll_date, enrollments.unenroll_date FROM users JOIN enrollments ON enrollments.user_id = users.id WHERE enrollments.author_id = ${req.params.id};`;
+    const _enrollments = await db.queryBuilder(sql);
+    if (_enrollments.errors) return Helpers.dbError(res, _enrollments);
+    return Helpers.sendResponse(res, 200, SUCCESS, { learners: _enrollments.rows });
+  }
+
+  static async getAllAuthors(req, res) {
+    const currentuser = await Helpers.getLoggedInUser(req, res);
+    if (currentuser.role !== 2) {
+      return Helpers.sendResponse(res, 401, NOT_AUTHORISED);
+    }
+    const _users = await user.allWhere({ role: 1 });
+    if (_users.errors) return Helpers.dbError(res, _users);
+    return Helpers.sendResponse(res, 200, SUCCESS, { users: _users.rows });
+  }
+
+  static async getAllLearners(req, res) {
+    const currentuser = await Helpers.getLoggedInUser(req, res);
+    if (currentuser.role !== 2) {
+      return Helpers.sendResponse(res, 401, NOT_AUTHORISED);
+    }
+    const _users = await user.allWhere({ role: 0 });
+    if (_users.errors) return Helpers.dbError(res, _users);
+    return Helpers.sendResponse(res, 200, SUCCESS, { users: _users.rows });
+  }
+
+  static async getAllAdmins(req, res) {
+    const currentuser = await Helpers.getLoggedInUser(req, res);
+    if (currentuser.role !== 2) {
+      return Helpers.sendResponse(res, 401, NOT_AUTHORISED);
+    }
+    const _users = await user.allWhere({ role: 2 });
+    if (_users.errors) return Helpers.dbError(res, _users);
+    return Helpers.sendResponse(res, 200, SUCCESS, { users: _users.rows });
+  }
+
+  static async getUserPosts(req, res) {
+    const _posts = await post.allWhere({ owner_id: req.params.id });
+    if (_posts.errors) return Helpers.dbError(res, _posts);
+    return Helpers.sendResponse(res, 200, SUCCESS, { posts: _posts.rows });
+  }
+
+  static async getAuthorAssignments(req, res) {
+    const _assignment = await assignment.allWhere({ author_id: req.params.id });
+    if (_assignment.errors) return Helpers.dbError(res, _assignment);
+    return Helpers.sendResponse(res, 200, SUCCESS, { assignments: _assignment.rows });
+  }
+
+  static async getAuthorsCourses(req, res) {
+    const _courses = await course.allWhere({ author_id: req.params.id });
+    console.log('author courses', _courses);
+    if (_courses.errors) return Helpers.dbError(res, _courses);
+    return Helpers.sendResponse(res, 200, SUCCESS, { courses: _courses.rows });
   }
 }
 

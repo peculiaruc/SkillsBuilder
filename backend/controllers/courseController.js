@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 import sendEmail from '../utils/sendEmails';
 import Course from '../models/course';
 import Helpers from '../helpers/helpers';
@@ -5,18 +7,23 @@ import Enrollment from '../models/enrollments';
 import Categories from '../models/categories';
 import User from '../models/users';
 import CourseLesson from '../models/courseLesson';
-import moment from 'moment';
+
 import Database from '../db/db';
 import Assignment from '../models/assignment';
 import CourseStatus from '../models/courseStatus';
 import Material from '../models/courseMaterial';
 import { ALREADY_ENROLLED, NOT_AUTHORISED, SUCCESS } from '../utils/constants';
+import {
+  sendMessage,
+  getEnrollmentTemplatedMessage,
+  getAssignmentTemplatedMessage,
+} from '../helpers/whatsappMessagehelper';
 
 const course = new Course();
 const enrollment = new Enrollment();
 const cat = new Categories();
 const user = new User();
-const materials = new CourseLesson();
+const lesson = new CourseLesson();
 const db = new Database();
 const assignment = new Assignment();
 const status = new CourseStatus();
@@ -94,12 +101,28 @@ class CourseController {
       'Enrollment Confirmation',
       `You have successfully enrolled in ${_course.row.title}`,
     );
+    // if (_user.row.whatsapp) {
+    //   const _author = await user.getById(_course.row.author_id);
+    //   if (_author.errors) return Helpers.dbError(res, _author);
+
+    //   const data = getEnrollmentTemplatedMessage(_user.row.whatsapp, _course.row, _author.row);
+
+    //   await sendMessage(data, res);
+    // }
+
     return Helpers.sendResponse(res, 200, SUCCESS);
   }
 
   static async unEnrollUser(req, res) {
     const _user = await user.getById(req.body.userId);
-    if (_user.errors) return Helpers.dbError(res, _user);
+    if (_user.errors) return Helpers.dbError(res, _user); // if (_user.row.whatsapp) {
+    //   const _author = await user.getById(_course.row.author_id);
+    //   if (_author.errors) return Helpers.dbError(res, _author);
+
+    //   const data = getEnrollmentTemplatedMessage(_user.row.whatsapp, _course.row, _author.row);
+
+    //   await sendMessage(data, res);
+    // }
 
     const _course = await course.getById(req.params.id);
     if (_course.errors) return Helpers.dbError(res, _course);
@@ -143,9 +166,10 @@ class CourseController {
   }
 
   static async getCourseLessons(req, res) {
-    const _materials = await materials.allWhere({ course_id: req.params.id });
-    if (_materials.errors) return Helpers.dbError(res, _materials);
-    return Helpers.sendResponse(res, 200, SUCCESS, { materials: _materials.rows });
+    const _lessons = await lesson.allWhere({ course_id: req.params.id });
+    if (_lessons.errors) return Helpers.dbError(res, _lessons);
+    console.log(_lessons);
+    return Helpers.sendResponse(res, 200, SUCCESS, { lessons: _lessons.rows });
   }
 
   static async getCourseAuthor(req, res) {
