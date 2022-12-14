@@ -16,6 +16,7 @@ import {
   posts,
   courseMaterial,
   courseProgress,
+  telegramUsers,
 } from '../migrations';
 
 export default async () => {
@@ -43,6 +44,7 @@ export default async () => {
     await db.queryBuilder(posts);
     await db.queryBuilder(courseMaterial);
     await db.queryBuilder(courseProgress);
+    await db.queryBuilder(telegramUsers);
     return true;
   } catch (e) {
     console.log('db init err', e);

@@ -3,6 +3,7 @@
     "cloudinary": "^1.32.0",
     "passport": "^0.6.0",
     "passport-google-oauth20": "^2.0.0",
-    "passport-google-oidc": "^0.1.0"
+    "passport-google-oidc": "^0.1.0",
+    "telegraf": "^4.11.2"
   }
 }
