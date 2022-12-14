@@ -1,5 +1,5 @@
-// export const serverHost = 'http://127.0.0.1:3000';
-export const serverHost = 'https://opensourceteam3.onrender.com';
+export const serverHost = 'http://127.0.0.1:3000';
+// export const serverHost = 'https://opensourceteam3.onrender.com';
 // export const serverHost = process.env.NODE_ENV !== 'production' ? 'https://opensourceteam3.onrender.com' : 'http://127.0.0.1:3000';
 
 const basePath = `${serverHost}/api`;
@@ -23,3 +23,7 @@ const appConfig = {
 };
 
 export default appConfig;
+
+export const CLOUDINARY_NAME = 'dhojciv8g';
+export const CLOUDINARY_PRESET = 'ocabiwp6';
+export const editorApiKey = 'az4jjuya0r8mednk47zpgjbwm2ei0a135vje7duq24twmomo';

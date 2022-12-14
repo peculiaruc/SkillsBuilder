@@ -16,7 +16,8 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "strictNullChecks": true,
-    "strictFunctionTypes": false
+    "strictFunctionTypes": false,
+    "typeRoots": ["./node_modules/@types", "./src/types"]
   },
   "include": [
     ".eslintrc.cjs",
