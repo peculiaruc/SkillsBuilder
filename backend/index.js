@@ -28,7 +28,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(morgan('short'));
-app.use(botInit());
 
 app.use('/home', (req, res) => {
   res.status(200).send('Welcome to this awesome API!!');
@@ -56,7 +55,7 @@ app.use((req, res) => {
 
 app.listen(PORT, async () => {
   await initializeDb();
-  // await botInit();
+  botInit();
   console.log(`Listening on port: ${PORT}`);
 });
 
