@@ -54,13 +54,13 @@ app.use((req, res) => {
 });
 
 app.listen(PORT, async () => {
-  try {
-    await initializeDb();
-    await botInit();
-    console.log(`Listening on port: ${PORT}`);
-  } catch (e) {
-    console.log('error', e);
-  }
+  // try {
+  await initializeDb();
+  await botInit();
+  console.log(`Listening on port: ${PORT}`);
+  // } catch (e) {
+  //   console.log('error', e);
+  // }
 });
 
 export default app;
