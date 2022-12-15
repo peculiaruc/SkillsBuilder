@@ -59,7 +59,7 @@ app.listen(PORT, async () => {
     await botInit();
     console.log(`Listening on port: ${PORT}`);
   } catch (e) {
-    console.log('error');
+    console.log('error', e);
   }
 });
 
