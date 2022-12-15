@@ -3,7 +3,7 @@ import cors from 'cors';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
 
-import { bot } from './services/telegramBot';
+import botInit from './services/telegramBot';
 import initializeDb from './db/dbinit';
 import {
   authRoute,
@@ -22,7 +22,6 @@ import {
 
 dotenv.config();
 const app = express();
-bot();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
@@ -56,6 +55,7 @@ app.use((req, res) => {
 
 app.listen(PORT, async () => {
   await initializeDb();
+  await botInit();
   console.log(`Listening on port: ${PORT}`);
 });
 
