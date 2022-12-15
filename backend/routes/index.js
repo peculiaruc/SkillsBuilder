@@ -9,6 +9,8 @@ import questionRoute from './questionRoute';
 import submissionRoute from './submissionRoute';
 import postsRoute from './postsRoute';
 import materialRoute from './materialsRoute';
+import lessonRoute from './lessonRoute';
+import lessonContentRoute from './lessonContentRoute';
 
 export {
   authRoute,
@@ -22,4 +24,6 @@ export {
   submissionRoute,
   postsRoute,
   materialRoute,
+  lessonRoute,
+  lessonContentRoute,
 };

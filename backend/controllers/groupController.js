@@ -1,13 +1,12 @@
+import moment from 'moment';
+
 import Helpers from '../helpers/helpers';
 import Group from '../models/groups';
 import JoinedGroup from '../models/joinedGroups';
-import moment from 'moment';
 import Database from '../db/db';
-import Post from '../models/posts';
 
 const group = new Group();
 const joinedG = new JoinedGroup();
-const post = new Post();
 const db = new Database();
 const date = moment(new Date()).format('YYYY-MM-DD');
 
@@ -196,7 +195,7 @@ class GroupController {
   }
 
   static async groupMembers(req, res) {
-    const sql = `SELECT users.fullname, users.email, users.phone, users.city, joined_groups.join_date FROM users JOIN joined_groups ON joined_groups.user_id = users.id WHERE joined_groups.group_id = ${req.params.id};`;
+    const sql = `SELECT users.fullname, users.email, users.phone, users.city, users.picture, joined_groups.id, joined_groups.join_date FROM users JOIN joined_groups ON joined_groups.user_id = users.id WHERE joined_groups.group_id = ${req.params.id} AND joined_groups.leave_date IS NULL;`;
     const _members = await db.queryBuilder(sql);
     if (_members.errors) return Helpers.dbError(res, _members);
 
@@ -204,7 +203,8 @@ class GroupController {
   }
 
   static async groupPosts(req, res) {
-    const _posts = await post.allWhere({ group_id: req.params.id });
+    const sql = `SELECT posts.id, posts.title, posts.content, posts.owner_id, posts.group_id, posts.content_type, users.fullname, users.picture FROM posts JOIN users ON posts.owner_id = users.id WHERE posts.group_id = ${req.params.id} ORDER BY posts.created_at DESC`;
+    const _posts = await db.queryBuilder(sql);
     if (_posts.errors) return Helpers.dbError(res, _posts);
     console.log(_posts);
     return Helpers.sendResponse(res, 200, 'success', { posts: _posts.rows });

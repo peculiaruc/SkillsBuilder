@@ -46,7 +46,8 @@ class PostController {
       return Helpers.sendResponse(res, 401, 'User not authorised to perform this task');
     }
     const newupdate = {
-      ...req.body,
+      title: req.body.title,
+      content: req.body.content,
     };
     const _update = await post.update(newupdate, { id: req.params.id });
     if (_update.errors) return Helpers.dbError(res, _update);

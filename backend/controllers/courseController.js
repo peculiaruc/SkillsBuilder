@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 import sendEmail from '../utils/sendEmails';
 import Course from '../models/course';
 import Helpers from '../helpers/helpers';
@@ -5,22 +7,26 @@ import Enrollment from '../models/enrollments';
 import Categories from '../models/categories';
 import User from '../models/users';
 import CourseLesson from '../models/courseLesson';
-import moment from 'moment';
+
 import Database from '../db/db';
 import Assignment from '../models/assignment';
 import CourseStatus from '../models/courseStatus';
 import Material from '../models/courseMaterial';
 import { ALREADY_ENROLLED, NOT_AUTHORISED, SUCCESS } from '../utils/constants';
 
+import CourseProgress from '../models/courseProgress';
+import TelegramController from './telegramController';
+
 const course = new Course();
 const enrollment = new Enrollment();
 const cat = new Categories();
 const user = new User();
-const materials = new CourseLesson();
+const lesson = new CourseLesson();
 const db = new Database();
 const assignment = new Assignment();
 const status = new CourseStatus();
 const material = new Material();
+const progress = new CourseProgress();
 
 class CourseController {
   static async getAllCourses(req, res) {
@@ -94,12 +100,13 @@ class CourseController {
       'Enrollment Confirmation',
       `You have successfully enrolled in ${_course.row.title}`,
     );
+
     return Helpers.sendResponse(res, 200, SUCCESS);
   }
 
   static async unEnrollUser(req, res) {
     const _user = await user.getById(req.body.userId);
-    if (_user.errors) return Helpers.dbError(res, _user);
+    if (_user.errors) return Helpers.dbError(res, _user); // if (_user.row.whatsapp) {
 
     const _course = await course.getById(req.params.id);
     if (_course.errors) return Helpers.dbError(res, _course);
@@ -143,9 +150,10 @@ class CourseController {
   }
 
   static async getCourseLessons(req, res) {
-    const _materials = await materials.allWhere({ course_id: req.params.id });
-    if (_materials.errors) return Helpers.dbError(res, _materials);
-    return Helpers.sendResponse(res, 200, SUCCESS, { materials: _materials.rows });
+    const _lessons = await lesson.allWhere({ course_id: req.params.id });
+    if (_lessons.errors) return Helpers.dbError(res, _lessons);
+    console.log(_lessons);
+    return Helpers.sendResponse(res, 200, SUCCESS, { lessons: _lessons.rows });
   }
 
   static async getCourseAuthor(req, res) {
@@ -183,6 +191,8 @@ class CourseController {
     if (_course.errors) {
       return Helpers.dbError(res, _course);
     }
+    await TelegramController.newCourseUpdate(_course.rows[0]);
+    // await newCourseUpdate(_course.rows[0]);
     return Helpers.sendResponse(res, 200, SUCCESS, {
       course: _course.rows[0],
     });
@@ -210,6 +220,29 @@ class CourseController {
       return Helpers.dbError(res, _status);
     }
     return Helpers.sendResponse(res, 200, SUCCESS, { status: _status.rows });
+  }
+
+  static async getCourseProgress(req, res) {
+    const currentuser = await Helpers.getLoggedInUser(req, res);
+    const _progress = await progress.allWhere({
+      course_id: req.params.id,
+      user_id: currentuser.id,
+    });
+    if (_progress.errors) return Helpers.dbError(res, _progress);
+    return Helpers.sendResponse(res, 200, SUCCESS, { progress: _progress.rows });
+  }
+
+  static async updateCourseProgress(req, res) {
+    const currentuser = await Helpers.getLoggedInUser(req, res);
+    const _progress = await progress.update(
+      { progress_value: req.body.progress_value },
+      {
+        course_id: req.params.id,
+        user_id: currentuser.id,
+      },
+    );
+    if (_progress.errors) return Helpers.dbError(res, _progress);
+    return Helpers.sendResponse(res, 200, SUCCESS, { progress: _progress.rows });
   }
 }
 

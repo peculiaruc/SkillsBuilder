@@ -13,6 +13,9 @@ import { choiceType } from './create_table_choice_type';
 import { courseStatus } from './create_table_course_status';
 import { posts } from './create_table_posts';
 import { courseMaterial } from './create_course_material_table';
+import { courseProgress } from './create_table_course_progres';
+import { telegramUsers } from './create_table_telegram_users';
+import { lessonContent } from './create_table_lesson_content';
 
 export {
   users,
@@ -30,4 +33,7 @@ export {
   courseStatus,
   posts,
   courseMaterial,
+  courseProgress,
+  telegramUsers,
+  lessonContent,
 };

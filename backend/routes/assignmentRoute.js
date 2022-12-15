@@ -18,4 +18,6 @@ router.get('/:id/questions', assignmentController.getAssignmentQuestions);
 
 router.get('/:id/submissions', assignmentController.getAssignmentSubmissions);
 
+router.post('/authors/:id/submissions', assignmentController.getAuthorAssignmentSubmissions);
+
 module.exports = router;

@@ -8,6 +8,7 @@ import Database from '../db/db';
 import { NOT_AUTHORISED, SUCCESS, ALREADY_EXISTS } from '../utils/constants';
 import Post from '../models/posts';
 import Course from '../models/course';
+import Assignment from '../models/assignment';
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ const tokn = new Token();
 const enroll = new Enrollment();
 const post = new Post();
 const course = new Course();
+const assignment = new Assignment();
 const db = new Database();
 class UserController {
   static async getAllUsers(req, res) {
@@ -140,7 +142,7 @@ class UserController {
   }
 
   static async getUserGroups(req, res) {
-    const sql = `SELECT groups.name, groups.description, joined_groups.id, joined_groups.group_id, joined_groups.join_date, joined_groups.leave_date FROM groups JOIN joined_groups ON joined_groups.group_id = groups.id WHERE joined_groups.user_id = ${req.params.id} AND joined_groups.leave_date IS NULL;`;
+    const sql = `SELECT groups.name, groups.description, groups.owner_id, joined_groups.id, joined_groups.group_id, joined_groups.status, joined_groups.join_date, joined_groups.leave_date FROM groups JOIN joined_groups ON joined_groups.group_id = groups.id WHERE joined_groups.user_id = ${req.params.id} AND joined_groups.leave_date IS NULL;`;
     const _group = await db.queryBuilder(sql);
     if (_group.errors) {
       return Helpers.dbError(res, _group);
@@ -162,7 +164,7 @@ class UserController {
     }
     const _users = await user.allWhere({ role: 1 });
     if (_users.errors) return Helpers.dbError(res, _users);
-    return Helpers.sendResponse(res, 200, SUCCESS, { authors: _users.rows });
+    return Helpers.sendResponse(res, 200, SUCCESS, { users: _users.rows });
   }
 
   static async getAllLearners(req, res) {
@@ -172,7 +174,7 @@ class UserController {
     }
     const _users = await user.allWhere({ role: 0 });
     if (_users.errors) return Helpers.dbError(res, _users);
-    return Helpers.sendResponse(res, 200, SUCCESS, { authors: _users.rows });
+    return Helpers.sendResponse(res, 200, SUCCESS, { users: _users.rows });
   }
 
   static async getAllAdmins(req, res) {
@@ -182,19 +184,26 @@ class UserController {
     }
     const _users = await user.allWhere({ role: 2 });
     if (_users.errors) return Helpers.dbError(res, _users);
-    return Helpers.sendResponse(res, 200, SUCCESS, { authors: _users.rows });
+    return Helpers.sendResponse(res, 200, SUCCESS, { users: _users.rows });
   }
 
   static async getUserPosts(req, res) {
-    const _posts = post.allWhere({ owner_id: req.params.id });
-    if (_posts.errror) return Helpers.dbError(res, _posts);
-    return Helpers.sendResponse(200, SUCCESS, { posts: _posts.rows });
+    const _posts = await post.allWhere({ owner_id: req.params.id });
+    if (_posts.errors) return Helpers.dbError(res, _posts);
+    return Helpers.sendResponse(res, 200, SUCCESS, { posts: _posts.rows });
+  }
+
+  static async getAuthorAssignments(req, res) {
+    const _assignment = await assignment.allWhere({ author_id: req.params.id });
+    if (_assignment.errors) return Helpers.dbError(res, _assignment);
+    return Helpers.sendResponse(res, 200, SUCCESS, { assignments: _assignment.rows });
   }
 
   static async getAuthorsCourses(req, res) {
-    const _courses = course.allWhere({ author_id: req.params.id });
-    if (_courses.errror) return Helpers.dbError(res, _courses);
-    return Helpers.sendResponse(200, SUCCESS, { posts: _courses.rows });
+    const _courses = await course.allWhere({ author_id: req.params.id });
+    console.log('author courses', _courses);
+    if (_courses.errors) return Helpers.dbError(res, _courses);
+    return Helpers.sendResponse(res, 200, SUCCESS, { courses: _courses.rows });
   }
 }
 

@@ -2,6 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
+
+import botInit from './services/telegramBot';
 import initializeDb from './db/dbinit';
 import {
   authRoute,
@@ -14,6 +16,8 @@ import {
   submissionRoute,
   postsRoute,
   materialRoute,
+  lessonRoute,
+  lessonContentRoute,
 } from './routes';
 
 dotenv.config();
@@ -28,17 +32,19 @@ app.use(morgan('short'));
 app.use('/home', (req, res) => {
   res.status(200).send('Welcome to this awesome API!!');
 });
-
-app.use('/api/v1/auth', authRoute);
-app.use('/api/v1/social', socialLoginRoute);
-app.use('/api/v1/course', courseRoute);
-app.use('/api/v1/assignment', assignmentRoute);
-app.use('/api/v1/submission', submissionRoute);
-app.use('/api/v1/question', questionRoute);
-app.use('/api/v1/group', groupRoute);
-app.use('/api/v1/user', userRoute);
-app.use('/api/v1/post', postsRoute);
-app.use('/api/v1/material', materialRoute);
+const apiPath = '/api/v1';
+app.use(`${apiPath}/auth`, authRoute);
+app.use(`${apiPath}/social`, socialLoginRoute);
+app.use(`${apiPath}/course`, courseRoute);
+app.use(`${apiPath}/assignment`, assignmentRoute);
+app.use(`${apiPath}/submission`, submissionRoute);
+app.use(`${apiPath}/question`, questionRoute);
+app.use(`${apiPath}/group`, groupRoute);
+app.use(`${apiPath}/user`, userRoute);
+app.use(`${apiPath}/post`, postsRoute);
+app.use(`${apiPath}/material`, materialRoute);
+app.use(`${apiPath}/lesson`, lessonRoute);
+app.use(`${apiPath}/media`, lessonContentRoute);
 
 app.use((req, res) => {
   res.status(404).send({
@@ -48,8 +54,13 @@ app.use((req, res) => {
 });
 
 app.listen(PORT, async () => {
+  // try {
   await initializeDb();
+  await botInit();
   console.log(`Listening on port: ${PORT}`);
+  // } catch (e) {
+  //   console.log('error', e);
+  // }
 });
 
 export default app;

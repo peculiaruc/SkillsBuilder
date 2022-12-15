@@ -24,7 +24,7 @@ router.get('/:id/myposts', UserController.getUserPosts);
 
 router.get('/authors/:id/mycourses', UserController.getAuthorsCourses);
 
-// router.get('/:id/myassignments', userController.getUserAssignments);
+router.get('/authors/:id/assignments', UserController.getAuthorAssignments);
 
 router.get('/:id/learners', UserController.getAuthorsLearners);
 

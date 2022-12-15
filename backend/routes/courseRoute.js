@@ -28,6 +28,8 @@ router.get('/:id/learners', courseController.courseLearners);
 
 router.get('/:id/assignments', courseController.getCourseAssignments);
 
+router.get('/:id/lessons', courseController.getCourseLessons);
+
 router.get('/:id/materials', courseController.getCourseMaterials);
 
 router.get('/:id/author', courseController.getCourseAuthor);
@@ -35,5 +37,9 @@ router.get('/:id/author', courseController.getCourseAuthor);
 router.get('/status', courseController.courseStatus);
 
 router.get('/categories', courseController.getCourseCategories);
+
+router.get('/:id/progress', courseController.getCourseProgress);
+
+router.put('/:id/progress', courseController.updateCourseProgress);
 
 module.exports = router;
