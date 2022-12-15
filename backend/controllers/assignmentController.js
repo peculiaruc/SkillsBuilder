@@ -1,9 +1,9 @@
 import Helpers from '../helpers/helpers';
 import Assignment from '../models/assignment';
-import AssignmentSubmissions from '../models/assignmentSubmissions';
 import AssignmentQuestions from '../models/assignmentQuestions';
-import { NOT_AUTHORISED, SUCCESS } from '../utils/constants';
+import AssignmentSubmissions from '../models/assignmentSubmissions';
 import Course from '../models/course';
+import { NOT_AUTHORISED } from '../utils/constants';
 import TelegramController from './telegramController';
 const assignment = new Assignment();
 const submission = new AssignmentSubmissions();
