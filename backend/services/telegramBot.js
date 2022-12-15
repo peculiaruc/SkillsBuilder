@@ -1,6 +1,9 @@
 import { Telegraf } from 'telegraf';
 import dotenv from 'dotenv';
 
+// eslint-disable-next-line import/no-cycle
+import TelegramController from '../controllers/telegramController';
+
 dotenv.config();
 
 export const bot = new Telegraf(process.env.BOT_TOKEN);
