@@ -19,10 +19,10 @@ import {
   lessonRoute,
   lessonContentRoute,
 } from './routes';
-import TelegramController from './controllers/telegramController';
 
 dotenv.config();
 const app = express();
+bot();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
@@ -56,7 +56,6 @@ app.use((req, res) => {
 
 app.listen(PORT, async () => {
   await initializeDb();
-  await bot();
   console.log(`Listening on port: ${PORT}`);
 });
 
