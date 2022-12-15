@@ -19,6 +19,9 @@ import {
   getAssignmentTemplatedMessage,
 } from '../helpers/whatsappMessagehelper';
 
+import CourseProgress from '../models/courseProgress';
+import TelegramController from './telegramController';
+
 const course = new Course();
 const enrollment = new Enrollment();
 const cat = new Categories();
@@ -28,6 +31,7 @@ const db = new Database();
 const assignment = new Assignment();
 const status = new CourseStatus();
 const material = new Material();
+const progress = new CourseProgress();
 
 class CourseController {
   static async getAllCourses(req, res) {
@@ -101,6 +105,7 @@ class CourseController {
       'Enrollment Confirmation',
       `You have successfully enrolled in ${_course.row.title}`,
     );
+
     // if (_user.row.whatsapp) {
     //   const _author = await user.getById(_course.row.author_id);
     //   if (_author.errors) return Helpers.dbError(res, _author);
@@ -110,12 +115,14 @@ class CourseController {
     //   await sendMessage(data, res);
     // }
 
+
     return Helpers.sendResponse(res, 200, SUCCESS);
   }
 
   static async unEnrollUser(req, res) {
     const _user = await user.getById(req.body.userId);
-    if (_user.errors) return Helpers.dbError(res, _user); // if (_user.row.whatsapp) {
+    if (_user.errors) return Helpers.dbError(res, _user);
+    // if (_user.row.whatsapp) {
     //   const _author = await user.getById(_course.row.author_id);
     //   if (_author.errors) return Helpers.dbError(res, _author);
 
@@ -123,6 +130,8 @@ class CourseController {
 
     //   await sendMessage(data, res);
     // }
+
+
 
     const _course = await course.getById(req.params.id);
     if (_course.errors) return Helpers.dbError(res, _course);
@@ -207,6 +216,8 @@ class CourseController {
     if (_course.errors) {
       return Helpers.dbError(res, _course);
     }
+    await TelegramController.newCourseUpdate(_course.rows[0]);
+    // await newCourseUpdate(_course.rows[0]);
     return Helpers.sendResponse(res, 200, SUCCESS, {
       course: _course.rows[0],
     });
@@ -234,6 +245,29 @@ class CourseController {
       return Helpers.dbError(res, _status);
     }
     return Helpers.sendResponse(res, 200, SUCCESS, { status: _status.rows });
+  }
+
+  static async getCourseProgress(req, res) {
+    const currentuser = await Helpers.getLoggedInUser(req, res);
+    const _progress = await progress.allWhere({
+      course_id: req.params.id,
+      user_id: currentuser.id,
+    });
+    if (_progress.errors) return Helpers.dbError(res, _progress);
+    return Helpers.sendResponse(res, 200, SUCCESS, { progress: _progress.rows });
+  }
+
+  static async updateCourseProgress(req, res) {
+    const currentuser = await Helpers.getLoggedInUser(req, res);
+    const _progress = await progress.update(
+      { progress_value: req.body.progress_value },
+      {
+        course_id: req.params.id,
+        user_id: currentuser.id,
+      },
+    );
+    if (_progress.errors) return Helpers.dbError(res, _progress);
+    return Helpers.sendResponse(res, 200, SUCCESS, { progress: _progress.rows });
   }
 }
 

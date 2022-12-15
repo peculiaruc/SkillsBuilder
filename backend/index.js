@@ -2,6 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
+
+import botInit from './services/telegramBot';
 import initializeDb from './db/dbinit';
 import {
   authRoute,
@@ -52,8 +54,13 @@ app.use((req, res) => {
 });
 
 app.listen(PORT, async () => {
+  // try {
   await initializeDb();
+  await botInit();
   console.log(`Listening on port: ${PORT}`);
+  // } catch (e) {
+  //   console.log('error', e);
+  // }
 });
 
 export default app;

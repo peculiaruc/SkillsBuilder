@@ -17,15 +17,15 @@ const sendEmail = async (email, subject, text) => {
     await transporter.sendMail({
       from: process.env.USER,
       to: email,
-      subject: subject,
-      text: text,
+      subject,
+      text,
     });
 
     console.log('email sent sucessfully');
     return true;
   } catch (error) {
     console.log(error, 'email not sent');
-    return error
+    return error;
   }
 };
 

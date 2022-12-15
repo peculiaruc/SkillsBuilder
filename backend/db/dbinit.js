@@ -16,11 +16,14 @@ import {
   courseStatus,
   posts,
   courseMaterial,
+  courseProgress,
+  telegramUsers,
+
 } from '../migrations';
 
 export default async () => {
   let date;
-  let db = new Database();
+  const db = new Database();
   try {
     date = await db.queryBuilder('SELECT NOW()');
     if (process.env.NODE_ENV !== 'production') {
@@ -43,6 +46,8 @@ export default async () => {
     await db.queryBuilder(courseStatus);
     await db.queryBuilder(posts);
     await db.queryBuilder(courseMaterial);
+    await db.queryBuilder(courseProgress);
+    await db.queryBuilder(telegramUsers);
     return true;
   } catch (e) {
     console.log('db init err', e);

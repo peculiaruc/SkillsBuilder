@@ -38,4 +38,8 @@ router.get('/status', courseController.courseStatus);
 
 router.get('/categories', courseController.getCourseCategories);
 
+router.get('/:id/progress', courseController.getCourseProgress);
+
+router.put('/:id/progress', courseController.updateCourseProgress);
+
 module.exports = router;

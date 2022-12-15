@@ -2,11 +2,17 @@ import Helpers from '../helpers/helpers';
 import Course from '../models/course';
 import CourseLesson from '../models/courseLesson';
 import LessonContent from '../models/lessonContent';
+import Material from '../models/courseMaterial';
 import User from '../models/users';
 import { NOT_AUTHORISED, SUCCESS } from '../utils/constants';
 
 const lesson = new CourseLesson();
+
 const content = new LessonContent();
+
+const user = new User();
+const material = new Material();
+
 const course = new Course();
 
 class LessonsController {
@@ -32,6 +38,7 @@ class LessonsController {
     if (_lesson.errors) return Helpers.dbError(res, _lesson);
     return Helpers.sendResponse(res, 200, SUCCESS, { lesson: _lesson.row });
   }
+
 
   static async getLessonContentById(req, res) {
     const _lesson = await lesson.getById(req.params.id);
