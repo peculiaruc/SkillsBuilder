@@ -1,9 +1,10 @@
 /* eslint-disable prettier/prettier */
-import { createTheme, alpha, useTheme } from '@mui/material';
+import { alpha, createTheme, useTheme } from '@mui/material';
 
 const themeColors = {
   primary: '#0e2129',
   secondary: '#023c40',
+  // secondary: '#fff',
   success: '#00ca65',
   error: '#6a1143',
   info: '#222996',
@@ -20,6 +21,30 @@ const theme = createTheme({
     ].join(','),
   },
   components: {
+    MuiPaper: {
+      defaultProps: {
+        elevation: 0,
+      },
+    },
+    MuiTabs: {
+      defaultProps: {
+        textColor: 'primary',
+      },
+      styleOverrides: {
+        indicator: {
+          height: 5,
+          borderTopLeftRadius: 8,
+          borderTopRightRadius: 8,
+        },
+        root: {
+          height: 56,
+          '& .MuiButtonBase-root.MuiTab-root': {
+            fontWeight: 'bold !important',
+            bottom: -5,
+          },
+        },
+      },
+    },
     MuiInputLabel: {
       defaultProps: {
         size: 'small',
@@ -85,8 +110,8 @@ const theme = createTheme({
     },
     action: {
       active: alpha(themeColors.primary, 0.54),
-      hover: alpha(themeColors.primary, 0.04),
-      selected: alpha(themeColors.primary, 0.08),
+      hover: alpha(themeColors.primary, 0.6),
+      selected: alpha(themeColors.background, 0.1),
       disabled: alpha(themeColors.primary, 0.26),
       disabledBackground: alpha(themeColors.primary, 0.12),
       focus: alpha(themeColors.primary, 0.12),
@@ -122,5 +147,7 @@ const theme = createTheme({
 });
 
 export const usePalette = () => useTheme().palette;
+
+export const drawerWidth = 260;
 
 export default theme;

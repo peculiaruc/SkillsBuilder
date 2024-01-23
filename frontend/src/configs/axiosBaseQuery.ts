@@ -1,6 +1,9 @@
+import Cookies from 'js-cookie';
 import type { BaseQueryFn } from '@reduxjs/toolkit/query';
 import type { AxiosError, AxiosRequestConfig } from 'axios';
 import axios from 'axios';
+import { toast } from 'react-toastify';
+import { userCookie } from './app';
 
 const axiosBaseQuery = (
   { baseUrl }: { baseUrl: string } = { baseUrl: '' },
@@ -30,6 +33,12 @@ unknown
     return { data: result.data };
   } catch (axiosError) {
     const err = axiosError as AxiosError;
+    const rest = err.response?.data as { message: string };
+    if (rest?.message && rest.message === 'Invalid token') {
+      Cookies.remove(userCookie);
+      window.location.reload();
+    }
+    toast(rest?.message || err.message, { type: 'error' });
     return {
       error: {
         status: err.response?.status,

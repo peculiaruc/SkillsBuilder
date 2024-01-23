@@ -1,7 +1,9 @@
 import BackgroundLayout from '../layout/BackgroundLayout';
-import authroutes from './auth/routes';
 import DashboardLayout from '../layout/DashboardLayout';
-import DashboardView from './dashboard';
+import adminroutes from './admin';
+import authroutes from './auth/routes';
+import DashboardProvider from './DashboardProvider';
+import learnersRoutes from './public';
 
 export default [
   {
@@ -13,8 +15,10 @@ export default [
         children: [
           {
             index: true,
-            element: <DashboardView />,
+            element: <DashboardProvider />,
           },
+          ...learnersRoutes,
+          adminroutes,
         ],
       },
       authroutes,

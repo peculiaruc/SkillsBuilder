@@ -4,18 +4,28 @@ import {
 } from '@mui/material';
 import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { usePasswordResetMutation } from '../../apiServices/authService';
 import Logo from '../../assets/images/Logo.png';
 import appConfig from '../../configs/app';
+import { ResetPasswordRequest } from '../../interfaces/CourseType';
 
 export default function ForgotPasswordView() {
   const navigate = useNavigate();
+
+  const [resetPassword] = usePasswordResetMutation();
+
+  const onSubmit = async (email: ResetPasswordRequest) => {
+    await resetPassword(email).unwrap();
+    toast('Password reset link sent to your email account', { type: 'success' });
+    navigate('/reset-password');
+  };
 
   const formik = useFormik({
     initialValues: {
       email: '',
     },
-    onSubmit: () => navigate('/login'),
-
+    onSubmit,
   });
 
   return (
@@ -33,7 +43,7 @@ export default function ForgotPasswordView() {
         </Stack>
         <Stack spacing={2}>
           <TextField
-            onCanPlay={formik.handleChange}
+            onChange={formik.handleChange}
             label="Email Address"
             required
             name="email"

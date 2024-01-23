@@ -1,30 +1,32 @@
-import {
-  Email, Google, LinkedIn, Password, Window,
-} from '@mui/icons-material';
+import { Email, Password } from '@mui/icons-material';
 
 import {
   Box,
-  Button, Checkbox, Divider, FormControlLabel, InputAdornment, Stack, TextField, Typography,
+  Button, Checkbox, FormControlLabel, InputAdornment, Stack, TextField, Typography,
 } from '@mui/material';
 import { useFormik } from 'formik';
+import { ThreeDots } from 'react-loader-spinner';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useLoginMutation } from '../../apiServices/authService';
 import Logo from '../../assets/images/Logo.png';
 import appConfig from '../../configs/app';
-import { AuthInterface } from '../../interfaces/User';
+import { CredentialsType } from '../../interfaces/UserType';
+import { usePalette } from '../../theme/theme';
+import SocialLoginForm from './SocialLogin';
 
 export default function LoginView() {
+  const palette = usePalette();
   const navigate = useNavigate();
 
-  const [login] = useLoginMutation();
+  const [login, { isLoading }] = useLoginMutation();
 
-  const initialValues: AuthInterface = {
+  const initialValues: CredentialsType = {
     email: '',
     password: '',
   };
 
-  const onSubmit = async (credentials: AuthInterface) => {
+  const onSubmit = async (credentials: CredentialsType) => {
     await login(credentials).unwrap();
     toast('Login successfully', { type: 'success' });
   };
@@ -46,7 +48,6 @@ export default function LoginView() {
         <img src={Logo} alt={appConfig.appName} />
         <h2>{appConfig.appName}</h2>
       </Stack>
-
       <form onSubmit={formik.handleSubmit}>
         <Stack spacing={2}>
           <TextField
@@ -92,7 +93,16 @@ export default function LoginView() {
             </Typography>
 
           </Box>
-          <Button type="submit">Login</Button>
+          { !isLoading ? <Button type="submit">Login</Button> : (
+            <ThreeDots
+              height="20"
+              width="100%"
+              radius="9"
+              color={palette.primary.main}
+              ariaLabel="three-dots-loading"
+              visible
+            />
+          )}
         </Stack>
       </form>
       <Stack
@@ -103,9 +113,10 @@ export default function LoginView() {
         }}
       >
         <span>
-          Don&apos;t have and account?
+          Don&apos;t have an account? &nbsp;
         </span>
         <Typography
+          mr={1}
           onClick={() => navigate('/signup')}
           style={{ cursor: 'pointer', fontWeight: 'bold' }}
         >
@@ -113,19 +124,7 @@ export default function LoginView() {
         </Typography>
 
       </Stack>
-      <Divider>Or continue with</Divider>
-      <Stack
-        direction="row"
-        spacing={2}
-        sx={{
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <Google fontSize="large" />
-        <Window fontSize="large" />
-        <LinkedIn fontSize="large" />
-      </Stack>
+      <SocialLoginForm />
     </Stack>
   );
 }
