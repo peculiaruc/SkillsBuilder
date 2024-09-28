@@ -1,6 +1,6 @@
-﻿# SkillBuddy
-Welcome to SKILLSbuddy, A conversational e-learning app.  
-It is a platform for Conversational Learning "Operations", where teachers can monitor individual learner progress and engage with the learners in chat through the platform, as well as launch class-wide campaigns, amongst other operation. SKILLSbuddy is a form of digital learning that focuses on delivering a learning experience as simple as having a conversation, simultaneously providing a richer and more learner-centred experience compared to traditional eLearning experiences.
+﻿# SkillsBuider
+Welcome to SKILLSBUILDER, A conversational e-learning app.  
+It is a platform for Conversational Learning "Operations", where teachers can monitor individual learner progress and engage with the learners in chat through the platform, as well as launch class-wide campaigns, amongst other operation. SKILLSBUILDER is a form of digital learning that focuses on delivering a learning experience as simple as having a conversation, simultaneously providing a richer and more learner-centred experience compared to traditional eLearning experiences.
 ## Techonologies 
 * Frontend - React TypeScript
 * Backend - Nodejs
